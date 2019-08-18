@@ -33,7 +33,7 @@
   </div>
 
   <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top py-lg-4" id="mainNav">
     <div class="container">
       <a class="navbar-brand text-uppercase text-expanded font-weight-bold d-lg-none" href="#">Fina Massa</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,13 +41,13 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav mx-auto">
-          <li class="nav-item active px-lg-4">
+          <li class="nav-item px-lg-4 {{index}}">
             <a class="nav-link text-uppercase text-expanded" href="{% url 'index' %}">Início
               <span class="sr-only">(current)</span>
             </a>
           </li>
-          <li class="nav-item px-lg-4">
-              <a class="nav-link text-uppercase text-expanded" href="{% url 'index' %}">Sobre</a>
+          <li class="nav-item px-lg-4 {{sobre}}" id="sobre">
+              <a class="nav-link text-uppercase text-expanded" href="{% url 'sobre' %}">Sobre</a>
           </li>
           <li class="nav-item px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="products.html">Produtos</a>
@@ -72,7 +72,23 @@
   <!-- Bootstrap core JavaScript -->
   <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
   <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-
+  <script type="text/javascript">
+    $(() => {
+      const determineSticky = () => {
+        $('.sticky-top').each((i, el) => {
+          const $nav = $(el);
+          const stickPoint = parseInt($nav.css('top'), 10);
+          const currTop = el.getBoundingClientRect().top;
+          const isStuck = currTop <= stickPoint;
+          $nav.toggleClass('py-lg-0 py-lg-4', !isStuck);
+        });
+      }
+      determineSticky()
+       $(window).on('resize scroll', () => {
+        determineSticky();
+      });
+    });
+  </script>
 </body>
 
 </html>
