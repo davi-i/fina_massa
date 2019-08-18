@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+  <section class="page-section cta">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-9 mx-auto">
+          <div class="cta-inner text-center rounded">
+            <h2 class="section-heading">
+              <span class="section-heading-lower">Cadastrar item de cardápio</span>
+            </h2>
+            <span class="text-danger">Erros</span>
+            <form method="post" class="mx-auto mt-3">
+              {% csrf_token %}
+              <div class="control-group form-group">
+                <div class="controls">
+                  <label for="id_descricao">Descrição</label><br />
+                  <span class="text-danger">Erros</span>
+                  <input id="id_descricao" class="form-control" type="text" name="descricao" />
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="control-group form-group">
+                <div class="controls">
+                  <label for="id_tipo">Tipo</label><br />
+                  <span class="text-danger">Erros</span>
+                  <select id="id_tipo" class="form-control" name="tipo">
+                    <option value="0">Pizza</option>
+                    <option value="1">Pastel</option>
+                    <option value="2">Suco</option>
+                    <option value="3">Pizza Especial</option>
+                    <option value="4">Outras Bebidas</option>
+                  </select>
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="control-group form-group">
+                <div class="controls">
+                  <label for="id_preco">Preço</label><br />
+                  <span class="text-danger">Erros</span>
+                  <input id="id_preco" class="form-control" type="number" name="preco" />
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="control-group form-group">
+                <div class="controls">
+                  <label>Ingedientes</label><br />
+                  <span class="text-danger">Erros</span>
+                  <div class="form-control">
+                    <input id="id_ingredientes_0" type="checkbox" name="ingredientes" /> Frango
+                  </div>
+                  <div class="form-control">
+                    <input id="id_ingredientes_1" type="checkbox" name="ingredientes" /> Carne
+                  </div>
+                  <div class="form-control">
+                    <input id="id_ingredientes_2" type="checkbox" name="ingredientes" /> Tomate
+                  </div>
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="control-group form-group">
+                <div class="controls">
+                  <label>Disponível nas filias:</label><br />
+                  <span class="text-danger">Erros</span>
+                  <div class="form-control">
+                    <input id="id_filial_0" type="checkbox" name="filial" /> Canguaretama
+                  </div>
+                  <div class="form-control">
+                    <input id="id_filial_1" type="checkbox" name="filial" /> Baía Formosa
+                  </div>
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Salvar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

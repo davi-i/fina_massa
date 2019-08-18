@@ -7,3 +7,7 @@ def index(request):
 
 def sobre(request):
     return render(request, 'sobre.html', {'sobre': 'active'})
+
+
+def cardapio_cadastro(request):
+    return render(request, 'cardapio_cadastro.html')
