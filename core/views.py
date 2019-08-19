@@ -11,3 +11,7 @@ def sobre(request):
 
 def cardapio_cadastro(request):
     return render(request, 'cardapio_cadastro.html')
+
+def cardapio(request):
+    return render(request, 'cardapio.html', {'cardapio': 'active'})
+
