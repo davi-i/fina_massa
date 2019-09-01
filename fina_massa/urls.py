@@ -15,11 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from core.views import index, sobre, cardapio_cadastro, cardapio
+from django.contrib.auth import views as auth_views
+from core.views import index, registro, perfil, sobre, cardapio_cadastro, cardapio
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
+    path('login/', auth_views.LoginView.as_view(), name='login'),
+    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path("registro/", registro, name="registro"),
+    path('perfil/', perfil, name='perfil'),
     path('sobre/', sobre, name='sobre'),
     path('cardapio/cadastrar/', cardapio_cadastro, name='cardapio_cadastro'),
     path('cardapio/', cardapio, name='cardapio'),
