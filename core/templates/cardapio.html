@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block conteudo %}
   <section class="page-section cta">
@@ -10,7 +11,24 @@
             <h2 class="section-heading">
               <span class="section-heading-lower">Cardápio</span>
             </h2>
-            {{filter.form}}
+            <form method="get">
+              {% for field in filter.form %}
+                {% trans field.label %}: {{field}}
+              
+              {% endfor %}
+              <button type="submit" class="btn btn-primary">Enviar</button>
+            </form>
+            <table class="list-hours mb-5 text-left mx-auto">
+              {% for item in filter.qs %}
+                <tr class="list-hours-item">
+                  <td class="pt-2 pr-5">
+                    {{item.descricao}}<br/>
+                    <span class="sp">({{item.ingredientes}})</span>
+                  </td>
+                  <td class="text-right">R${{item.preco}}</td>
+                </tr>
+              {% endfor %}
+            </table>
             <h3 class='text-uppercase'><strong>Pastéis</strong></h3>
 
             <table class="list-hours mb-5 text-left mx-auto">
