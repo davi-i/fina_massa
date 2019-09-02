@@ -2,10 +2,10 @@ from django.db import models
 
 # Create your models here.
 
-class ItemCardapio(Models.model):
-	Tipo = models.Charfield('Tipo', max_length=100)
-	Preco = models.Charfield('Preco', FIELDNAME = forms.FloatField())
-	Ingredientes = models.Charfield('Ingredientes', max_length=100)
-	FiliaisD = models.Charfield('FiliaisD', max_length=100)
 
-		
+class ItemCardapio(models.Model):
+    descricao = models.CharField('Descrição', max_length=100)
+    tipo = models.CharField('Tipo', max_length=100)
+    preco = models.FloatField('Preco')
+    ingredientes = models.CharField('Ingredientes', max_length=100)
+    filiais = models.CharField('Filiais', max_length=100)
