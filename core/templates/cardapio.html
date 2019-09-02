@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block conteudo %}
+  <section class="page-section cta">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-9 mx-auto">
+          <div class="cta-inner text-center rounded">
+            <h2 class="section-heading">
+              <span class="section-heading-lower">Cardápio</span>
+            </h2>
+            {{filter.form}}
+            <h3 class='text-uppercase'><strong>Pastéis</strong></h3>
+
+            <table class="list-hours mb-5 text-left mx-auto">
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5">
+                  Queijo<br/>
+                  <span class="sp">(mussarela)</span>
+                </td>
+                <td class="text-right">R$8,00</td>
+              </tr>
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5">
+                  Pizza<br/>
+                  <span class="sp">(mussarela, presunto e orégano)</span>
+                </td>
+                <td class="text-right">R$10,00</td>
+              </tr>
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5">
+                  Frango<br/>
+                  <span class="sp">(mussarela, frango)</span>
+                </td>
+                <td class="text-right">R$10,00</td>
+              </tr>
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5">
+                  Frango catupiry<br/>
+                  <span class="sp">(frango e catupiry)</span>
+                </td>
+                <td class="text-right">R$10,00</td>
+              </tr>
+            </table>
+            <h3 class='text-uppercase'><strong>Pizzas</strong></h3>
+
+            <table class="list-hours mb-5 text-left mx-auto">
+              <tr class="list-hours-item">
+                <th></th>
+                <td class="text-center">
+                  P<br/>
+                  <span class="sp">4 fatias</span>
+                </td>
+                <td class="text-center">
+                  M<br/>
+                  <span class="sp">6 fatias</span>
+                </td>
+                <td class="text-center">
+                  G<br/>
+                  <span class="sp">8 fatias</span>
+                </td>
+              </tr>
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5">
+                  Mussarela<br/>
+                  <span class="sp">(mussarela, tomate e azeitona)</span>
+                </td>
+                <td class="text-center pr-2">R$15,00</td>
+                <td class="text-center pr-2">R$20,00</td>
+                <td class="text-center pr-2">R$28,00</td>
+              </tr>
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5"> 
+                  Marguerita<br/>
+                  <span class="sp">(mussarela, mangericão, tomate e azeitona)</span>
+                </td>
+                <td class="text-center pr-2">R$15,00</td>
+                <td class="text-center pr-2">R$22,00</td>
+                <td class="text-center pr-2">R$30,00</td>
+              </tr>
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5">
+                  Frango<br/>
+                  <span class="sp">(mussarela, frango, tomate e azeitona)</span>
+                </td>
+                <td class="text-center pr-2">R$16,00</td>
+                <td class="text-center pr-2">R$24,00</td>
+                <td class="text-center pr-2">R$32,00</td>
+              </tr>
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5">
+                  Frango catupiry<br/>
+                  <span class="sp">(mussarela, frango, catupiry e azeitona)</span>
+                </td>
+                <td class="text-center pr-2">R$17,00</td>
+                <td class="text-center pr-2">R$25,00</td>
+                <td class="text-center pr-2">R$34,00</td>
+              </tr>
+            </table>
+
+            <h3 class='text-uppercase'><strong>Pizzas Especiais</strong></h3>
+
+            <table class="list-hours mb-5 text-left mx-auto">
+              <tr class="list-hours-item">
+                <th></th>
+                <td class="text-center">
+                  P<br/>
+                  <span class="sp">4 fatias</span>
+                </td>
+                <td class="text-center">
+                  M<br/>
+                  <span class="sp">6 fatias</span>
+                </td>
+                <td class="text-center">
+                  G<br/>
+                  <span class="sp">8 fatias</span>
+                </td>
+              </tr>
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5">
+                  À moda da casa<br/>
+                  <span class="sp">(mussarela, bacon, cream cheese, champignon, milho e azeitona)</span>
+                </td>
+                <td class="text-center pr-2">R$18,00</td>
+                <td class="text-center pr-2">R$27,00</td>
+                <td class="text-center pr-2">R$36,00</td>
+              </tr>
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5"> 
+                  Atum<br/>
+                  <span class="sp">(mussarela, atum, cebola e azeitona)</span>
+                </td>
+                <td class="text-center pr-2">R$17,00</td>
+                <td class="text-center pr-2">R$25,00</td>
+                <td class="text-center pr-2">R$34,00</td>
+              </tr>
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5">
+                  Lombo canadense<br/>
+                  <span class="sp">(mussarela, lombo canadense, cebola e azeitona)</span>
+                </td>
+                <td class="text-center pr-2">R$18,00</td>
+                <td class="text-center pr-2">R$27,00</td>
+                <td class="text-center pr-2">R$36,00</td>
+              </tr>
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5">
+                  Alho<br/>
+                  <span class="sp">(mussarela, alho, cebola e azeitona)</span>
+                </td>
+                <td class="text-center pr-2">R$16,00</td>
+                <td class="text-center pr-2">R$24,00</td>
+                <td class="text-center pr-2">R$32,00</td>
+              </tr>
+            </table>
+
+            <h3 class='text-uppercase'><strong>Sucos</strong></h3>
+
+            <table class="list-hours mb-5 text-left mx-auto">
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5">
+                  Acerola
+                </td>
+                <td class="text-right">R$3,00</td>
+              </tr>
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5">
+                  Cajá
+                </td>
+                <td class="text-right">R$4,00</td>
+              </tr>
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5">
+                  Goiaba
+                </td>
+                <td class="text-right">R$3,00</td>
+              </tr>
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5">
+                  Graviola
+                </td>
+                <td class="text-right">R$4,00</td>
+              </tr>
+            </table>
+
+            <h3 class='text-uppercase'><strong>Outras bebidas</strong></h3>
+
+            <table class="list-hours mb-5 text-left mx-auto">
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5">
+                  Água
+                </td>
+                <td class="text-right">R$2,00</td>
+              </tr>
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5">
+                  Água com gás
+                </td>
+                <td class="text-right">R$3,00</td>
+              </tr>
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5">
+                  Refrigerante lata
+                </td>
+                <td class="text-right">R$4,00</td>
+              </tr>
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5">
+                  Coca-Cola 1L
+                </td>
+                <td class="text-right">R$7,00</td>
+              </tr>
+              <tr class="list-hours-item">
+                <td class="pt-2 pr-5">
+                  Guaraná 1L
+                </td>
+                <td class="text-right">R$6,00</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section about-heading">
+    <div class="container">
+      <img class="img-fluid rounded about-heading-img mb-3 mb-lg-0" src="{% static 'img/about.jpg' %}" alt="">
+      <!--<div class="about-heading-content">
+        <div class="row">
+          <div class="col-xl-9 col-lg-10 mx-auto">
+            <div class="bg-faded rounded p-5">
+              <h2 class="section-heading mb-4">
+                <span class="section-heading-upper">Strong Coffee, Strong Roots</span>
+                <span class="section-heading-lower">About Our Cafe</span>
+              </h2>
+              <p>Founded in 1987 by tde Hernandez brotders, our establishment has been serving up rich coffee sourced from artisan farmers in various regions of Soutd and Central America. We are dedicated to travelling tde world, finding tde best coffee, and bringing back to you here in our cafe.</p>
+              <p class="mb-0">We guarantee tdat you will fall in
+                <em>lust</em>
+                witd our decadent blends tde moment you walk inside until you finish your last sip. Join us for your daily routine, an outing witd friends, or simply just to enjoy some alone time.</p>
+            </div>
+          </div>
+        </div>
+      </div>-->
+    </div>
+  </section>
+{% endblock %}

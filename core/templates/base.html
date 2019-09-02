@@ -10,6 +10,7 @@
   <meta name="author" content="">
 
   <title>Fina Massa</title>
+  <link rel="shortcut icon" href="{% static 'img/logo.png' %}">
 
   <!-- Bootstrap core CSS -->
   <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -49,8 +50,8 @@
           <li class="nav-item px-lg-4 {{sobre}}" id="sobre">
               <a class="nav-link text-uppercase text-expanded" href="{% url 'sobre' %}">Sobre</a>
           </li>
-          <li class="nav-item px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="products.html">Produtos</a>
+          <li class="nav-item px-lg-4 {{cardapio}}">
+            <a class="nav-link text-uppercase text-expanded" href="{% url 'cardapio' %}">Cardápio</a>
           </li>
           <!--li class="nav-item px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="store.html">Store</a>
@@ -71,22 +72,25 @@
 
   <!-- Bootstrap core JavaScript -->
   <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/jquery/jquery.ba-throttle-debounce.min.js' %}"></script>
   <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
   <script type="text/javascript">
     $(() => {
       const determineSticky = () => {
         $('.sticky-top').each((i, el) => {
-          const $nav = $(el);
-          const stickPoint = parseInt($nav.css('top'), 10);
-          const currTop = el.getBoundingClientRect().top;
-          const isStuck = currTop <= stickPoint;
-          $nav.toggleClass('py-lg-0 py-lg-4', !isStuck);
+          const $nav = $(el),
+            stickPoint = parseInt($nav.css('top')),
+            currTop = el.getBoundingClientRect().top,
+            isStuck = currTop <= stickPoint;
+          $nav.toggleClass('py-lg-4', !isStuck);
+          if (isStuck) $('html, body').scrollTop($nav.offset().top);
+          console.log('a')
         });
       }
       determineSticky()
-       $(window).on('resize scroll', () => {
+       $(window).on('resize scroll', $.debounce(25, () => {
         determineSticky();
-      });
+      }));
     });
   </script>
 </body>
