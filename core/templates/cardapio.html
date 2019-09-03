@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
-{% load i18n %}
+{% load static widget_tweaks %}
 
 {% block conteudo %}
   <section class="page-section cta">
@@ -11,26 +10,17 @@
             <h2 class="section-heading">
               <span class="section-heading-lower">Cardápio</span>
             </h2>
-            <form method="get">
+            <form method="get" class="form-inline">
               {% for field in filter.form %}
-                {% trans field.label %}: {{field}}
-              
+                <label class="sr-only" for="{{field.id_for_label}}">{{field.label}}</label>
+                {% render_field field class='form-control mx-2 my-2' placeholder=field.label %}
               {% endfor %}
-              <button type="submit" class="btn btn-primary">Enviar</button>
+              <button type="submit" class="btn btn-primary">Filtrar</button>
             </form>
-            <table class="list-hours mb-5 text-left mx-auto">
-              {% for item in filter.qs %}
-                <tr class="list-hours-item">
-                  <td class="pt-2 pr-5">
-                    {{item.descricao}}<br/>
-                    <span class="sp">({{item.ingredientes}})</span>
-                  </td>
-                  <td class="text-right">R${{item.preco}}</td>
-                </tr>
-              {% endfor %}
-            </table>
-            <h3 class='text-uppercase'><strong>Pastéis</strong></h3>
 
+            {% if pasteis %}
+              <h3 class='text-uppercase'><strong>Pastéis</strong></h3>
+            {% endif %}
             <table class="list-hours mb-5 text-left mx-auto">
               {% for pastel in pasteis%}
               <tr class="list-hours-item">
@@ -42,8 +32,10 @@
               </tr>
               {% endfor %}
             </table>
-            <h3 class='text-uppercase'><strong>Pizzas</strong></h3>
 
+            {% if pizzas %}
+              <h3 class='text-uppercase'><strong>Pizzas</strong></h3>
+            {% endif %}
             <table class="list-hours mb-5 text-left mx-auto">
               {% for pizza in pizzas %}
               <tr class="list-hours-item">
@@ -62,7 +54,7 @@
                 </td>
               </tr>
               <tr class="list-hours-item">
-                <td class="pt-2 pr-5"> 
+                <td class="pt-2 pr-5">
                   {{pizza.descricao}}<br/>
                   <span class="sp">({{pizza.ingredientes}})</span>
                 </td>
@@ -73,8 +65,9 @@
               {% endfor %}
             </table>
 
-            <h3 class='text-uppercase'><strong>Pizzas Especiais</strong></h3>
-
+            {% if pizzas_especiais %}
+              <h3 class='text-uppercase'><strong>Pizzas Especiais</strong></h3>
+            {% endif %}
             <table class="list-hours mb-5 text-left mx-auto">
               {% for pizza_especial in pizzas_especiais %}
               <tr class="list-hours-item">
@@ -104,8 +97,9 @@
               {% endfor %}
             </table>
 
-            <h3 class='text-uppercase'><strong>Sucos</strong></h3>
-
+            {% if sucos %}
+              <h3 class='text-uppercase'><strong>Sucos</strong></h3>
+            {% endif %}
             <table class="list-hours mb-5 text-left mx-auto">
               {% for suco in sucos %}
               <tr class="list-hours-item">
@@ -117,8 +111,9 @@
               {% endfor %}
             </table>
 
-            <h3 class='text-uppercase'><strong>Outras bebidas</strong></h3>
-
+            {% if bebidas %}
+              <h3 class='text-uppercase'><strong>Outras bebidas</strong></h3>
+            {% endif %}
             <table class="list-hours mb-5 text-left mx-auto">
               {% for bebida in bebidas %}
               <tr class="list-hours-item">

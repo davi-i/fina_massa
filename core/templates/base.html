@@ -84,11 +84,10 @@
             isStuck = currTop <= stickPoint;
           $nav.toggleClass('py-lg-4', !isStuck);
           if (isStuck) $('html, body').scrollTop($nav.offset().top);
-          console.log('a')
         });
       }
       determineSticky()
-       $(window).on('resize scroll', $.debounce(25, () => {
+      $(window).on('resize scroll', $.debounce(25, () => {
         determineSticky();
       }));
     });

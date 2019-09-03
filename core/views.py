@@ -38,18 +38,20 @@ def cardapio_cadastro(request):
 
 
 def cardapio(request):
-    pasteis = ItemCardapio.objects.filter(tipo='pastel')
-    pizzas = ItemCardapio.objects.filter(tipo='pizza')
-    pizzas_especiais = ItemCardapio.objects.filter(tipo='pizza_especial')
-    sucos = ItemCardapio.objects.filter(tipo='suco')
-    bebidas = ItemCardapio.objects.filter(tipo='bebida')
     itens = ItemCardapio.objects.all()
-    filter = ItemCardapioFilter(request.GET, queryset=itens)
+    item_filter = ItemCardapioFilter(request.GET, queryset=itens)
+    itens = item_filter.qs
+    pasteis = itens.filter(tipo='pastel')
+    pizzas = itens.filter(tipo='pizza')
+    pizzas_especiais = itens.filter(tipo='pizza_especial')
+    sucos = itens.filter(tipo='suco')
+    bebidas = itens.filter(tipo='bebida')
     contexto = {
         'cardapio': 'active',
-        'filter': filter,
+        'filter': item_filter,
         'pasteis': pasteis,
         'pizzas': pizzas,
+        'pizzas_especiais': pizzas_especiais,
         'sucos': sucos,
         'bebidas': bebidas,
     }
