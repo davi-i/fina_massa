@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from .filters import ItemCardapioFilter
-from .models import ItemCardapio
+from .models import ItemCardapio, Tamanho
 
 
 def index(request):
@@ -46,6 +46,7 @@ def cardapio(request):
     pizzas_especiais = itens.filter(tipo='pizza_especial')
     sucos = itens.filter(tipo='suco')
     bebidas = itens.filter(tipo='bebida')
+    tamanhos = Tamanho.objects.all()
     contexto = {
         'cardapio': 'active',
         'filter': item_filter,
@@ -54,5 +55,6 @@ def cardapio(request):
         'pizzas_especiais': pizzas_especiais,
         'sucos': sucos,
         'bebidas': bebidas,
+        'tamanhos': tamanhos,
     }
     return render(request, 'cardapio.html', contexto)

@@ -40,29 +40,23 @@
               {% for pizza in pizzas %}
               <tr class="list-hours-item">
                 <th></th>
-                <td class="text-center">
-                  P<br/>
-                  <span class="sp">4 fatias</span>
-                </td>
-                <td class="text-center">
-                  M<br/>
-                  <span class="sp">6 fatias</span>
-                </td>
-                <td class="text-center">
-                  G<br/>
-                  <span class="sp">8 fatias</span>
-                </td>
+                {% for tamanho in tamanhos %}
+                  <td class="text-center">
+                    {{tamanho.tamanho}}<br/>
+                    <span class="sp">{{tamanho.fatias}} fatias</span>
+                  </td> 
+                {% endfor %}
               </tr>
+              {% endfor %}
               <tr class="list-hours-item">
                 <td class="pt-2 pr-5">
                   {{pizza.descricao}}<br/>
                   <span class="sp">({{pizza.ingredientes}})</span>
                 </td>
-                <td class="text-center pr-2">R$--,--</td>
-                <td class="text-center pr-2">R$--,--</td>
-                <td class="text-center pr-2">R${{pizza.preco}}</td>
+                {% for tamanho in pizza.tamanhos %}
+                  <td class="text-center pr-2">R${{tamanho.preco}}</td>
+                {% endfor %}
               </tr>
-              {% endfor %}
             </table>
 
             {% if pizzas_especiais %}
