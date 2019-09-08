@@ -10,121 +10,76 @@
             <h2 class="section-heading">
               <span class="section-heading-lower">Cardápio</span>
             </h2>
-            <form method="get" class="form-inline">
+
+            <hr/>
+            <form id="filtros" method="get" class="form-inline justify-content-center">
               {% for field in filter.form %}
-                <label class="sr-only" for="{{field.id_for_label}}">{{field.label}}</label>
-                {% render_field field class='form-control mx-2 my-2' placeholder=field.label %}
+                {% if field.field.widget.input_type == 'checkbox' %}
+                  <div class="form-control h-auto mx-md-2 my-2 mx-0">
+                    <strong>{{field.label_tag}}</strong>
+                    {% for checkbox in field %}
+                      <div class="form-control mx-md-2 my-2 mx-0">
+                        {{checkbox}} {{checkbox.label}}
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  <label class="sr-only" for="{{field.id_for_label}}">{{field.label}}</label>
+                  {% render_field field class='form-control mx-md-2 my-2 mx-0' placeholder=field.label %}
+                {% endif %}
               {% endfor %}
-              <button type="submit" class="btn btn-primary">Filtrar</button>
             </form>
+            <button type="submit" form="filtros" class="btn btn-primary">Filtrar</button>
+            <hr/>
 
-            {% if pasteis %}
-              <h3 class='text-uppercase'><strong>Pastéis</strong></h3>
-            {% endif %}
-            <table class="list-hours mb-5 text-left mx-auto">
-              {% for pastel in pasteis%}
-              <tr class="list-hours-item">
-                <td class="pt-2 pr-5">
-                  {{pastel.descricao}}<br/>
-                  <span class="sp">({{pastel.ingredientes}})</span>
-                </td>
-                <td class="text-right">R${{pastel.preco}}</td>
-              </tr>
-              {% endfor %}
-            </table>
-
-            {% if pizzas %}
-              <h3 class='text-uppercase'><strong>Pizzas</strong></h3>
-            {% endif %}
-            <table class="list-hours mb-5 text-left mx-auto">
-              {% for pizza in pizzas %}
-              <tr class="list-hours-item">
-                <th></th>
-                {% for tamanho in tamanhos %}
-                  <td class="text-center">
-                    {{tamanho.tamanho}}<br/>
-                    <span class="sp">{{tamanho.fatias}} fatias</span>
-                  </td> 
-                {% endfor %}
-              </tr>
-              {% endfor %}
-              <tr class="list-hours-item">
-                <td class="pt-2 pr-5">
-                  {{pizza.descricao}}<br/>
-                  <span class="sp">({{pizza.ingredientes}})</span>
-                </td>
-                {% for tamanho in pizza.tamanhos %}
-                  <td class="text-center pr-2">R${{tamanho.preco}}</td>
-                {% endfor %}
-              </tr>
-            </table>
-
-            {% if pizzas_especiais %}
-              <h3 class='text-uppercase'><strong>Pizzas Especiais</strong></h3>
-            {% endif %}
-            <table class="list-hours mb-5 text-left mx-auto">
-              {% for pizza_especial in pizzas_especiais %}
-              <tr class="list-hours-item">
-                <th></th>
-                <td class="text-center">
-                  P<br/>
-                  <span class="sp">4 fatias</span>
-                </td>
-                <td class="text-center">
-                  M<br/>
-                  <span class="sp">6 fatias</span>
-                </td>
-                <td class="text-center">
-                  G<br/>
-                  <span class="sp">8 fatias</span>
-                </td>
-              </tr>
-              <tr class="list-hours-item">
-                <td class="pt-2 pr-5">
-                  {{pizza_especial.descricao}}<br/>
-                  <span class="sp">({{pizza_especial.ingredientes}})</span>
-                </td>
-                <td class="text-center pr-2">R$--,--</td>
-                <td class="text-center pr-2">R$--,--</td>
-                <td class="text-center pr-2">R${{pizza_especial.preco}}</td>
-              </tr>
-              {% endfor %}
-            </table>
-
-            {% if sucos %}
-              <h3 class='text-uppercase'><strong>Sucos</strong></h3>
-            {% endif %}
-            <table class="list-hours mb-5 text-left mx-auto">
-              {% for suco in sucos %}
-              <tr class="list-hours-item">
-                <td class="pt-2 pr-5">
-                  {{suco.descricao}}
-                </td>
-                <td class="text-right">R${{suco.preco}}</td>
-              </tr>
-              {% endfor %}
-            </table>
-
-            {% if bebidas %}
-              <h3 class='text-uppercase'><strong>Outras bebidas</strong></h3>
-            {% endif %}
-            <table class="list-hours mb-5 text-left mx-auto">
-              {% for bebida in bebidas %}
-              <tr class="list-hours-item">
-                <td class="pt-2 pr-5">
-                  {{bebida.descricao}}
-                </td>
-                <td class="text-right">R${{bebida.preco}}</td>
-              </tr>
-              {% endfor %}
-            </table>
+            {% for tipo in tipos %}
+              {% if tipo.itens.all %}
+                {% with itens=tipo.itens.all %}
+                  <h3 class='text-uppercase'><strong>{{tipo}}</strong></h3>
+                  <table class="list-hours mb-5 text-left mx-auto">
+                    {% if item.pizza_set.all %}
+                      <tr class="list-hours-item">
+                        <th></th>
+                        {% for tamanho in tamanhos %}
+                          <td class="text-center">
+                            {{tamanho.descricao}}<br/>
+                            <span class="sp">{{tamanho.fatias}} fatias</span>
+                          </td>
+                        {% endfor %}
+                      </tr>
+                    {% endif %}
+                    {% for item in itens %}
+                      <tr class="list-hours-item">
+                        <td class="pt-2 pr-5">
+                          {{item.descricao}}<br/>
+                          {% if item.ingredientes.all %}
+                            <span class="sp">
+                              {% for ingrediente in item.ingredientes.all %}
+                                {% if forloop.first %}({% endif %}{{ingrediente}}{% if forloop.last %}){% else %},{% endif %}
+                              {% endfor %}
+                            </span>
+                          {% endif %}
+                        </td>
+                        {% if item.pizza_set.all %}
+                          {% for tamanho in item.pizza_set.all %}
+                            <td class="text-center pr-2">R${{tamanho.preco}}</td>
+                          {% endfor %}
+                        {% else %}
+                          <td class="text-right">R${{item.preco}}</td>
+                        {% endif %}
+                      </tr>
+                    {% endfor %}
+                  </table>
+                {% endwith %}
+              {% endif %}
+            {% endfor %}
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="page-section about-heading">
+  <!--section class="page-section about-heading">
     <div class="container">
       <img class="img-fluid rounded about-heading-img mb-3 mb-lg-0" src="{% static 'img/about.jpg' %}" alt="">
       <!--<div class="about-heading-content">
@@ -142,7 +97,7 @@
             </div>
           </div>
         </div>
-      </div>-->
+      </div>->
     </div>
-  </section>
+  </section-->
 {% endblock %}

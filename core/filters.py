@@ -1,16 +1,20 @@
-import django_filters
-from .models import ItemCardapio
+import django_filters as filters
+from django import forms
+from .models import ItemCardapio, Filial, Tipo
 
 
-class ItemCardapioFilter(django_filters.FilterSet):
-    preco_minimo = django_filters.NumberFilter(label="Preço mínimo",
-                                               field_name='preco',
-                                               lookup_expr='gte')
-    preco_maximo = django_filters.NumberFilter(label="Preço máximo",
-                                               field_name='preco',
-                                               lookup_expr='lte')
-    tipo = django_filters.CharFilter(label='Tipo', lookup_expr='icontains')
+class ItemCardapioFilter(filters.FilterSet):
+    preco_minimo = filters.NumberFilter(label="Preço mínimo",
+                                        field_name='preco',
+                                        lookup_expr='gte')
+    preco_maximo = filters.NumberFilter(label="Preço máximo",
+                                        field_name='preco',
+                                        lookup_expr='lte')
+    tipo = filters.ModelMultipleChoiceFilter(queryset=Tipo.objects.all(),
+                                             widget=forms.CheckboxSelectMultiple)
+    filiais = filters.ModelMultipleChoiceFilter(queryset=Filial.objects.all(),
+                                                widget=forms.CheckboxSelectMultiple)
 
     class Meta:
         model = ItemCardapio
-        fields = ['filiais']
+        fields = []
