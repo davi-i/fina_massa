@@ -67,6 +67,14 @@
                         {% else %}
                           <td class="text-right">R${{item.preco}}</td>
                         {% endif %}
+                        {% if user.is_authenticated %}
+                          <td class="px-3 text-center">
+                            <a href="{% url 'cardapio_edicao' item.id %}" class="text-primary"><i class="fas fa-edit"></i></a>
+                          </td>
+                          <td class="px-3 text-center">
+                            <a href="{% url 'cardapio_remocao' item.id %}" class="text-danger"><i class="fas fa-trash"></i></a>
+                        </td>
+                        {% endif %}
                       </tr>
                     {% endfor %}
                   </table>

@@ -40,6 +40,7 @@ for tipo, ds, ps, igss in zip(tipos, descricoes, precos, ingredientes):
     for d, p, igs in zip(ds, ps, igss):
         i = ItemCardapio()
         i.tipo = tipo
+        i.descricao = d
         i.save()
         i.filiais.add(bf)
         i.filiais.add(cang)

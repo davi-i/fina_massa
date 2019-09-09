@@ -28,5 +28,6 @@ urlpatterns = [
     path('sobre/', sobre, name='sobre'),
     path('cardapio/cadastrar/', cardapio_cadastro, name='cardapio_cadastro'),
     path('cardapio/<int:id>/editar/', cardapio_edicao, name='cardapio_edicao'),
+    path('cardapio/<int:id>/remover/', cardapio_remocao, name='cardapio_remocao'),
     path('cardapio/', cardapio, name='cardapio'),
 ]

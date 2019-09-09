@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from .filters import ItemCardapioFilter
 from .models import ItemCardapio, Tamanho, Pizza, Tipo
@@ -46,7 +46,7 @@ def cardapio_cadastro(request):
 
 
 def cardapio_edicao(request, id):
-    item = ItemCardapio.objects.get(pk=id)
+    item = get_object_or_404(ItemCardapio, pk=id)
     form = ItemCardapioForm(request.POST or None, instance=item)
     if form.is_valid():
         form.save()
@@ -55,6 +55,12 @@ def cardapio_edicao(request, id):
         'form': form,
     }
     return render(request, 'cardapio_cadastro.html', contexto)
+
+
+def cardapio_remocao(request, id):
+    item = get_object_or_404(ItemCardapio, pk=id)
+    item.delete()
+    return render(request, 'cardapio.html')
 
 
 def cardapio(request):

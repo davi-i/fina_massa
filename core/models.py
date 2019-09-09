@@ -29,7 +29,7 @@ class ItemCardapio(models.Model):
     tipo = models.ForeignKey(Tipo,
                              on_delete=models.CASCADE,
                              related_query_name='item')
-    ingredientes = models.ManyToManyField(Ingrediente)
+    ingredientes = models.ManyToManyField(Ingrediente, blank=True)
     filiais = models.ManyToManyField(Filial, related_query_name='item')
     preco = models.DecimalField('Preço',
                                 max_digits=10,
