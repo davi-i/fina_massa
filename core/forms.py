@@ -1,20 +1,17 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-
 
 from .models import (ItemCardapio)
 
-class ItemCardapio(UserCreationForm):
+
+class ItemCardapioForm(forms.ModelForm):
     class Meta:
         model = ItemCardapio
-        fiedls = ('descricao',
+        fields = ('descricao',
                   'tipo',
                   'preco',
                   'ingredientes',
                   'filiais')
-
-
-
-        
-        
-    
+        widgets = {
+            'ingredientes': forms.CheckboxSelectMultiple(),
+            'filiais': forms.CheckboxSelectMultiple(),
+        }

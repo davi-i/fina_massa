@@ -10,10 +10,12 @@ class ItemCardapioFilter(filters.FilterSet):
     preco_maximo = filters.NumberFilter(label="Preço máximo",
                                         field_name='preco',
                                         lookup_expr='lte')
-    tipo = filters.ModelMultipleChoiceFilter(queryset=Tipo.objects.all(),
-                                             widget=forms.CheckboxSelectMultiple)
-    filiais = filters.ModelMultipleChoiceFilter(queryset=Filial.objects.all(),
-                                                widget=forms.CheckboxSelectMultiple)
+    tipo = filters.ModelMultipleChoiceFilter(
+        queryset=Tipo.objects.all(),
+        widget=forms.CheckboxSelectMultiple)
+    filiais = filters.ModelMultipleChoiceFilter(
+        queryset=Filial.objects.all(),
+        widget=forms.CheckboxSelectMultiple)
 
     class Meta:
         model = ItemCardapio

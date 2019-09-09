@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from core.views import index, registro, perfil, sobre, cardapio_cadastro, cardapio
+from core.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,5 +27,6 @@ urlpatterns = [
     path('perfil/', perfil, name='perfil'),
     path('sobre/', sobre, name='sobre'),
     path('cardapio/cadastrar/', cardapio_cadastro, name='cardapio_cadastro'),
+    path('cardapio/<int:id>/editar/', cardapio_edicao, name='cardapio_edicao'),
     path('cardapio/', cardapio, name='cardapio'),
 ]

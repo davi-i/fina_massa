@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from .filters import ItemCardapioFilter
 from .models import ItemCardapio, Tamanho, Pizza, Tipo
+from .forms import ItemCardapioForm
 
 
 def index(request):
@@ -34,7 +35,26 @@ def sobre(request):
 
 
 def cardapio_cadastro(request):
-    return render(request, 'cardapio_cadastro.html')
+    form = ItemCardapioForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('cardapio')
+    contexto = {
+        'form': form,
+    }
+    return render(request, 'cardapio_cadastro.html', contexto)
+
+
+def cardapio_edicao(request, id):
+    item = ItemCardapio.objects.get(pk=id)
+    form = ItemCardapioForm(request.POST or None, instance=item)
+    if form.is_valid():
+        form.save()
+        return redirect('cardapio')
+    contexto = {
+        'form': form,
+    }
+    return render(request, 'cardapio_cadastro.html', contexto)
 
 
 def cardapio(request):
