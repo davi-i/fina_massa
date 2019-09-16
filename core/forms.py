@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import (ItemCardapio, Filial)
+from .models import (ItemCardapio, Filial, Endereco)
 
 
 class ItemCardapioForm(forms.ModelForm):
@@ -19,4 +19,12 @@ class ItemCardapioForm(forms.ModelForm):
 class FilialForm(forms.ModelForm):
   class Meta:
     model = Filial
-    fields = ('nome',)
+    fields = ('nome',
+              'contato',)
+
+class EnderecoForm(forms.ModelForm):
+  class Meta:
+    model = Endereco
+    fields = ('rua',
+              'bairro',
+              'cidade')

@@ -3,8 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .filters import ItemCardapioFilter
 from .models import ItemCardapio, Tamanho, Pizza, Tipo
-from .forms import ItemCardapioForm, FilialForm
-
+from .forms import ItemCardapioForm, FilialForm, EnderecoForm
 
 def index(request):
     contexto = {
@@ -84,10 +83,15 @@ def cardapio(request):
 
 def filial_cadastro(request):
     form = FilialForm(request.POST or None)
-    if form.is_valid():
-        form.save()
+    endereco_form = EnderecoForm(request.POST or None)
+    if form.is_valid() and endereco_form.is_valid():
+        endereco = endereco_form.save()
+        filial = form.save(commit=False)
+        filial.endereco = endereco
+        filial.save()
         return redirect('cardapio')
     contexto = {
         'form': form,
+        'endereco_form': endereco_form
     }
     return render(request, 'filial_cadastro.html', contexto)
