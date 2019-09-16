@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import (ItemCardapio)
+from .models import (ItemCardapio, Filial)
 
 
 class ItemCardapioForm(forms.ModelForm):
@@ -15,3 +15,8 @@ class ItemCardapioForm(forms.ModelForm):
             'ingredientes': forms.CheckboxSelectMultiple(),
             'filiais': forms.CheckboxSelectMultiple(),
         }
+
+class FilialForm(forms.ModelForm):
+  class Meta:
+    model = Filial
+    fields = ('nome',)

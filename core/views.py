@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .filters import ItemCardapioFilter
 from .models import ItemCardapio, Tamanho, Pizza, Tipo
-from .forms import ItemCardapioForm
+from .forms import ItemCardapioForm, FilialForm
 
 
 def index(request):
@@ -80,3 +80,14 @@ def cardapio(request):
         'tamanhos': tamanhos,
     }
     return render(request, 'cardapio.html', contexto)
+
+
+def filial_cadastro(request):
+    form = FilialForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('cardapio')
+    contexto = {
+        'form': form,
+    }
+    return render(request, 'filial_cadastro.html', contexto)

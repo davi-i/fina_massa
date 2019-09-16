@@ -1,0 +1,25 @@
+{% load widget_tweaks %}
+
+{% for erro in form.non_field_errors %}
+  <span class="text-danger">{{erro|escape}}</span>
+{% endfor %}{% for field in form %}
+  <div class="control-group form-group">
+    <div class="controls">
+      {{field.label_tag}}
+      {% for erro in field.errors %}
+        <span class="text-danger">{{erro|escape}}</span>
+      {% endfor %}
+      {% if field.field.widget.input_type == 'checkbox' %}
+        {% for checkbox in field %}
+          <div class="form-control">
+            {{checkbox}}
+            {{checkbox.label}}
+          </div>
+        {% endfor %}
+      {% else %}
+        {{field|add_class:'form-control'}}
+      {% endif %}
+      <p class="help-block"></p>
+    </div>
+  </div>
+{% endfor %}
