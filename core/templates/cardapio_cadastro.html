@@ -12,7 +12,12 @@
             </h2>
             <form method="post" class="mx-auto mt-3">
               {% csrf_token %}
-              {% include 'form.html' with form=form only %} 
+              {% include 'form.html' with form=form only %}
+              <div id="div-tamanhos">
+                {% for pizza_form in pizzas_forms %}
+                  {% include 'form.html' with form=pizza_form only %}
+                {% endfor %}
+              </div>
               <button type="submit" class="btn btn-primary">Salvar</button>
             </form>
           </div>
@@ -20,4 +25,20 @@
       </div>
     </div>
   </section>
+{% endblock %}
+
+{% block scripts %}
+  {{super}}
+  <script type="text/javascript">
+     // $(() => {
+     //  $tamanhos = $('#div-tamanhos').hide()
+     //  $preco = $('input[name=preco]')
+     //  $('select[name=tipo]').change(e => {
+     //    $select = $(e.target);
+     //    is_pizza = $select.val().toLowerCase().startsWith('pizza')
+     //    $tamanhos.toggle(is_pizza)
+     //    $preco.toggle(!is_pizza)
+     //  });
+     });
+  </script>
 {% endblock %}

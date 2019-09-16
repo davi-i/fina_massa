@@ -33,22 +33,24 @@
             <hr/>
 
             {% for tipo in tipos %}
-              {% if tipo.itens.all %}
-                {% with itens=tipo.itens.all %}
-                  <h3 class='text-uppercase'><strong>{{tipo}}</strong></h3>
-                  <table class="list-hours mb-5 text-left mx-auto">
-                    {% if item.pizza_set.all %}
-                      <tr class="list-hours-item">
-                        <th></th>
-                        {% for tamanho in tamanhos %}
-                          <td class="text-center">
-                            {{tamanho.descricao}}<br/>
-                            <span class="sp">{{tamanho.fatias}} fatias</span>
-                          </td>
-                        {% endfor %}
-                      </tr>
-                    {% endif %}
+              {% with itens=tipo.all %}
+                {% if itens %}
                     {% for item in itens %}
+                      {% if forloop.first %}
+                        <h3 class='text-uppercase'><strong>{{item.tipo}}</strong></h3>
+                        <table class="list-hours mb-5 text-left mx-auto">
+                          {% if item.pizza_set.all %}
+                            <tr class="list-hours-item">
+                              <th></th>
+                              {% for tamanho in tamanhos %}
+                                <td class="text-center">
+                                  {{tamanho.descricao}}<br/>
+                                  <span class="sp">{{tamanho.fatias}} fatias</span>
+                                </td>
+                              {% endfor %}
+                            </tr>
+                        {% endif %}
+                      {% endif %}
                       <tr class="list-hours-item">
                         <td class="pt-2 pr-5">
                           {{item.descricao}}<br/>
@@ -78,8 +80,8 @@
                       </tr>
                     {% endfor %}
                   </table>
-                {% endwith %}
-              {% endif %}
+                {% endif %}
+              {% endwith %}
             {% endfor %}
           </div>
         </div>

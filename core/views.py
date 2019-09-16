@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .filters import ItemCardapioFilter
 from .models import ItemCardapio, Tamanho, Pizza, Tipo
-from .forms import ItemCardapioForm, FilialForm
+from .forms import ItemCardapioForm, FilialForm, PizzaForm
 
 
 def index(request):
@@ -37,12 +37,17 @@ def sobre(request):
 
 @login_required
 def cardapio_cadastro(request):
+    pizzas_forms = []
+    for tamanho in Tamanho.objects.all():
+        pizza = Pizza(tamanho=tamanho)
+        pizzas_forms.append(PizzaForm(request.POST or None, instance=pizza))
     form = ItemCardapioForm(request.POST or None)
     if form.is_valid():
         form.save()
         return redirect('cardapio')
     contexto = {
         'form': form,
+        'pizzas_forms': pizzas_forms,
     }
     return render(request, 'cardapio_cadastro.html', contexto)
 
@@ -70,8 +75,9 @@ def cardapio_remocao(request, id):
 def cardapio(request):
     item_filter = ItemCardapioFilter(request.GET,
                                      queryset=ItemCardapio.objects.all())
-    itens = item_filter.qs
-    tipos = Tipo.objects.filter(item__id__in=itens).distinct()
+    tipos = []
+    for tipo in Tipo.objects.all():
+        tipos += [tipo.itens.filter(id__in=item_filter.qs)]
     tamanhos = Tamanho.objects.all()
     contexto = {
         'cardapio': 'active',

@@ -39,6 +39,7 @@ class ItemCardapio(models.Model):
     class Meta:
         default_related_name = 'itens'
 
+
 class Tamanho(models.Model):
     descricao = models.CharField('Tamanho', max_length=4)
     fatias = models.IntegerField('Fatias')
