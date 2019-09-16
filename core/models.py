@@ -16,9 +16,20 @@ class Ingrediente(models.Model):
     def __str__(self):
         return self.nome.capitalize()
 
+class Endereco(models.Model):
+    rua = models.CharField('Rua', max_length=100)
+    bairro = models.CharField('Bairro', max_length=100)
+    cidade = models.CharField('Cidade', max_length=100)
+
+    def __str__(self):
+        return '%s, %s, %s' % (self.rua, self.bairro, self.cidade)
+
 
 class Filial(models.Model):
     nome = models.CharField('Nome', max_length=100)
+    contato = models.IntegerField('Contato')
+    endereco = models.ForeignKey(Endereco,
+                                on_delete=models.PROTECT)
 
     def __str__(self):
         return self.nome.capitalize()

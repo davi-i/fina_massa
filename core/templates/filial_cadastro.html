@@ -12,6 +12,7 @@
             <form method="post" class="mx-auto mt-3">
               {% csrf_token %}
               {% include 'form.html' with form=form only %} 
+              {% include 'form.html' with form=endereco_form only %} 
               <button type="submit" class="btn btn-primary">Salvar</button>
             </form>
           </div>
