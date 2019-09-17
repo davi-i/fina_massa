@@ -3,7 +3,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .filters import ItemCardapioFilter
 from .models import ItemCardapio, Tamanho, Pizza, Tipo
-from .forms import ItemCardapioForm, FilialForm, EnderecoForm, PizzaForm
+from .forms import ItemCardapioForm, FilialForm, EnderecoForm, PizzaForm, PizzaCricaoForm
+
 
 def index(request):
     contexto = {
@@ -37,12 +38,18 @@ def sobre(request):
 @login_required
 def cardapio_cadastro(request):
     pizzas_forms = []
-    for tamanho in Tamanho.objects.all():
-        pizza = Pizza(tamanho=tamanho)
-        pizzas_forms.append(PizzaForm(request.POST or None, instance=pizza))
-    form = ItemCardapioForm(request.POST or None)
-    if form.is_valid():
-        form.save()
+    for n, tamanho in enumerate(Tamanho.objects.all(), start=1):
+        pizzas_forms.append(PizzaCricaoForm(tamanho,
+                                            request.POST or None,
+                                            prefix=n,
+                                            use_required_attribute=False))
+    form = ItemCardapioForm(request.POST or None, use_required_attribute=False)
+    if (form.is_valid() and
+            all([pizza_form.is_valid() for pizza_form in pizzas_forms])):
+        item = form.save()
+        if form.cleaned_data['tipo'].descricao.startswith('pizza'):
+            for pizza_form in pizzas_forms:
+                pizza_form.save(item)
         return redirect('cardapio')
     contexto = {
         'form': form,
@@ -54,12 +61,26 @@ def cardapio_cadastro(request):
 @login_required
 def cardapio_edicao(request, id):
     item = get_object_or_404(ItemCardapio, pk=id)
+    pizzas_forms = []
+    for n, pizza in enumerate(item.pizza_set.all(), start=1):
+        pizzas_forms.append(PizzaForm(request.POST or None,
+                                      prefix=n,
+                                      instance=pizza,
+                                      use_required_attribute=False))
     form = ItemCardapioForm(request.POST or None, instance=item)
     if form.is_valid():
-        form.save()
+        item = form.save()
+        if all([pizza_form.is_valid() for pizza_form in pizzas_forms]):
+            if form.cleaned_data['tipo'].descricao.startswith('pizza'):
+                for pizza_form in pizzas_forms:
+                    pizza_form.save(item)
+            else:
+                for pizza_form in pizzas_forms:
+                    del pizza_form
         return redirect('cardapio')
     contexto = {
         'form': form,
+        'pizzas_forms': pizzas_forms,
     }
     return render(request, 'cardapio_cadastro.html', contexto)
 
@@ -68,7 +89,7 @@ def cardapio_edicao(request, id):
 def cardapio_remocao(request, id):
     item = get_object_or_404(ItemCardapio, pk=id)
     item.delete()
-    return render(request, 'cardapio.html')
+    return redirect('cardapio')
 
 
 def cardapio(request):

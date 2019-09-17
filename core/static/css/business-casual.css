@@ -261,3 +261,37 @@ p {
 .font-weight-light {
   font-weight: 100 !important;
 }
+
+input.erro {
+  border-color: #dc3545;
+}
+
+div.erro:first-of-type{
+  border-top-color: #dc3545;
+}
+
+div.erro, select.erro {
+  border-left-color: #dc3545;
+  border-right-color: #dc3545;
+}
+
+div.erro:last-of-type{
+  border-bottom-color: #dc3545;
+}
+
+input.sem-erro, select.sem-erro {
+  border-color: #1f7a1f;
+}
+
+div.sem-erro:first-of-type{
+  border-top-color: #1f7a1f;
+}
+
+div.sem-erro{
+  border-left-color: #1f7a1f;
+  border-right-color: #1f7a1f;
+}
+
+div.sem-erro:last-of-type{
+  border-bottom-color: #1f7a1f;
+}

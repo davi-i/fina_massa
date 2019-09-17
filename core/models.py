@@ -16,6 +16,7 @@ class Ingrediente(models.Model):
     def __str__(self):
         return self.nome.capitalize()
 
+
 class Endereco(models.Model):
     rua = models.CharField('Rua', max_length=100)
     bairro = models.CharField('Bairro', max_length=100)
@@ -29,7 +30,7 @@ class Filial(models.Model):
     nome = models.CharField('Nome', max_length=100)
     contato = models.IntegerField('Contato')
     endereco = models.ForeignKey(Endereco,
-                                on_delete=models.PROTECT)
+                                 on_delete=models.PROTECT)
 
     def __str__(self):
         return self.nome.capitalize()
@@ -45,6 +46,7 @@ class ItemCardapio(models.Model):
     preco = models.DecimalField('Preço',
                                 max_digits=10,
                                 decimal_places=2,
+                                blank=True,
                                 null=True)
 
     class Meta:
@@ -66,5 +68,5 @@ class Pizza(models.Model):
     preco = models.DecimalField('Preço', max_digits=10, decimal_places=2)
 
     class Meta:
-        unique_together = ['item', 'tamanho']
+        unique_together = ('item', 'tamanho')
         ordering = ['tamanho']

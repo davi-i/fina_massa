@@ -13,7 +13,7 @@
             <form method="post" class="mx-auto mt-3">
               {% csrf_token %}
               {% include 'form.html' with form=form only %}
-              <div id="div-tamanhos">
+              <div id="div-precos">
                 {% for pizza_form in pizzas_forms %}
                   {% include 'form.html' with form=pizza_form only %}
                 {% endfor %}
@@ -30,15 +30,17 @@
 {% block scripts %}
   {{super}}
   <script type="text/javascript">
-     // $(() => {
-     //  $tamanhos = $('#div-tamanhos').hide()
-     //  $preco = $('input[name=preco]')
-     //  $('select[name=tipo]').change(e => {
-     //    $select = $(e.target);
-     //    is_pizza = $select.val().toLowerCase().startsWith('pizza')
-     //    $tamanhos.toggle(is_pizza)
-     //    $preco.toggle(!is_pizza)
-     //  });
+    $precos = $('#div-precos')
+    $preco = $('input[name=preco]').parents('.form-group')
+     chechar_tipo = ($select) => {
+        is_pizza = $('option[value='+$select.val()+']').html().toLowerCase().startsWith('pizza')
+        $precos.toggle(is_pizza)
+        $preco.toggle(!is_pizza)
+     }
+     $(() => {
+      chechar_tipo($('select[name=tipo]').change(e => {
+        chechar_tipo($(e.target));
+      }));
      });
   </script>
 {% endblock %}

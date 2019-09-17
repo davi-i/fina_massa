@@ -1,7 +1,11 @@
 from django.test import TestCase
-from .models import *
 
-# Create your tests here.
+
+'''
+Código para criar tamanhos, tipos, filiais e alguns itens
+'''
+from core.models import *
+
 p = Tamanho.objects.create(descricao="P", fatias=4)
 m = Tamanho.objects.create(descricao="M", fatias=6)
 g = Tamanho.objects.create(descricao="G", fatias=8)
@@ -16,9 +20,6 @@ mussarela = Ingrediente.objects.create(nome='mussarela')
 frango = Ingrediente.objects.create(nome='frango')
 catupiry = Ingrediente.objects.create(nome='catupiry')
 calabresa = Ingrediente.objects.create(nome='calabresa')
-
-bf = Filial.objects.create(nome='BF')
-cang = Filial.objects.create(nome='Cang')
 
 tipos = [pastel, pizza, suco]
 descricoes = [
@@ -42,8 +43,6 @@ for tipo, ds, ps, igss in zip(tipos, descricoes, precos, ingredientes):
         i.tipo = tipo
         i.descricao = d
         i.save()
-        i.filiais.add(bf)
-        i.filiais.add(cang)
         for ig in igs:
             i.ingredientes.add(ig)
         if tipo.descricao.startswith('pizza'):
