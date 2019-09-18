@@ -295,3 +295,8 @@ div.sem-erro{
 div.sem-erro:last-of-type{
   border-bottom-color: #1f7a1f;
 }
+
+select[readonly] {
+  pointer-events: none;
+  touch-action: none;
+}

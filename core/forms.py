@@ -35,6 +35,15 @@ class ItemCardapioForm(forms.ModelForm):
             self.add_error('preco', "Este campo é obrigatório")
 
 
+class ItemCardapioEdicaoForm(ItemCardapioForm):
+    def __init__(self, instance, *args, **kwargs):
+        super().__init__(instance=instance, *args, **kwargs)
+        self.fields['tipo'].widget.attrs = {'readonly': True}
+
+    def clean(self):
+        return super(forms.ModelForm, self).clean()
+
+
 class EnderecoForm(forms.ModelForm):
     class Meta:
         model = Endereco
@@ -79,5 +88,4 @@ class PizzaForm(forms.ModelForm):
 
 class PizzaCricaoForm(PizzaForm):
     def __init__(self, tamanho, *args, **kwargs):
-        self.instance = Pizza(tamanho=tamanho)
-        super().__init__(*args, **kwargs)
+        super().__init__(instance=Pizza(tamanho=tamanho), *args, **kwargs)

@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .filters import ItemCardapioFilter
 from .models import ItemCardapio, Tamanho, Pizza, Tipo
-from .forms import ItemCardapioForm, FilialForm, EnderecoForm, PizzaForm, PizzaCricaoForm
+from .forms import ItemCardapioForm, ItemCardapioEdicaoForm, FilialForm, EnderecoForm, PizzaForm, PizzaCricaoForm
 
 
 def index(request):
@@ -67,7 +67,7 @@ def cardapio_edicao(request, id):
                                       prefix=n,
                                       instance=pizza,
                                       use_required_attribute=False))
-    form = ItemCardapioForm(request.POST or None, instance=item)
+    form = ItemCardapioEdicaoForm(item, request.POST or None)
     if form.is_valid():
         item = form.save()
         if all([pizza_form.is_valid() for pizza_form in pizzas_forms]):

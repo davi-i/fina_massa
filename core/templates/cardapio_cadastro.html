@@ -33,7 +33,7 @@
     $precos = $('#div-precos')
     $preco = $('input[name=preco]').parents('.form-group')
      chechar_tipo = ($select) => {
-        is_pizza = $('option[value='+$select.val()+']').html().toLowerCase().startsWith('pizza')
+        is_pizza = $('option[value="'+$select.val()+'"]').html().toLowerCase().startsWith('pizza')
         $precos.toggle(is_pizza)
         $preco.toggle(!is_pizza)
      }
