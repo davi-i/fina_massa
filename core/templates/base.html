@@ -64,6 +64,25 @@
   {% block conteudo %}
   {% endblock %}
 
+  <div class="modal fade" id="promocao" tabindex="-1" role="dialog" aria-labelledby="title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="title">ANTENÇÃO!</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body bg-danger">
+          <span name='descricao'></span>! Não perca!
+          Essa promoção só é válida até o dia <span name='fim'></span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <footer class="footer text-faded text-center py-5">
     <div class="container">
       <p class="m-0 small">Copyright &copy; Your Website 2019</p>
@@ -91,6 +110,12 @@
         $(window).on('resize scroll', $.debounce(25, () => {
           determineSticky();
         }));
+        {% for promocao in promocoes %}
+          const $modal = $('#promocao');
+          $modal.find("span[name='descricao']").text("{{promocao.descricao}}");
+          $modal.find("span[name='fim']").text("{{promocao.fim}}");
+          $modal.modal('show');
+        {% endfor %}
       });
     </script>
   {% endblock %}

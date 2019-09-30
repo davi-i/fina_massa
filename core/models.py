@@ -72,3 +72,9 @@ class Pizza(models.Model):
     class Meta:
         unique_together = ('item', 'tamanho')
         ordering = ['tamanho']
+
+
+class Promocao(models.Model):
+    descricao = models.CharField('Descrição', max_length=100)
+    inicio = models.DateTimeField('Início')
+    fim = models.DateTimeField('fim')

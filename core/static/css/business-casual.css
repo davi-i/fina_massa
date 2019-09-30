@@ -40,6 +40,10 @@ p {
   background-color: rgba(255, 255, 255, 0.8);
 }
 
+.bg-main {
+  background-color: rgba(228, 102, 34, 0.9);
+}
+
 .site-heading .site-heading-upper {
   display: block;
   font-size: 5rem;

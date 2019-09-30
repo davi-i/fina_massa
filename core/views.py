@@ -2,8 +2,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .filters import ItemCardapioFilter
-from .models import ItemCardapio, Tamanho, Pizza, Tipo, Filial
-from .forms import ItemCardapioForm, ItemCardapioEdicaoForm, FilialForm, EnderecoForm, PizzaForm, PizzaCricaoForm
+from .models import ItemCardapio, Tamanho, Tipo, Filial, Promocao
+from .forms import (ItemCardapioForm, ItemCardapioEdicaoForm, FilialForm,
+                    EnderecoForm, PizzaForm, PizzaCricaoForm, PromocaoForm)
+from datetime import datetime
+
+
+def promocoes_atuais():
+    return Promocao.objects.filter(inicio__lte=datetime.now(),
+                                   fim__gte=datetime.now())
 
 
 def index(request):
@@ -11,6 +18,7 @@ def index(request):
     contexto = {
         'index': 'active',
         'filiais': filiais,
+        'promocoes': promocoes_atuais(),
     }
     return render(request, 'index.html', contexto)
 
@@ -73,12 +81,8 @@ def cardapio_edicao(request, id):
     if form.is_valid():
         item = form.save()
         if all([pizza_form.is_valid() for pizza_form in pizzas_forms]):
-            if form.cleaned_data['tipo'].descricao.startswith('pizza'):
-                for pizza_form in pizzas_forms:
-                    pizza_form.save(item)
-            else:
-                for pizza_form in pizzas_forms:
-                    del pizza_form
+            for pizza_form in pizzas_forms:
+                pizza_form.save(item)
         return redirect('cardapio')
     contexto = {
         'form': form,
@@ -124,3 +128,14 @@ def filial_cadastro(request):
         'endereco_form': endereco_form
     }
     return render(request, 'filial_cadastro.html', contexto)
+
+
+def promocao_cadastro(request):
+    form = PromocaoForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('perfil')
+    contexto = {
+        'form': form,
+    }
+    return render(request, 'promocao_cadastro.html', contexto)

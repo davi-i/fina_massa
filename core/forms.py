@@ -1,7 +1,19 @@
 from django import forms
 from django.db.models import F
-from .models import (ItemCardapio, Filial, Endereco, Pizza, Tipo)
+from .models import (ItemCardapio, Filial, Endereco, Pizza, Tipo, Promocao)
 from django.utils.translation import ugettext_lazy as _
+
+
+class DateTimeField(forms.DateTimeField):
+    def __init__(self, *args, **kwargs):
+        super().__init__(input_formats=['%Y-%m-%dT%H:%M'], *args, **kwargs)
+        self.widget = forms.DateTimeInput(attrs={'type': 'datetime-local'})
+
+
+class TimeField(forms.TimeField):
+    def __init__(self, *args, **kwargs):
+        super().__init__(input_formats=['%H:%M'], *args, **kwargs)
+        self.widget = forms.TimeInput(attrs={'type': 'time'})
 
 
 class ItemCardapioForm(forms.ModelForm):
@@ -53,6 +65,9 @@ class EnderecoForm(forms.ModelForm):
 
 
 class FilialForm(forms.ModelForm):
+    abertura = TimeField()
+    fechamento = TimeField()
+
     class Meta:
         model = Filial
         fields = ('nome',
@@ -91,3 +106,12 @@ class PizzaForm(forms.ModelForm):
 class PizzaCricaoForm(PizzaForm):
     def __init__(self, tamanho, *args, **kwargs):
         super().__init__(instance=Pizza(tamanho=tamanho), *args, **kwargs)
+
+
+class PromocaoForm(forms.ModelForm):
+    inicio = DateTimeField()
+    fim = DateTimeField()
+
+    class Meta:
+        model = Promocao
+        fields = ('descricao', 'inicio', 'fim')

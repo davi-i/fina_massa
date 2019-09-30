@@ -30,7 +30,7 @@
 {% block scripts %}
   {{super}}
   <script type="text/javascript">
-    $precos = $('#div-precos')
+    $precos = $('#div-precos').hide()
     $preco = $('input[name=preco]').parents('.form-group')
      chechar_tipo = ($select) => {
         is_pizza = $('option[value="'+$select.val()+'"]').html().toLowerCase().startsWith('pizza')
