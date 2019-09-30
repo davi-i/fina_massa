@@ -56,7 +56,9 @@ class FilialForm(forms.ModelForm):
     class Meta:
         model = Filial
         fields = ('nome',
-                  'contato',)
+                  'contato',
+                  'abertura',
+                  'fechamento')
 
 
 class PizzaForm(forms.ModelForm):

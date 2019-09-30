@@ -2,13 +2,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .filters import ItemCardapioFilter
-from .models import ItemCardapio, Tamanho, Pizza, Tipo
+from .models import ItemCardapio, Tamanho, Pizza, Tipo, Filial
 from .forms import ItemCardapioForm, ItemCardapioEdicaoForm, FilialForm, EnderecoForm, PizzaForm, PizzaCricaoForm
 
 
 def index(request):
+    filiais = Filial.objects.all()
     contexto = {
         'index': 'active',
+        'filiais': filiais,
     }
     return render(request, 'index.html', contexto)
 

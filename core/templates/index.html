@@ -8,11 +8,14 @@
         <img class="intro-img img-fluid mb-3 mb-lg-0 rounded" src="{% static 'img/intro.jpg' %}" alt="">
         <div class="intro-text left-0 text-center bg-faded p-5 rounded">
           <h2 class="section-heading mb-4">Experimente nossas pizzas!</h2>
-          <address>
-            <p class="mb-3 lead"><i class="fas fa-phone-alt"></i> (84) 99460-0160</p>
-            <p class="mb-3 lead"><i class="fas fa-map-marked"></i> <a href="https://www.google.com/maps/place/Fina+Massa+-+Pizzaria+%26+Pastelaria/@-6.3791923,-35.1284868,17.14z/data=!4m5!3m4!1s0x7ad7e0025fef57d:0x4527459e36f1f568!8m2!3d-6.3801489!4d-35.1277203" target="_blank">Rua Doutor Pedro Velho, Canguaretama</p></a>
-            <p class="mb-3 lead"><i class="fas fa-clock"></i> Das 18:30 às 22:00</p>
-          </address>
+          {% for filial in filiais %}
+            <h3 class="">{{filial.nome}}</h2>
+            <address>
+              <p class="mb-3 lead"><i class="fas fa-phone-alt"></i> {{filial.contato}}</p>
+              <p class="mb-3 lead"><i class="fas fa-map-marked"></i> {{filial.endereco}}</p>
+              <p class="mb-3 lead"><i class="fas fa-clock"></i> Das {{filial.abertura}} às {{filial.fechamento}}</p>
+            </address>
+          {% endfor %}
           <!--div class="intro-button mx-auto">
             <a class="btn btn-primary btn-xl" href="#">Lorem ipsum!</a>
           </div-->

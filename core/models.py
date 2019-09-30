@@ -31,6 +31,8 @@ class Filial(models.Model):
     contato = models.IntegerField('Contato')
     endereco = models.ForeignKey(Endereco,
                                  on_delete=models.PROTECT)
+    abertura = models.TimeField('Hora que abre')
+    fechamento = models.TimeField('Hora que fecha')
 
     def __str__(self):
         return self.nome.capitalize()
