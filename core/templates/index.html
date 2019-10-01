@@ -10,8 +10,8 @@
           <h2 class="section-heading mb-4">Experimente nossas pizzas!</h2>
           {% for filial in filiais %}
             <h3 class="">{{filial.nome}}</h2>
-            <address>
-              <p class="mb-3 lead"><i class="fas fa-phone-alt"></i> {{filial.contato}}</p>
+            <address class="mb-4">
+              <p class="mb-3 lead"><i class="fas fa-phone-alt"></i> {{filial.contato_str}}</p>
               <p class="mb-3 lead"><i class="fas fa-map-marked"></i> {{filial.endereco}}</p>
               <p class="mb-3 lead"><i class="fas fa-clock"></i> Das {{filial.abertura}} às {{filial.fechamento}}</p>
             </address>

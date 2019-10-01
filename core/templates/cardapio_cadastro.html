@@ -41,6 +41,16 @@
       chechar_tipo($('select[name=tipo]').change(e => {
         chechar_tipo($(e.target));
       }));
-     });
+      const $novo_div = $('<div class="form-control"></div>'),
+            $nome_div = $('<div class=inline-input><input type="text" name="ingrediente-nome" class="form-control inline" /><button type=button name=ingrediente-salvar class="btn btn-primary py-0 inline">Salvar</button></div>').hide().wrap('<div class=inline-input></div>'),
+            $novo = $('<button type=button name=novo class="btn py-0">Novo</button>')
+                .wrap($novo_div).click(() => {
+                  $novo.parents('.form-control').hide()
+                  $nome_div.show()
+                }),
+            $ingrediente_div = $('input[name=ingredientes]').last().parents('.form-group');
+      $ingrediente_div.append($novo.parents('.form-control'), $nome_div);
+       });
+
   </script>
 {% endblock %}

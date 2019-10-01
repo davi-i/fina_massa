@@ -61,7 +61,8 @@ class EnderecoForm(forms.ModelForm):
         model = Endereco
         fields = ('rua',
                   'bairro',
-                  'cidade')
+                  'cidade',
+                  'numero')
 
 
 class FilialForm(forms.ModelForm):
@@ -73,7 +74,7 @@ class FilialForm(forms.ModelForm):
         fields = ('nome',
                   'contato',
                   'abertura',
-                  'fechamento')
+                  'fechamento',)
 
 
 class PizzaForm(forms.ModelForm):

@@ -53,6 +53,24 @@
           <li class="nav-item px-lg-4 {{cardapio}}">
             <a class="nav-link text-uppercase text-expanded" href="{% url 'cardapio' %}">Cardápio</a>
           </li>
+          {% if user.is_authenticated %}
+            <li class="nav-item px-lg-4 {{restrito}} dropdown">
+              <a class="nav-link text-uppercase text-expanded dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{user.username}}
+              </a>
+              <div class="dropdown-menu bg-main-faded text-center p-0" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item {{cardapio_cadastro}}" href="{% url 'cardapio_cadastro' %}">Cadastrar item no cardápio</a>
+                <a class="dropdown-item {{filial_cadastro}}" href="{% url 'filial_cadastro' %}">Cadastrar filial</a>
+                <a class="dropdown-item {{registro}}" href="{% url 'registro' %}">Cadastrar funcionário</a>
+                <div class="dropdown-divider m-0"></div>
+                <a class="dropdown-item bg-danger" href="{% url 'logout' %}">Sair</a>
+              </div>
+            </li>
+          {% else %}
+            <li class="nav-item px-lg-4 {{restrito}}">
+              <a class="nav-link text-uppercase text-expanded" href="{% url 'login' %}">Área Restrita</a>
+            </li>
+          {% endif %}
           <!--li class="nav-item px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="store.html">Store</a>
           </li-->

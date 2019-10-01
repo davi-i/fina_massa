@@ -23,19 +23,19 @@ def index(request):
     return render(request, 'index.html', contexto)
 
 
+@login_required
 def registro(request):
     form = UserCreationForm(request.POST or None)
     if form.is_valid():
         form.save()
         return redirect('login')
     contexto = {
+        'restrito': 'active',
+        'registro': 'active',
         'form': form,
     }
     return render(request, 'registration/registro.html', contexto)
 
-
-def perfil(request):
-    return render(request, 'registration/perfil.html')
 
 
 def sobre(request):
@@ -62,6 +62,8 @@ def cardapio_cadastro(request):
                 pizza_form.save(item)
         return redirect('cardapio')
     contexto = {
+        'restrito': 'active',
+        'cardapio_cadastro': 'active',
         'form': form,
         'pizzas_forms': pizzas_forms,
     }
@@ -85,6 +87,8 @@ def cardapio_edicao(request, id):
                 pizza_form.save(item)
         return redirect('cardapio')
     contexto = {
+        'restrito': 'active',
+        'cardapio_cadastro': 'active',
         'form': form,
         'pizzas_forms': pizzas_forms,
     }
@@ -124,6 +128,8 @@ def filial_cadastro(request):
         filial.save()
         return redirect('cardapio')
     contexto = {
+        'restrito': 'active',
+        'filial_cadastro': 'active',
         'form': form,
         'endereco_form': endereco_form
     }
@@ -134,7 +140,7 @@ def promocao_cadastro(request):
     form = PromocaoForm(request.POST or None)
     if form.is_valid():
         form.save()
-        return redirect('perfil')
+        return redirect('index')
     contexto = {
         'form': form,
     }

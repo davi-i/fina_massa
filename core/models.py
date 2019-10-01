@@ -21,9 +21,12 @@ class Endereco(models.Model):
     rua = models.CharField('Rua', max_length=100)
     bairro = models.CharField('Bairro', max_length=100)
     cidade = models.CharField('Cidade', max_length=100)
+    numero = models.IntegerField('Número', null=True, blank=True)
 
     def __str__(self):
-        return '%s, %s, %s' % (self.rua, self.bairro, self.cidade)
+        numero = self.numero or "S/N"
+
+        return '%s, %s, %s, %s' % (self.rua, self.bairro, self.cidade, numero)
 
 
 class Filial(models.Model):
@@ -36,6 +39,12 @@ class Filial(models.Model):
 
     def __str__(self):
         return self.nome.capitalize()
+
+    @property
+    def contato_str(self):
+        contato = str(self.contato)
+        hifen = 7 if len(contato) == 11 else 6
+        return '(' + contato[:2] + ') ' + contato[2:hifen] + '-' + contato[hifen:]
 
 
 class ItemCardapio(models.Model):

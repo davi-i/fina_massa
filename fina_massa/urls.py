@@ -21,10 +21,10 @@ from core.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
-    path('login/', auth_views.LoginView.as_view(), name='login'),
+    path('login/', auth_views.LoginView.as_view(extra_context={'restrito': 'active'}), name='login'),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     path("registro/", registro, name="registro"),
-    path('perfil/', perfil, name='perfil'),
+    # path('perfil/', perfil, name='perfil'),
     path('sobre/', sobre, name='sobre'),
     path('cardapio/cadastrar/', cardapio_cadastro, name='cardapio_cadastro'),
     path('cardapio/<int:id>/editar/', cardapio_edicao, name='cardapio_edicao'),
