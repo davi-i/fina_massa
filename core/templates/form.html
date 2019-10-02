@@ -2,25 +2,20 @@
 
 {% for erro in form.non_field_errors %}
   <div class="alert alert-danger">{{erro|escape}}</div>
-{% endfor %}{% for field in form %}
+{% endfor %}
+{% for field in form %}
   <div class="control-group form-group">
-    <div class="controls">
+    <div class="controls{% if field.errors %} erro{% elif form.is_bound %} sem-erro{% endif %}">
       {{field.label_tag}}
       {% if field.field.widget.input_type == 'checkbox' %}
         {% for checkbox in field %}
-          <div class="form-control{% if field.errors %} erro{% elif form.is_bound %} sem-erro {% endif %}">
+          <div class="form-control">
             {{checkbox}}
             {{checkbox.label}}
           </div>
         {% endfor %}
       {% else %}
-        {% if field.errors %}
-          {{field|add_class:"form-control erro"}}
-        {% elif form.is_bound %}
-          {{field|add_class:"form-control sem-erro"}}
-        {% else %}
-          {{field|add_class:"form-control"}}
-        {% endif %}
+        {{field|add_class:"form-control"}}
       {% endif %}
       {% for erro in field.errors %}
         <small class="text-danger">{{erro}}</small>

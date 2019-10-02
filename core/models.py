@@ -11,7 +11,7 @@ class Tipo(models.Model):
 
 
 class Ingrediente(models.Model):
-    nome = models.CharField('Nome', max_length=100)
+    nome = models.CharField('Nome', max_length=100, unique=True)
 
     def __str__(self):
         return self.nome.capitalize()
@@ -52,7 +52,7 @@ class ItemCardapio(models.Model):
     tipo = models.ForeignKey(Tipo,
                              on_delete=models.CASCADE,
                              related_query_name='item')
-    ingredientes = models.ManyToManyField(Ingrediente, blank=True)
+    ingredientes = models.ManyToManyField(Ingrediente)
     filiais = models.ManyToManyField(Filial, related_query_name='item')
     preco = models.DecimalField('Preço',
                                 max_digits=10,

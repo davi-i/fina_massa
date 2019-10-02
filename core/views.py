@@ -2,15 +2,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .filters import ItemCardapioFilter
-from .models import ItemCardapio, Tamanho, Tipo, Filial, Promocao
-from .forms import (ItemCardapioForm, ItemCardapioEdicaoForm, FilialForm,
+from .models import Ingrediente, ItemCardapio, Tamanho, Tipo, Filial, Promocao
+from .forms import (IngredienteForm, ItemCardapioForm, ItemCardapioEdicaoForm, FilialForm,
                     EnderecoForm, PizzaForm, PizzaCricaoForm, PromocaoForm)
 from datetime import datetime
 
 
-def promocoes_atuais():
+def promocao_atual():
     return Promocao.objects.filter(inicio__lte=datetime.now(),
-                                   fim__gte=datetime.now())
+                                   fim__gte=datetime.now()).earliest('fim')
 
 
 def index(request):
@@ -18,7 +18,7 @@ def index(request):
     contexto = {
         'index': 'active',
         'filiais': filiais,
-        'promocoes': promocoes_atuais(),
+        'promocao': promocao_atual(),
     }
     return render(request, 'index.html', contexto)
 
@@ -37,25 +37,30 @@ def registro(request):
     return render(request, 'registration/registro.html', contexto)
 
 
-
 def sobre(request):
     contexto = {
         'sobre': 'active',
+        'promocao': promocao_atual(),
     }
     return render(request, 'sobre.html', contexto)
 
 
 @login_required
 def cardapio_cadastro(request):
+    form = ItemCardapioForm(request.POST or None)
     pizzas_forms = []
     for n, tamanho in enumerate(Tamanho.objects.all(), start=1):
         pizzas_forms.append(PizzaCricaoForm(tamanho,
                                             request.POST or None,
-                                            prefix=n,
-                                            use_required_attribute=False))
-    form = ItemCardapioForm(request.POST or None, use_required_attribute=False)
-    if (form.is_valid() and
-            all([pizza_form.is_valid() for pizza_form in pizzas_forms])):
+                                            prefix=n))
+    ingrediente_form = IngredienteForm(request.POST or None)
+    if ('salvar-ingrediente' in request.POST and
+            ingrediente_form.is_valid()):
+        ingrediente_form.save()
+        ingrediente_form = IngredienteForm()
+    elif ('salvar-item' in request.POST and
+          form.is_valid() and
+          all([pizza_form.is_valid() for pizza_form in pizzas_forms])):
         item = form.save()
         if form.cleaned_data['tipo'].descricao.startswith('pizza'):
             for pizza_form in pizzas_forms:
@@ -66,6 +71,7 @@ def cardapio_cadastro(request):
         'cardapio_cadastro': 'active',
         'form': form,
         'pizzas_forms': pizzas_forms,
+        'ingrediente_form': ingrediente_form
     }
     return render(request, 'cardapio_cadastro.html', contexto)
 
@@ -114,10 +120,12 @@ def cardapio(request):
         'filter': item_filter,
         'tipos': tipos,
         'tamanhos': tamanhos,
+        'promocao': promocao_atual(),
     }
     return render(request, 'cardapio.html', contexto)
 
 
+@login_required
 def filial_cadastro(request):
     form = FilialForm(request.POST or None)
     endereco_form = EnderecoForm(request.POST or None)
@@ -136,12 +144,15 @@ def filial_cadastro(request):
     return render(request, 'filial_cadastro.html', contexto)
 
 
+@login_required
 def promocao_cadastro(request):
     form = PromocaoForm(request.POST or None)
     if form.is_valid():
         form.save()
         return redirect('index')
     contexto = {
+        'restrito': 'active',
+        'promocao_cadastro': 'active',
         'form': form,
     }
     return render(request, 'promocao_cadastro.html', contexto)

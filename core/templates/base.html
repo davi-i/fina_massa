@@ -62,6 +62,7 @@
                 <a class="dropdown-item {{cardapio_cadastro}}" href="{% url 'cardapio_cadastro' %}">Cadastrar item no cardápio</a>
                 <a class="dropdown-item {{filial_cadastro}}" href="{% url 'filial_cadastro' %}">Cadastrar filial</a>
                 <a class="dropdown-item {{registro}}" href="{% url 'registro' %}">Cadastrar funcionário</a>
+                <a class="dropdown-item {{promocao_cadastro}}" href="{% url 'promocao_cadastro' %}">Cadastrar promoção</a>
                 <div class="dropdown-divider m-0"></div>
                 <a class="dropdown-item bg-danger" href="{% url 'logout' %}">Sair</a>
               </div>
@@ -71,9 +72,6 @@
               <a class="nav-link text-uppercase text-expanded" href="{% url 'login' %}">Área Restrita</a>
             </li>
           {% endif %}
-          <!--li class="nav-item px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="store.html">Store</a>
-          </li-->
         </ul>
       </div>
     </div>
@@ -84,20 +82,20 @@
 
   <div class="modal fade" id="promocao" tabindex="-1" role="dialog" aria-labelledby="title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
+      <div class="modal-content bg-main">
         <div class="modal-header">
-          <h5 class="modal-title" id="title">ANTENÇÃO!</h5>
+          <h5 class="modal-title" id="title">ATENÇÃO!</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body bg-danger">
+        <div class="modal-body bg-yellow-faded">
           <span name='descricao'></span>! Não perca!
           Essa promoção só é válida até o dia <span name='fim'></span>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-success" data-dismiss="modal">Fechar</button>
-        </div>
+        <!--div class="modal-footer bg-main">
+          <button type="button" class="btn btn-success btn-warning" data-dismiss="modal">Fechar</button>
+        </div-->
       </div>
     </div>
   </div>
@@ -128,12 +126,12 @@
         $(window).on('resize scroll', $.debounce(25, () => {
           determineSticky();
         }));
-        {% for promocao in promocoes %}
+        {% if promocao %}
           const $modal = $('#promocao');
           $modal.find("span[name='descricao']").text("{{promocao.descricao}}");
           $modal.find("span[name='fim']").text("{{promocao.fim}}");
           $modal.modal('show');
-        {% endfor %}
+        {% endif %}
       });
     </script>
   {% endblock %}

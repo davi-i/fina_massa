@@ -1,6 +1,6 @@
 from django import forms
 from django.db.models import F
-from .models import (ItemCardapio, Filial, Endereco, Pizza, Tipo, Promocao)
+from .models import (Ingrediente, ItemCardapio, Filial, Endereco, Pizza, Tipo, Promocao)
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -16,6 +16,15 @@ class TimeField(forms.TimeField):
         self.widget = forms.TimeInput(attrs={'type': 'time'})
 
 
+class IngredienteForm(forms.ModelForm):
+    class Meta:
+        model = Ingrediente
+        fields = ('nome',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(use_required_attribute=False, *args, **kwargs)
+
+
 class ItemCardapioForm(forms.ModelForm):
     class Meta:
         model = ItemCardapio
@@ -29,17 +38,15 @@ class ItemCardapioForm(forms.ModelForm):
             'filiais': forms.CheckboxSelectMultiple(),
         }
 
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.fields['tipo'].queryset = (
-    #         Tipo.objects.exclude(descricao__startswith='pizza'))
+    def __init__(self, *args, **kwargs):
+        super().__init__(use_required_attribute=False, *args, **kwargs)
 
     def clean(self):
         cleaned_data = super().clean()
         preco = cleaned_data.get('preco')
         tipo = cleaned_data.get('tipo')
 
-        if tipo.descricao.startswith('pizza'):
+        if tipo and tipo.descricao.startswith('pizza'):
             cleaned_data['preco'] = None
             return
 
@@ -83,7 +90,7 @@ class PizzaForm(forms.ModelForm):
         fields = ('preco',)
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(use_required_attribute=False, *args, **kwargs)
         self.fields['preco'].label = ('Preço (%s)' %
                                       self.instance.tamanho.descricao)
 

@@ -90,10 +90,6 @@ p {
   font-family: 'Raleway';
 }
 
-/*#mainNav .navbar-brand {
-  color: #1f7a1f;
-}*/
-
 #mainNav .navbar-nav .nav-item .nav-link, .dropdown-item {
   color: rgba(255, 255, 255, 0.7);
   font-weight: 800;
@@ -153,6 +149,10 @@ p {
   .intro .intro-text {
     width: 45%;
   }
+}
+
+.bg-yellow-faded {
+  background-color: rgba(230, 167, 86, 0.9);
 }
 
 .cta {
@@ -272,37 +272,37 @@ p {
   font-weight: 100 !important;
 }
 
-input.erro {
+.erro > input, .erro > select {
   border-color: #dc3545;
 }
 
-div.erro:first-of-type{
+.erro > div.form-control:first-of-type{
   border-top-color: #dc3545;
 }
 
-div.erro, select.erro {
+.erro > div.form-control {
   border-left-color: #dc3545;
   border-right-color: #dc3545;
 }
 
-div.erro:last-of-type{
+.erro > div.form-control:last-of-type{
   border-bottom-color: #dc3545;
 }
 
-input.sem-erro, select.sem-erro {
+.sem-erro > input, .sem-ero > select {
   border-color: #1f7a1f;
 }
 
-div.sem-erro:first-of-type{
+.sem-erro > div.form-control:first-of-type{
   border-top-color: #1f7a1f;
 }
 
-div.sem-erro{
+.sem-erro > div.form-control {
   border-left-color: #1f7a1f;
   border-right-color: #1f7a1f;
 }
 
-div.sem-erro:last-of-type{
+.sem-erro > div.form-control:last-of-type{
   border-bottom-color: #1f7a1f;
 }
 

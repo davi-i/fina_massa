@@ -18,7 +18,7 @@
                   {% include 'form.html' with form=pizza_form only %}
                 {% endfor %}
               </div>
-              <button type="submit" class="btn btn-primary">Salvar</button>
+              <button name="salvar-item" type="submit" class="btn btn-primary">Salvar</button>
             </form>
           </div>
         </div>
@@ -41,16 +41,24 @@
       chechar_tipo($('select[name=tipo]').change(e => {
         chechar_tipo($(e.target));
       }));
-      const $novo_div = $('<div class="form-control"></div>'),
-            $nome_div = $('<div class=inline-input><input type="text" name="ingrediente-nome" class="form-control inline" /><button type=button name=ingrediente-salvar class="btn btn-primary py-0 inline">Salvar</button></div>').hide().wrap('<div class=inline-input></div>'),
-            $novo = $('<button type=button name=novo class="btn py-0">Novo</button>')
-                .wrap($novo_div).click(() => {
-                  $novo.parents('.form-control').hide()
-                  $nome_div.show()
-                }),
-            $ingrediente_div = $('input[name=ingredientes]').last().parents('.form-group');
-      $ingrediente_div.append($novo.parents('.form-control'), $nome_div);
-       });
+
+      $('input').on('keypress', (e) => {
+        if (e.which == 13){
+          e.preventDefault()
+          $('button[name=salvar-item]').click()
+        }
+      })
+      const $nome_div = $(
+              "<div class='inline-input {% if ingrediente_form.nome.errors %}erro{% endif %}'>" +
+                  '{% render_field ingrediente_form.nome class="form-control inline" placeholder="Cadastrar novo ingrediente" %}' +
+                  "<button type=submit name=salvar-ingrediente class=\"btn btn-primary py-0 inline\">Salvar</button>" +
+                "</div>" +
+                {% for erro in ingrediente_form.nome.errors %}
+                  '<small class="text-danger">{{erro}}</small>' +
+                {% endfor %}''
+            );
+      $('input[name=ingredientes]:last').parents('.form-group').append($nome_div);
+    });
 
   </script>
 {% endblock %}

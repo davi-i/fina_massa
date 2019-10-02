@@ -31,5 +31,5 @@ urlpatterns = [
     path('cardapio/<int:id>/remover/', cardapio_remocao, name='cardapio_remocao'),
     path('cardapio/', cardapio, name='cardapio'),
     path('filial/cadastrar', filial_cadastro, name='filial_cadastro'),
-    path('promocao/cadastrar', promocao_cadastro, name='promocao_cadastro')
+    path('promocao/cadastrar', promocao_cadastro, name='promocao_cadastro'),
 ]
