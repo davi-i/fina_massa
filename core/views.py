@@ -9,8 +9,11 @@ from datetime import datetime
 
 
 def promocao_atual():
-    return Promocao.objects.filter(inicio__lte=datetime.now(),
-                                   fim__gte=datetime.now()).earliest('fim')
+    try:
+        return Promocao.objects.filter(inicio__lte=datetime.now(),
+                                       fim__gte=datetime.now()).earliest('fim')
+    except Promocao.DoesNotExist:
+        return Promocao.objects.none()
 
 
 def index(request):
@@ -148,6 +151,7 @@ def filial_cadastro(request):
 def promocao_cadastro(request):
     form = PromocaoForm(request.POST or None)
     if form.is_valid():
+        form.save_m2m()
         form.save()
         return redirect('index')
     contexto = {

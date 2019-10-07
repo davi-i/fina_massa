@@ -63,6 +63,9 @@ class ItemCardapio(models.Model):
     class Meta:
         default_related_name = 'itens'
 
+    def __str__(self):
+        return "%s de %s" % (self.tipo, self.descricao.lower())
+
 
 class Tamanho(models.Model):
     descricao = models.CharField('Tamanho', max_length=4)
@@ -82,8 +85,23 @@ class Pizza(models.Model):
         unique_together = ('item', 'tamanho')
         ordering = ['tamanho']
 
+    @property
+    def promocao_atual(self):
+        try:
+            return self.promocoes.filter(inicio__lte=datetime.now(),
+                                         fim__gte=datetime.now()).earliest('fim')
+        except Promocao.DoesNotExist:
+            return Promocao.objects.none()
+
 
 class Promocao(models.Model):
     descricao = models.CharField('Descrição', max_length=100)
     inicio = models.DateTimeField('Início')
-    fim = models.DateTimeField('fim')
+    fim = models.DateTimeField('Fim')
+    filial = models.ForeignKey(Filial, on_delete=models.CASCADE)
+    itens = models.ManyToManyField(ItemCardapio,
+                                   verbose_name='Itens afetados',
+                                   related_name='promocoes',
+                                   related_query_name='promocao')
+
+    

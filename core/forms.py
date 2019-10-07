@@ -122,4 +122,8 @@ class PromocaoForm(forms.ModelForm):
 
     class Meta:
         model = Promocao
-        fields = ('descricao', 'inicio', 'fim')
+        fields = ('descricao', 'inicio', 'fim', 'itens')
+
+        widgets = {
+            'itens': forms.CheckboxSelectMultiple(),
+        }

@@ -48,6 +48,10 @@ p {
   background-color: rgba(228, 102, 34, 0.6);
 }
 
+.promocao {
+  color:  #D4AF37;
+}
+
 .site-heading .site-heading-upper {
   display: block;
   font-size: 5rem;

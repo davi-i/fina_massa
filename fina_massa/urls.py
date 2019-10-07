@@ -16,20 +16,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from core.views import *
+from core import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index, name='index'),
+    path('', views.index, name='index'),
     path('login/', auth_views.LoginView.as_view(extra_context={'restrito': 'active'}), name='login'),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
-    path("registro/", registro, name="registro"),
+    path("registro/", views.registro, name="registro"),
     # path('perfil/', perfil, name='perfil'),
-    path('sobre/', sobre, name='sobre'),
-    path('cardapio/cadastrar/', cardapio_cadastro, name='cardapio_cadastro'),
-    path('cardapio/<int:id>/editar/', cardapio_edicao, name='cardapio_edicao'),
-    path('cardapio/<int:id>/remover/', cardapio_remocao, name='cardapio_remocao'),
-    path('cardapio/', cardapio, name='cardapio'),
-    path('filial/cadastrar', filial_cadastro, name='filial_cadastro'),
-    path('promocao/cadastrar', promocao_cadastro, name='promocao_cadastro'),
+    path('sobre/', views.sobre, name='sobre'),
+    path('cardapio/cadastrar/', views.cardapio_cadastro, name='cardapio_cadastro'),
+    path('cardapio/<int:id>/editar/', views.cardapio_edicao, name='cardapio_edicao'),
+    path('cardapio/<int:id>/remover/', views.cardapio_remocao, name='cardapio_remocao'),
+    path('cardapio/', views.cardapio, name='cardapio'),
+    path('filial/cadastrar', views.filial_cadastro, name='filial_cadastro'),
+    path('promocao/cadastrar', views.promocao_cadastro, name='promocao_cadastro'),
 ]

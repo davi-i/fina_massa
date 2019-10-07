@@ -31,6 +31,7 @@
             </form>
             <button type="submit" form="filtros" class="btn btn-primary">Filtrar</button>
             <hr/>
+            <div class="text-left promocao"><i class="fas fa-certificate"></i> Em promoção</div>
 
             {% for tipo in tipos %}
               {% with itens=tipo.all %}
@@ -41,6 +42,7 @@
                         <table class="list-hours mb-5 text-left mx-auto">
                           {% if item.pizza_set.all %}
                             <tr class="list-hours-item">
+                              <td></td>
                               <th></th>
                               {% for tamanho in tamanhos %}
                                 <td class="text-center">
@@ -52,6 +54,11 @@
                         {% endif %}
                       {% endif %}
                       <tr class="list-hours-item">
+                        <td class="promocao">
+                          {% if item.promocao_atual %}
+                            <i class="fas fa-certificate mx-2"></i>
+                          {% endif %}
+                        </td>
                         <td class="pt-2 pr-5">
                           {{item.descricao}}<br/>
                           {% if item.ingredientes.all %}
