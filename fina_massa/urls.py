@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
 from core import views
 
 urlpatterns = [
@@ -32,4 +34,4 @@ urlpatterns = [
     path('cardapio/', views.cardapio, name='cardapio'),
     path('filial/cadastrar', views.filial_cadastro, name='filial_cadastro'),
     path('promocao/cadastrar', views.promocao_cadastro, name='promocao_cadastro'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

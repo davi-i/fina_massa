@@ -130,6 +130,14 @@ p {
   position: relative;
 }
 
+.intro-text {
+  border-radius: 1rem;
+}
+
+.intro-img {
+  border-radius: 1rem;
+}
+
 @media (min-width: 992px) {
   .intro .intro-img {
     width: 75%;
@@ -333,4 +341,5 @@ div.inline-input:hover:after {
 
 address {
   background-color: rgba(228, 102, 34, 0.2);
+  border-radius: 1rem;
 }

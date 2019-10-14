@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 # Create your models here.
 
@@ -31,6 +32,7 @@ class Endereco(models.Model):
 
 class Filial(models.Model):
     nome = models.CharField('Nome', max_length=100)
+    foto = models.ImageField('Foto', upload_to='filiais')
     contato = models.IntegerField('Contato')
     endereco = models.ForeignKey(Endereco,
                                  on_delete=models.PROTECT)
@@ -103,5 +105,3 @@ class Promocao(models.Model):
                                    verbose_name='Itens afetados',
                                    related_name='promocoes',
                                    related_query_name='promocao')
-
-    

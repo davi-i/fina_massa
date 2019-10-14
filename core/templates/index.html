@@ -2,25 +2,24 @@
 {% load static %}
 
 {% block conteudo %}
-  <section class="page-section clearfix">
-    <div class="container">
-      <div class="intro">
-        <img class="intro-img img-fluid mb-3 mb-lg-0 rounded" src="{% static 'img/intro.jpg' %}" alt="">
-        <div class="intro-text left-0 text-center bg-faded p-5 rounded">
-          <h2 class="section-heading mb-4">Experimente nossas pizzas!</h2>
-          {% for filial in filiais %}
-            <h3 class="">{{filial.nome}}</h2>
+  {% for filial in filiais %}
+    <section class="page-section clearfix">
+      <div class="container">
+        <div class="intro">
+          <img class="intro-img img-fluid mb-3 mb-lg-0" src="/media/{{filial.foto}}" alt="">
+          <div class="intro-text left-0 text-center bg-faded p-5">
+            <h2 class="section-heading mb-4">{{filial.nome}}</h2>
             <address class="mb-4">
               <p class="mb-3 lead"><i class="fas fa-phone-alt"></i> {{filial.contato_str}}</p>
               <p class="mb-3 lead"><i class="fas fa-map-marked"></i> {{filial.endereco}}</p>
               <p class="mb-3 lead"><i class="fas fa-clock"></i> Das {{filial.abertura}} às {{filial.fechamento}}</p>
             </address>
-          {% endfor %}
-          <!--div class="intro-button mx-auto">
-            <a class="btn btn-primary btn-xl" href="#">Lorem ipsum!</a>
-          </div-->
+            <!--div class="intro-button mx-auto">
+              <a class="btn btn-primary btn-xl" href="#">Lorem ipsum!</a>
+            </div-->
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  {% endfor %}
 {% endblock %}

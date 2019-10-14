@@ -1,3 +1,4 @@
 django
 django-filter
 django-widget-tweaks
+Pillow

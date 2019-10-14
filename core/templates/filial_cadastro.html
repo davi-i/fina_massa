@@ -9,7 +9,7 @@
             <h2 class="section-heading">
               <span class="section-heading-lower">Cadastrar item de cardápio</span>
             </h2>
-            <form method="post" class="mx-auto mt-3">
+            <form method="post" class="mx-auto mt-3" enctype="multipart/form-data">
               {% csrf_token %}
               {% include 'form.html' with form=form only %} 
               {% include 'form.html' with form=endereco_form only %} 

@@ -79,6 +79,7 @@ class FilialForm(forms.ModelForm):
     class Meta:
         model = Filial
         fields = ('nome',
+                  'foto',
                   'contato',
                   'abertura',
                   'fechamento',)

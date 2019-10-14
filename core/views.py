@@ -130,7 +130,7 @@ def cardapio(request):
 
 @login_required
 def filial_cadastro(request):
-    form = FilialForm(request.POST or None)
+    form = FilialForm(request.POST or None, request.FILES or None)
     endereco_form = EnderecoForm(request.POST or None)
     if form.is_valid() and endereco_form.is_valid():
         endereco = endereco_form.save()
