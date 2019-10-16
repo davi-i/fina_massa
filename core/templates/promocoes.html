@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+  <section class="page-section cta">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-9 mx-auto">
+          <div class="cta-inner text-center rounded">
+            <h2 class="section-heading">
+              <span class="section-heading-lower">Gerenciar promoções</span>
+              <a href="{% url 'promocao_cadastro'%}" class="btn btn-primary">Cadastrar nova</a>
+            </h2>
+            {% for promocao in promocoes %}
+            {{promocao.descricao}}
+            <a href="{% url 'promocao_edicao' promocao.id %}" class="text-primary"><i class="fas fa-edit"></i></a>
+            <a href="{% url 'promocao_remocao' promocao.id %}" class="text-danger"><i class="fas fa-trash"></i></a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

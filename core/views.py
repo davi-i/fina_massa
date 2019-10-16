@@ -8,20 +8,11 @@ from .forms import (IngredienteForm, ItemCardapioForm, ItemCardapioEdicaoForm, F
 from datetime import datetime
 
 
-def promocao_atual():
-    try:
-        return Promocao.objects.filter(inicio__lte=datetime.now(),
-                                       fim__gte=datetime.now()).earliest('fim')
-    except Promocao.DoesNotExist:
-        return Promocao.objects.none()
-
-
 def index(request):
     filiais = Filial.objects.all()
     contexto = {
         'index': 'active',
         'filiais': filiais,
-        'promocao': promocao_atual(),
     }
     return render(request, 'index.html', contexto)
 
@@ -43,7 +34,6 @@ def registro(request):
 def sobre(request):
     contexto = {
         'sobre': 'active',
-        'promocao': promocao_atual(),
     }
     return render(request, 'sobre.html', contexto)
 
@@ -123,7 +113,6 @@ def cardapio(request):
         'filter': item_filter,
         'tipos': tipos,
         'tamanhos': tamanhos,
-        'promocao': promocao_atual(),
     }
     return render(request, 'cardapio.html', contexto)
 
@@ -148,15 +137,47 @@ def filial_cadastro(request):
 
 
 @login_required
+def promocoes(request):
+    promocoes = Promocao.objects.all()
+    contexto = {
+        'restrito': 'active',
+        'promocao_gerenciar': 'active',
+        'promocoes': promocoes,
+    }
+    return render(request, 'promocoes.html', contexto)
+
+
+@login_required
 def promocao_cadastro(request):
     form = PromocaoForm(request.POST or None)
     if form.is_valid():
-        form.save_m2m()
+        form.save()
+        return redirect('promocoes')
+    contexto = {
+        'restrito': 'active',
+        'promocao_gerenciar': 'active',
+        'form': form,
+    }
+    return render(request, 'promocao_cadastro.html', contexto)
+
+
+@login_required
+def promocao_edicao(request, id):
+    promocao = get_object_or_404(Promocao, pk=id)
+    form = PromocaoForm(request.POST or None, instance=promocao)
+    if form.is_valid():
         form.save()
         return redirect('index')
     contexto = {
         'restrito': 'active',
-        'promocao_cadastro': 'active',
+        'promocao_gerenciar': 'active',
         'form': form,
     }
     return render(request, 'promocao_cadastro.html', contexto)
+
+
+@login_required
+def promocao_remocao(request):
+    promocao = get_object_or_404(Promocao, pk=id)
+    promocao.delete()
+    return redirect('promocoes')
