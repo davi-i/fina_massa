@@ -97,7 +97,7 @@ class Pizza(models.Model):
 
 
 class Promocao(models.Model):
-    descricao = models.CharField('Descrição', max_length=100)
+    imagem = models.ImageField('Imagem', upload_to="promocoes")
     inicio = models.DateTimeField('Início')
     fim = models.DateTimeField('Fim')
     filial = models.ForeignKey(Filial, on_delete=models.CASCADE)

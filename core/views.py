@@ -149,7 +149,7 @@ def promocoes(request):
 
 @login_required
 def promocao_cadastro(request):
-    form = PromocaoForm(request.POST or None)
+    form = PromocaoForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         form.save()
         return redirect('promocoes')

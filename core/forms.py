@@ -4,6 +4,10 @@ from .models import (Ingrediente, ItemCardapio, Filial, Endereco, Pizza, Tipo, P
 from django.utils.translation import ugettext_lazy as _
 
 
+def fix_date(date):
+    return date.astimezone().strftime('%Y-%m-%dT%H:%M')
+
+
 class DateTimeField(forms.DateTimeField):
     def __init__(self, *args, **kwargs):
         super().__init__(input_formats=['%Y-%m-%dT%H:%M'], *args, **kwargs)
@@ -123,8 +127,14 @@ class PromocaoForm(forms.ModelForm):
 
     class Meta:
         model = Promocao
-        fields = ('descricao', 'filial', 'inicio', 'fim', 'itens')
+        fields = ('imagem', 'filial', 'inicio', 'fim', 'itens')
 
         widgets = {
             'itens': forms.CheckboxSelectMultiple(),
         }
+
+    def __init__(self, *args, **kwargs):
+        if 'instance' in kwargs and kwargs['instance'].pk:
+            kwargs['instance'].inicio = fix_date(kwargs['instance'].inicio)
+            kwargs['instance'].fim = fix_date(kwargs['instance'].fim)
+        super().__init__(*args, **kwargs)

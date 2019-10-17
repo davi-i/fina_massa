@@ -2,3 +2,4 @@ django
 django-filter
 django-widget-tweaks
 Pillow
+django-cleanup

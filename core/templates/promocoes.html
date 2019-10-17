@@ -11,7 +11,7 @@
               <a href="{% url 'promocao_cadastro'%}" class="btn btn-primary">Cadastrar nova</a>
             </h2>
             {% for promocao in promocoes %}
-            {{promocao.descricao}}
+            <img src="/media/{{promocao.imagem}}" class="img-fluid" />
             <a href="{% url 'promocao_edicao' promocao.id %}" class="text-primary"><i class="fas fa-edit"></i></a>
             <a href="{% url 'promocao_remocao' promocao.id %}" class="text-danger"><i class="fas fa-trash"></i></a>
             {% endfor %}
