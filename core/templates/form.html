@@ -1,9 +1,12 @@
 {% load widget_tweaks %}
 
+{% for hidden in form.hidden_fields %}
+    {{hidden}}
+{% endfor %}
 {% for erro in form.non_field_errors %}
   <div class="alert alert-danger">{{erro|escape}}</div>
 {% endfor %}
-{% for field in form %}
+{% for field in form.visible_fields %}
   <div class="control-group form-group">
     <div class="controls{% if field.errors %} erro{% elif form.is_bound %} sem-erro{% endif %}">
       {{field.label_tag}}<br/>

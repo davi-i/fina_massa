@@ -1,6 +1,7 @@
 from django import forms
 from django.db.models import F
-from .models import (Ingrediente, ItemCardapio, Filial, Endereco, Pizza, Tipo, Promocao)
+from .models import (Ingrediente, ItemCardapio, Filial,
+                     Endereco, Pizza, Tipo, Promocao, Tamanho)
 from django.utils.translation import ugettext_lazy as _
 import datetime
 
@@ -106,15 +107,22 @@ class PizzaForm(forms.ModelForm):
         fields = ('preco',)
 
     def __init__(self, *args, **kwargs):
-        super().__init__(use_required_attribute=False, *args, **kwargs)
+        if 'tamanho' in kwargs:
+            tamanho = self.tamanho = kwargs.pop('tamanho')
+            kwargs['instance'] = Pizza(tamanho=self.tamanho)
+        else:
+            tamanho = kwargs['instance'].tamanho
+        super().__init__(*args, **kwargs)
         self.fields['preco'].label = ('Preço (%s)' %
-                                      self.instance.tamanho.descricao)
+                                      tamanho.descricao)
 
-    def save(self, item):
+    def save(self, commit=False):
         pizza = super().save(commit=False)
-        pizza.item = item
-        pizza.save()
-
+        if hasattr(self, 'tamanho'):
+            pizza.tamanho = self.tamanho
+        if commit:
+            pizza.save()
+        return pizza
     # def clean(self):
     #     cleaned_data = super().clean()
     #     preco = cleaned_data.get('preco')
@@ -127,9 +135,33 @@ class PizzaForm(forms.ModelForm):
     #         self.add_error('preco', "Este campo é obrigatório")
 
 
-class PizzaCricaoForm(PizzaForm):
-    def __init__(self, tamanho, *args, **kwargs):
-        super().__init__(instance=Pizza(tamanho=tamanho), *args, **kwargs)
+class BasePizzaFormSet(forms.BaseModelFormSet):
+    def __init__(self, *args, **kwargs):
+        if 'queryset' not in kwargs:
+            self.tamanhos = Tamanho.objects.all()
+            kwargs['queryset'] = Pizza.objects.none()
+        super().__init__(*args, **kwargs)
+
+    def get_form_kwargs(self, index):
+        form_kwargs = super().get_form_kwargs(index)
+        if hasattr(self, 'tamanhos') and index < len(self.tamanhos):
+            form_kwargs['tamanho'] = self.tamanhos[index]
+        return form_kwargs
+
+    def save(self, item):
+        pizzas = super().save(commit=False)
+        for pizza in pizzas:
+            pizza.item = item
+            pizza.save()
+        return pizzas
+
+
+tamanho_count = Tamanho.objects.count()
+PizzaFormSet = forms.modelformset_factory(model=Pizza,
+                                          form=PizzaForm,
+                                          formset=BasePizzaFormSet,
+                                          max_num=tamanho_count,
+                                          extra=tamanho_count)
 
 
 class PromocaoForm(forms.ModelForm):

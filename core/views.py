@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .filters import ItemCardapioFilter, PizzaFilter
 from .models import Ingrediente, ItemCardapio, Tamanho, Tipo, Filial, Promocao, Pizza
 from .forms import (IngredienteForm, ItemCardapioForm, ItemCardapioEdicaoForm, FilialForm,
-                    EnderecoForm, PizzaForm, PizzaCricaoForm, PromocaoForm)
+                    EnderecoForm, PizzaFormSet, PromocaoForm)
 from datetime import date
 
 
@@ -43,24 +43,22 @@ def sobre(request):
 @login_required
 def cardapio_cadastro(request):
     form = ItemCardapioForm(request.POST or None)
-    pizzas_forms = []
-    for n, tamanho in enumerate(Tamanho.objects.all(), start=1):
-        pizzas_forms.append(PizzaCricaoForm(tamanho,
-                                            request.POST or None,
-                                            prefix=n))
+    pizzas_forms = PizzaFormSet(request.POST or None)
     ingrediente_form = IngredienteForm(request.POST or None)
+
     if ('salvar-ingrediente' in request.POST and
             ingrediente_form.is_valid()):
         ingrediente_form.save()
         ingrediente_form = IngredienteForm()
+
     elif ('salvar-item' in request.POST and
           form.is_valid() and
-          all([pizza_form.is_valid() for pizza_form in pizzas_forms])):
+          pizzas_forms.is_valid()):
         item = form.save()
         if form.cleaned_data['tipo'].descricao.startswith('pizza'):
-            for pizza_form in pizzas_forms:
-                pizza_form.save(item)
+            pizzas_forms.save(item)
         return redirect('cardapio')
+
     contexto = {
         'restrito': 'active',
         'cardapio_cadastro': 'active',
@@ -74,18 +72,13 @@ def cardapio_cadastro(request):
 @login_required
 def cardapio_edicao(request, id):
     item = get_object_or_404(ItemCardapio, pk=id)
-    pizzas_forms = []
-    for n, pizza in enumerate(item.pizza_set.all(), start=1):
-        pizzas_forms.append(PizzaForm(request.POST or None,
-                                      prefix=n,
-                                      instance=pizza,
-                                      use_required_attribute=False))
+    pizzas_forms = PizzaFormSet(request.POST or None,
+                                queryset=item.pizza_set.all())
     form = ItemCardapioEdicaoForm(item, request.POST or None)
     if form.is_valid():
         item = form.save()
-        if all([pizza_form.is_valid() for pizza_form in pizzas_forms]):
-            for pizza_form in pizzas_forms:
-                pizza_form.save(item)
+        if pizzas_forms.is_valid():
+            pizzas_forms.save(item)
         return redirect('cardapio')
     contexto = {
         'restrito': 'active',
@@ -110,10 +103,10 @@ def cardapio(request):
                                queryset=Pizza.objects.all())
     tipos = []
     for tipo in Tipo.objects.all():
+        itens = tipo.itens.filter(id__in=item_filter.qs)
         if tipo.descricao.startswith('pizza'):
-            tipos.append(tipo.itens.filter(pizza__in=pizza_filter.qs).distinct())
-        else:
-            tipos.append(tipo.itens.filter(id__in=item_filter.qs))
+            itens = itens.filter(pizza__in=pizza_filter.qs).distinct()
+        tipos.append(itens)
     tamanhos = Tamanho.objects.all()
     contexto = {
         'cardapio': 'active',

@@ -17,6 +17,7 @@
                 {% for pizza_form in pizzas_forms %}
                   {% include 'form.html' with form=pizza_form only %}
                 {% endfor %}
+                {{pizzas_forms.management_form}}
               </div>
               <button name="salvar-item" type="submit" class="btn btn-primary">Salvar</button>
             </form>

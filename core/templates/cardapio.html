@@ -34,61 +34,59 @@
             <div class="text-left promocao"><i class="fas fa-certificate"></i> Em promoção</div>
 
             {% for tipo in tipos %}
-              {% with itens=tipo.all %}
-                {% if itens %}
-                    {% for item in itens %}
-                      {% if forloop.first %}
-                        <h3 class='text-uppercase'><strong>{{item.tipo}}</strong></h3>
-                        <table class="list-hours mb-5 text-left mx-auto">
-                          {% if item.pizza_set.all %}
-                            <tr class="list-hours-item">
-                              <td></td>
-                              <th></th>
-                              {% for tamanho in tamanhos %}
-                                <td class="text-center">
-                                  {{tamanho.descricao}}<br/>
-                                  <span class="sp">{{tamanho.fatias}} fatias</span>
-                                </td>
-                              {% endfor %}
-                            </tr>
-                        {% endif %}
-                      {% endif %}
-                      <tr class="list-hours-item">
-                        <td class="promocao">
-                          {% if item.promocao_atual %}
-                            <button data-toggle="modal" data-target="#promocao" class="not-visible"><i class="fas fa-certificate mx-2"></i></button>
-                          {% endif %}
-                        </td>
-                        <td class="pt-2 pr-5">
-                          {{item.descricao}}<br/>
-                          {% if item.ingredientes.all %}
-                            <span class="sp">
-                              {% for ingrediente in item.ingredientes.all %}
-                                {% if forloop.first %}({% endif %}{{ingrediente}}{% if forloop.last %}){% else %},{% endif %}
-                              {% endfor %}
-                            </span>
-                          {% endif %}
-                        </td>
-                        {% if item.pizza_set.all %}
-                          {% for tamanho in item.pizza_set.all %}
-                            <td class="text-center pr-2">R${{tamanho.preco}}</td>
+                {% for item in tipo.all %}
+                  {% if forloop.first %}
+                    <h3 class='text-uppercase'><strong>{{item.tipo}}</strong></h3>
+                    <table class="list-hours mb-5 text-left mx-auto">
+                      {% if item.pizza_set.all %}
+                        <tr class="list-hours-item">
+                          <td></td>
+                          <th></th>
+                          {% for tamanho in tamanhos %}
+                            <td class="text-center">
+                              {{tamanho.descricao}}<br/>
+                              <span class="sp">{{tamanho.fatias}} fatias</span>
+                            </td>
                           {% endfor %}
-                        {% else %}
-                          <td class="text-right">R${{item.preco}}</td>
-                        {% endif %}
-                        {% if user.is_authenticated %}
-                          <td class="px-3 text-center">
-                            <a href="{% url 'cardapio_edicao' item.id %}" class="btn-link text-primary"><i class="fas fa-edit"></i></a>
-                          </td>
-                          <td class="px-3 text-center">
-                            <a href="{% url 'cardapio_remocao' item.id %}" class="btn-link text-danger"><i class="fas fa-trash"></i></a>
-                          </td>
-                        {% endif %}
-                      </tr>
-                    {% endfor %}
-                  </table>
-                {% endif %}
-              {% endwith %}
+                        </tr>
+                    {% endif %}
+                  {% endif %}
+                  <tr class="list-hours-item">
+                    <td class="promocao">
+                      {% if item.promocao_atual %}
+                        <button data-toggle="modal" data-target="#promocao" class="not-visible"><i class="fas fa-certificate mx-2"></i></button>
+                      {% endif %}
+                    </td>
+                    <td class="pt-2 pr-5">
+                      {{item.descricao}}<br/>
+                      {% if item.ingredientes.all %}
+                        <span class="sp">
+                          {% for ingrediente in item.ingredientes.all %}
+                            {% if forloop.first %}({% endif %}{{ingrediente}}{% if forloop.last %}){% else %},{% endif %}
+                          {% endfor %}
+                        </span>
+                      {% endif %}
+                    </td>
+                    {% if item.pizza_set.all %}
+                      {% for tamanho in item.pizza_set.all %}
+                        <td class="text-center pr-2">R${{tamanho.preco}}</td>
+                      {% endfor %}
+                    {% else %}
+                      <td class="text-right">R${{item.preco}}</td>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                      <td class="px-3 text-center">
+                        <a href="{% url 'cardapio_edicao' item.id %}" class="btn-link text-primary"><i class="fas fa-edit"></i></a>
+                      </td>
+                      <td class="px-3 text-center">
+                        <a href="{% url 'cardapio_remocao' item.id %}" class="btn-link text-danger"><i class="fas fa-trash"></i></a>
+                      </td>
+                    {% endif %}
+                  </tr>
+                {% endfor %}
+              </table>
+            {% empty %}
+              <h2>Nenhum item encontrado</h2>
             {% endfor %}
           </div>
         </div>
