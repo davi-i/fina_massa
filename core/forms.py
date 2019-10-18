@@ -87,6 +87,14 @@ class EnderecoForm(forms.ModelForm):
                   'cidade',
                   'numero')
 
+    def __init__(self, data, *args, **kwargs):
+        prefix = kwargs['prefix'] = 'endereco'
+        if data:
+                kwargs['data'] = {k: v for
+                                  k, v in data.items()
+                                  if k.startswith(prefix)} or None
+        super().__init__(*args, **kwargs)
+
 
 class FilialForm(forms.ModelForm):
     abertura = TimeField()
@@ -98,7 +106,17 @@ class FilialForm(forms.ModelForm):
                   'foto',
                   'contato',
                   'abertura',
-                  'fechamento',)
+                  'fechamento',
+                  'endereco')
+        widgets = {
+            'endereco': forms.RadioSelect()
+        }
+
+    def __init__(self, *args, **kwargs):
+        # kwargs['use_required_attribute'] = False
+        kwargs['prefix'] = 'filial'
+        super().__init__(*args, **kwargs)
+        self.fields['endereco'].empty_label = None
 
 
 class PizzaForm(forms.ModelForm):

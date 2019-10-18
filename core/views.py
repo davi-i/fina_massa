@@ -119,13 +119,14 @@ def cardapio(request):
 
 @login_required
 def filial_cadastro(request):
-    form = FilialForm(request.POST or None, request.FILES or None)
-    endereco_form = EnderecoForm(request.POST or None)
-    if form.is_valid() and endereco_form.is_valid():
+    data = request.POST.copy() or None
+    form = FilialForm(data, request.FILES or None)
+    endereco_form = EnderecoForm(data)
+    if endereco_form.is_valid():
         endereco = endereco_form.save()
-        filial = form.save(commit=False)
-        filial.endereco = endereco
-        filial.save()
+        data['endereco'] = endereco.pk
+    if form.is_valid():
+        form.save()
         return redirect('cardapio')
     contexto = {
         'restrito': 'active',

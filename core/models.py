@@ -32,13 +32,14 @@ class Endereco(models.Model):
 
 
 class Filial(models.Model):
-    nome = models.CharField('Nome', max_length=100)
+    nome = models.CharField('Nome', max_length=100, unique=True)
     foto = models.ImageField('Foto', upload_to='filiais')
     contato = models.IntegerField('Contato')
     endereco = models.ForeignKey(Endereco,
-                                 on_delete=models.PROTECT)
-    abertura = models.TimeField('Hora que abre')
-    fechamento = models.TimeField('Hora que fecha')
+                                 on_delete=models.PROTECT,
+                                 verbose_name='Endereço')
+    abertura = models.TimeField()
+    fechamento = models.TimeField()
 
     def __str__(self):
         return self.nome.capitalize()

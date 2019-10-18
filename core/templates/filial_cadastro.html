@@ -11,8 +11,11 @@
             </h2>
             <form method="post" class="mx-auto mt-3" enctype="multipart/form-data">
               {% csrf_token %}
-              {% include 'form.html' with form=form only %} 
-              {% include 'form.html' with form=endereco_form only %} 
+              {% include 'form.html' with form=form only %}
+              <div id="endereco-form" class="d-none">
+                <h4>Endereço:</h4>
+                {% include 'form.html' with form=endereco_form only %}
+              </div>
               <button type="submit" class="btn btn-primary">Salvar</button>
             </form>
           </div>
@@ -20,4 +23,40 @@
       </div>
     </div>
   </section>
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript">
+    $(() => {
+      $filial_inputs = $('input[name="filial-endereco"]');
+      $filial_endereco = $('label[for=id_filial-endereco_0]').parents('.form-group');
+      $endereco_form = $('#endereco-form');
+      $endereco_inputs = $endereco_form.find('input').prop('disabled', true);
+
+      switch_forms = (state) => {
+        $filial_inputs.prop('disabled', !state);
+        $endereco_form.toggleClass('d-none', state);
+        $endereco_inputs.prop('disabled', state);
+        $filial_endereco.toggle(state);
+      }
+
+      if ($filial_inputs.length) {
+        $filial_endereco.append(
+          $('<button type="button" class="form-control btn btn-primary border-0">Outro</button>')
+              .click((e) => {
+                switch_forms(false)
+              })
+        );
+
+        $endereco_form.children('h4').after(
+          $('<button type="button" class="btn btn-primary mb-2">Usar um existente</button>')
+              .click((e) => {
+                switch_forms(true)
+              })
+        );
+      }
+      else
+        switch_forms(false)
+    });
+  </script>
 {% endblock %}
