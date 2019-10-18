@@ -52,6 +52,29 @@ p {
   color:  #D4AF37;
 }
 
+.modal-content {
+  background-color: #D4AF37;
+}
+
+.model-content * {
+  font-family: "Lora";
+}
+
+.modal-body {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.not-visible {
+  background: unset;
+  border: none;
+  outline: none;
+  color: unset;
+}
+
+.not-visible:focus {
+    outline: none;
+}
+
 .site-heading .site-heading-upper {
   display: block;
   font-size: 5rem;
@@ -240,7 +263,7 @@ p {
 }
 
 .sp {
-  font-size: 0.8rem; 
+  font-size: 0.8rem;
 }
 
 @media (min-width: 992px) {
@@ -335,11 +358,54 @@ button.inline {
   font-size: .8rem;
 }
 
-div.inline-input:hover:after {
-  background-color: #df902a;
-}
-
 address {
   background-color: rgba(228, 102, 34, 0.2);
   border-radius: 1rem;
+}
+
+#calendario {
+  color: white;
+}
+#calendario .semana {
+  letter-spacing: 1px;
+  border-bottom: 1px solid #c6c6c6;
+  background: rgba(0, 0, 0, 0.1);
+}
+#calendario .semana + div {
+  position: relative;
+  line-height: normal;
+}
+#calendario .dia {
+  border: 1px solid #c6c6c6;
+  background-color: rgba(228, 102, 34, 0.9);
+}
+#calendario .dia {
+  float: left;
+  max-width: 8rem;
+}
+#calendario .dia .info {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  height: 4rem;
+}
+
+#calendario .dia .info.tem:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+#calendario .dia.today {
+  color: white;
+  background: #df902a;
+}
+
+.right-top {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+table.bg-main thead {
+  background: rgba(0, 0, 0, 0.1);
 }

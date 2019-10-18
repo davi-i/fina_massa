@@ -81,21 +81,12 @@
   {% endblock %}
 
   <div class="modal fade" id="promocao" tabindex="-1" role="dialog" aria-labelledby="title" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content bg-main">
-        <div class="modal-header">
-          <h5 class="modal-title" id="title">ATENÇÃO!</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body bg-yellow-faded">
-          <span name='descricao'></span>! Não perca!
-          Essa promoção só é válida até o dia <span name='fim'></span>
-        </div>
-        <!--div class="modal-footer bg-main">
-          <button type="button" class="btn btn-success btn-warning" data-dismiss="modal">Fechar</button>
-        </div-->
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <button type="button" class="close right-top p-2 bg-danger" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <img src="" width="100%" height="auto" />
       </div>
     </div>
   </div>
@@ -112,29 +103,15 @@
   {% block scripts %}
     <script type="text/javascript">
       $(() => {
-        const determineSticky = () => {
-          $('.sticky-top').each((i, el) => {
-            const $nav = $(el),
-              stickPoint = parseInt($nav.css('top')),
-              currTop = el.getBoundingClientRect().top,
-              isStuck = currTop <= stickPoint;
-            $nav.toggleClass('py-lg-4', !isStuck);
-            if (isStuck) $('html, body').scrollTop($nav.offset().top);
-          });
-        }
-        determineSticky()
-        $(window).on('resize scroll', $.debounce(25, () => {
-          determineSticky();
-        }));
-        {% if promocao %}
-          const $modal = $('#promocao');
-          $modal.find("span[name='descricao']").text("{{promocao.descricao}}");
-          $modal.find("span[name='fim']").text("{{promocao.fim}}");
-          $modal.modal('show');
-        {% endif %}
+        $('#promocao').on('show.bs.modal', (e) => {
+          $modal = $(e.target);
+          imagem = $(e.relatedTarget).data('imagem');
+          $modal.find('img').attr('src', "/media/"+imagem);
+        });
       });
     </script>
   {% endblock %}
+  <script src="{% static 'js/navbar.js' %}"></script>
 </body>
 
 </html>

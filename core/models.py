@@ -1,5 +1,6 @@
 from django.db import models
-from datetime import datetime
+from django.utils import timezone
+from datetime import date, timedelta
 
 # Create your models here.
 
@@ -68,6 +69,13 @@ class ItemCardapio(models.Model):
     def __str__(self):
         return "%s de %s" % (self.tipo, self.descricao.lower())
 
+    @property
+    def promocao_atual(self):
+        try:
+            return self.promocoes.get(data=timezone.now().date())
+        except Promocao.DoesNotExist:
+            return Promocao.objects.none()
+
 
 class Tamanho(models.Model):
     descricao = models.CharField('Tamanho', max_length=4)
@@ -87,21 +95,31 @@ class Pizza(models.Model):
         unique_together = ('item', 'tamanho')
         ordering = ['tamanho']
 
-    @property
-    def promocao_atual(self):
-        try:
-            return self.promocoes.filter(inicio__lte=datetime.now(),
-                                         fim__gte=datetime.now()).earliest('fim')
-        except Promocao.DoesNotExist:
-            return Promocao.objects.none()
-
 
 class Promocao(models.Model):
     imagem = models.ImageField('Imagem', upload_to="promocoes")
-    inicio = models.DateTimeField('Início')
-    fim = models.DateTimeField('Fim')
+    data = models.DateField('Data', unique=True)
     filial = models.ForeignKey(Filial, on_delete=models.CASCADE)
     itens = models.ManyToManyField(ItemCardapio,
                                    verbose_name='Itens afetados',
                                    related_name='promocoes',
                                    related_query_name='promocao')
+
+    def na_semana():
+        promocoes = []
+        agora = timezone.now()
+        hoje = agora.date()
+
+        def proper_week_day(weekday):
+            if weekday == 6:
+                return 0
+            return weekday + 1
+        for i in range(7):
+            dia = hoje - timedelta(days=proper_week_day(hoje.weekday()) - i)
+            try:
+                promocao = Promocao.objects.get(data=dia)
+            except Promocao.DoesNotExist:
+                promocao = None
+            today = 'today' if timezone.localtime(agora).date() == dia else ''
+            promocoes.append(((dia, today), promocao))
+        return promocoes

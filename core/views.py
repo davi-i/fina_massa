@@ -5,7 +5,7 @@ from .filters import ItemCardapioFilter
 from .models import Ingrediente, ItemCardapio, Tamanho, Tipo, Filial, Promocao
 from .forms import (IngredienteForm, ItemCardapioForm, ItemCardapioEdicaoForm, FilialForm,
                     EnderecoForm, PizzaForm, PizzaCricaoForm, PromocaoForm)
-from datetime import datetime
+from datetime import date
 
 
 def index(request):
@@ -13,6 +13,8 @@ def index(request):
     contexto = {
         'index': 'active',
         'filiais': filiais,
+        'promocoes': Promocao.na_semana(),
+        date.today().strftime('%A').lower(): 'today'
     }
     return render(request, 'index.html', contexto)
 
@@ -106,7 +108,7 @@ def cardapio(request):
                                      queryset=ItemCardapio.objects.all())
     tipos = []
     for tipo in Tipo.objects.all():
-        tipos += [tipo.itens.filter(id__in=item_filter.qs)]
+        tipos.append(tipo.itens.filter(id__in=item_filter.qs))
     tamanhos = Tamanho.objects.all()
     contexto = {
         'cardapio': 'active',
@@ -177,7 +179,7 @@ def promocao_edicao(request, id):
 
 
 @login_required
-def promocao_remocao(request):
+def promocao_remocao(request, id):
     promocao = get_object_or_404(Promocao, pk=id)
     promocao.delete()
     return redirect('promocoes')

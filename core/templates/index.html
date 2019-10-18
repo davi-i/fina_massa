@@ -2,6 +2,40 @@
 {% load static %}
 
 {% block conteudo %}
+  <section class="page-section cta">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-9 mx-auto">
+          <div class="cta-inner text-center rounded">
+            <h2 class="section-heading">
+              <span class="section-heading-lower">Promoções da semana</span>
+            </h2>
+            <div id="calendario" class="row d-flex justify-content-center">
+              {% for dia, promocao in promocoes %}
+                <div class="col-lg col-md-3 col-sm-6 col-12 dia mb-1 p-0 {{dia.1}}">
+                  <div>
+                    <div class="semana">{{dia.0|date:"D"}}</div>
+                    <div>
+                      <div class="right-top m-1">{{dia.0|date:"d"}}</div>
+                      {% if promocao.pk %}
+                        <div class="info tem" data-toggle="modal" data-target="#promocao" data-imagem="{{promocao.imagem}}">
+                          Promoção
+                        </div>
+                      {% else %}
+                        <div class="info">
+                          Nenhuma       :(
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
   {% for filial in filiais %}
     <section class="page-section clearfix">
       <div class="container">

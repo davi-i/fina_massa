@@ -10,18 +10,9 @@
               <span class="section-heading-lower">Cadastrar funcionário</span>
             </h2>
             <span class="text-danger">{{form.non_field_errors}}</span>
-            <form class="w-25 mx-auto" method="POST">
+            <form class="w-75 mx-auto" method="POST">
               {% csrf_token %}
-              {% for field in form %}
-                <div class="control-group form-group">
-                  <div class="controls">
-                    {{field.errors}}
-                    <label>{{field.label}}</label>
-                    {{field}}
-                    <p class="help-block"></p>
-                  </div>
-                </div>
-              {% endfor %}
+              {% include 'form.html' with form=form only %}
               <button type="submit" class="btn btn-primary">Cadastrar</button>
             </form>
           </div>

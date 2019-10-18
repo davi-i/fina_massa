@@ -10,11 +10,26 @@
               <span class="section-heading-lower">Gerenciar promoções</span>
               <a href="{% url 'promocao_cadastro'%}" class="btn btn-primary">Cadastrar nova</a>
             </h2>
-            {% for promocao in promocoes %}
-            <img src="/media/{{promocao.imagem}}" class="img-fluid" />
-            <a href="{% url 'promocao_edicao' promocao.id %}" class="text-primary"><i class="fas fa-edit"></i></a>
-            <a href="{% url 'promocao_remocao' promocao.id %}" class="text-danger"><i class="fas fa-trash"></i></a>
-            {% endfor %}
+            <table class="table table-bordered bg-main">
+              <thead class="">
+                <tr>
+                  <th>Promoção do dia</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for promocao in promocoes %}
+                <tr>
+                  <td>{{promocao.data|date:"d/m/Y"}}</td>
+                  <td>
+                    <button class="btn btn-primary rounded-circle" data-toggle="modal" data-target="#promocao" data-imagem="{{promocao.imagem}}"><i class="fas fa-search"></i></button>
+                    <a href="{% url 'promocao_edicao' promocao.id %}" class="btn btn-success rounded-circle"><i class="far fa-edit"></i></a>
+                    <a href="{% url 'promocao_remocao' promocao.id %}" class="btn btn-danger rounded-circle"><i class="fas fa-times"></i></a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

@@ -2,9 +2,14 @@ from django import forms
 from django.db.models import F
 from .models import (Ingrediente, ItemCardapio, Filial, Endereco, Pizza, Tipo, Promocao)
 from django.utils.translation import ugettext_lazy as _
+import datetime
 
 
 def fix_date(date):
+    if type(date) is datetime.date:
+        return date.strftime('%Y-%m-%d')
+    elif type(date) is datetime.time:
+        return date.strftime('%H:%M')
     return date.astimezone().strftime('%Y-%m-%dT%H:%M')
 
 
@@ -12,6 +17,12 @@ class DateTimeField(forms.DateTimeField):
     def __init__(self, *args, **kwargs):
         super().__init__(input_formats=['%Y-%m-%dT%H:%M'], *args, **kwargs)
         self.widget = forms.DateTimeInput(attrs={'type': 'datetime-local'})
+
+
+class DateField(forms.DateField):
+    def __init__(self, *args, **kwargs):
+        super().__init__(input_formats=['%Y-%m-%d'], *args, **kwargs)
+        self.widget = forms.DateTimeInput(attrs={'type': 'date'})
 
 
 class TimeField(forms.TimeField):
@@ -122,12 +133,11 @@ class PizzaCricaoForm(PizzaForm):
 
 
 class PromocaoForm(forms.ModelForm):
-    inicio = DateTimeField()
-    fim = DateTimeField()
+    data = DateField()
 
     class Meta:
         model = Promocao
-        fields = ('imagem', 'filial', 'inicio', 'fim', 'itens')
+        fields = ('imagem', 'filial', 'data', 'itens')
 
         widgets = {
             'itens': forms.CheckboxSelectMultiple(),
@@ -135,6 +145,5 @@ class PromocaoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         if 'instance' in kwargs and kwargs['instance'].pk:
-            kwargs['instance'].inicio = fix_date(kwargs['instance'].inicio)
-            kwargs['instance'].fim = fix_date(kwargs['instance'].fim)
+            kwargs['instance'].data = fix_date(kwargs['instance'].data)
         super().__init__(*args, **kwargs)
