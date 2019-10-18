@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from .filters import ItemCardapioFilter
-from .models import Ingrediente, ItemCardapio, Tamanho, Tipo, Filial, Promocao
+from .filters import ItemCardapioFilter, PizzaFilter
+from .models import Ingrediente, ItemCardapio, Tamanho, Tipo, Filial, Promocao, Pizza
 from .forms import (IngredienteForm, ItemCardapioForm, ItemCardapioEdicaoForm, FilialForm,
                     EnderecoForm, PizzaForm, PizzaCricaoForm, PromocaoForm)
 from datetime import date
@@ -106,9 +106,14 @@ def cardapio_remocao(request, id):
 def cardapio(request):
     item_filter = ItemCardapioFilter(request.GET,
                                      queryset=ItemCardapio.objects.all())
+    pizza_filter = PizzaFilter(request.GET,
+                               queryset=Pizza.objects.all())
     tipos = []
     for tipo in Tipo.objects.all():
-        tipos.append(tipo.itens.filter(id__in=item_filter.qs))
+        if tipo.descricao.startswith('pizza'):
+            tipos.append(tipo.itens.filter(pizza__in=pizza_filter.qs).distinct())
+        else:
+            tipos.append(tipo.itens.filter(id__in=item_filter.qs))
     tamanhos = Tamanho.objects.all()
     contexto = {
         'cardapio': 'active',
