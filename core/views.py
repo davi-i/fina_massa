@@ -182,3 +182,10 @@ def promocao_remocao(request, id):
     promocao = get_object_or_404(Promocao, pk=id)
     promocao.delete()
     return redirect('promocoes')
+
+@login_required
+def funcionarios(request):
+    contexto = {
+        'funcionarios': 'active',
+    }
+    return render (request, 'funcionarios.html', contexto)

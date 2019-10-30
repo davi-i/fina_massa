@@ -37,4 +37,5 @@ urlpatterns = [
     path('promocao/cadastrar', views.promocao_cadastro, name='promocao_cadastro'),
     path('promocao/<int:id>/editar', views.promocao_edicao, name='promocao_edicao'),
     path('promocao/<int:id>/remover', views.promocao_remocao, name='promocao_remocao'),
+    path('funcionarios/', views.funcionarios, name='funcionarios'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
