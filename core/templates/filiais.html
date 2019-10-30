@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+  <section class="page-section cta">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-9 mx-auto">
+          <div class="cta-inner text-center rounded">
+            <h2 class="section-heading">
+              <span class="section-heading-lower">Gerenciar filiais</span>
+              <a href="{% url 'filial_cadastro'%}" class="btn btn-primary">Cadastrar nova</a>
+            </h2>
+            <table class="table table-bordered bg-main">
+              <thead class="">
+                <tr>
+                  <th>Nome</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for filial in filiais %}
+                <tr>
+                  <td>{{filial.nome}}</td>
+                  <td>
+                    <a href="{% url 'filial' filial.id %}" class="btn btn-primary rounded-circle"><i class="fas fa-search"></i></a>
+                    <a href="{% url 'filial_edicao' filial.id %}" class="btn btn-success rounded-circle"><i class="far fa-edit"></i></a>
+                    <a href="{% url 'filial_remocao' filial.id %}" class="btn btn-danger rounded-circle"><i class="fas fa-times"></i></a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

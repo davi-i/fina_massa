@@ -19,6 +19,7 @@ def index(request):
     return render(request, 'index.html', contexto)
 
 
+
 @login_required
 def registro(request):
     form = UserCreationForm(request.POST or None)
@@ -116,6 +117,16 @@ def cardapio(request):
     }
     return render(request, 'cardapio.html', contexto)
 
+@login_required
+def filiais(request):
+    filiais = Filial.objects.all()
+    contexto = {
+        'restrito': 'active',
+        'filial_gerenciar': 'active',
+        'filiais': filiais,
+    }
+    return render(request, 'filiais.html', contexto)
+
 
 @login_required
 def filial_cadastro(request):
@@ -136,6 +147,17 @@ def filial_cadastro(request):
     }
     return render(request, 'filial_cadastro.html', contexto)
 
+@login_required
+def filial_edicao(request):
+    pass
+
+@login_required
+def filial_remocao(request):
+    pass
+
+@login_required
+def filial(request):
+    pass
 
 @login_required
 def promocoes(request):
@@ -146,7 +168,7 @@ def promocoes(request):
         'promocoes': promocoes,
     }
     return render(request, 'promocoes.html', contexto)
-
+    
 
 @login_required
 def promocao_cadastro(request):
