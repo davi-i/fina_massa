@@ -124,10 +124,10 @@ def filial_cadastro(request):
     endereco_form = EnderecoForm(data)
     if endereco_form.is_valid():
         endereco = endereco_form.save()
-        data['endereco'] = endereco.pk
+        data['filial-endereco'] = endereco.pk
     if form.is_valid():
         form.save()
-        return redirect('cardapio')
+        return redirect('index')
     contexto = {
         'restrito': 'active',
         'filial_cadastro': 'active',
