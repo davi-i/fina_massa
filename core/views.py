@@ -135,10 +135,10 @@ def filial_cadastro(request):
     endereco_form = EnderecoForm(data)
     if endereco_form.is_valid():
         endereco = endereco_form.save()
-        data['endereco'] = endereco.pk
+        data['filial-endereco'] = endereco.pk
     if form.is_valid():
         form.save()
-        return redirect('cardapio')
+        return redirect('index')
     contexto = {
         'restrito': 'active',
         'filial_cadastro': 'active',
@@ -204,3 +204,10 @@ def promocao_remocao(request, id):
     promocao = get_object_or_404(Promocao, pk=id)
     promocao.delete()
     return redirect('promocoes')
+
+@login_required
+def funcionarios(request):
+    contexto = {
+        'funcionarios': 'active',
+    }
+    return render (request, 'funcionarios.html', contexto)
