@@ -3,6 +3,8 @@ from django.db.models import F
 from .models import (Ingrediente, ItemCardapio, Filial,
                      Endereco, Pizza, Tipo, Promocao, Tamanho)
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 import datetime
 
 
@@ -30,6 +32,24 @@ class TimeField(forms.TimeField):
     def __init__(self, *args, **kwargs):
         super().__init__(input_formats=['%H:%M'], *args, **kwargs)
         self.widget = forms.TimeInput(attrs={'type': 'time'})
+
+
+class UsuarioForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'username')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['first_name'].label = "Nome"
+        self.fields['last_name'].label = "Sobrenome"
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password('finamassa.123')
+        if commit:
+            user.save()
+        return user
 
 
 class IngredienteForm(forms.ModelForm):
@@ -141,16 +161,6 @@ class PizzaForm(forms.ModelForm):
         if commit:
             pizza.save()
         return pizza
-    # def clean(self):
-    #     cleaned_data = super().clean()
-    #     preco = cleaned_data.get('preco')
-    #     item = self.instance.item
-
-    #     if not item.tipo.descricao.startswith('pizza'):
-    #         raise forms.ValidationError('O ItemCardapio vinculado à pizza deve ser do tipo pizza')
-
-    #     if not preco:
-    #         self.add_error('preco', "Este campo é obrigatório")
 
 
 class BasePizzaFormSet(forms.BaseModelFormSet):

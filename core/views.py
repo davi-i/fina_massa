@@ -2,10 +2,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from .filters import ItemCardapioFilter, PizzaFilter
 from .models import Ingrediente, ItemCardapio, Tamanho, Tipo, Filial, Promocao, Pizza
 from .forms import (IngredienteForm, ItemCardapioForm, ItemCardapioEdicaoForm, FilialForm,
-                    EnderecoForm, PizzaFormSet, PromocaoForm)
+                    EnderecoForm, PizzaFormSet, PromocaoForm, UsuarioForm)
 from datetime import date
 
 
@@ -133,17 +135,21 @@ def filial_cadastro(request):
     }
     return render(request, 'filial_cadastro.html', contexto)
 
+
 @login_required
 def filial_edicao(request):
     pass
+
 
 @login_required
 def filial_remocao(request):
     pass
 
+
 @login_required
 def filial(request):
     pass
+
 
 @login_required
 def promocoes(request):
@@ -154,7 +160,7 @@ def promocoes(request):
         'promocoes': promocoes,
     }
     return render(request, 'promocoes.html', contexto)
-    
+
 
 @login_required
 def promocao_cadastro(request):
@@ -191,6 +197,7 @@ def promocao_remocao(request, id):
     promocao.delete()
     return redirect('promocoes')
 
+
 @login_required
 def funcionarios(request):
     funcionarios = User.objects.all()
@@ -204,7 +211,7 @@ def funcionarios(request):
 
 @login_required
 def funcionario_cadastro(request):
-    form = UserCreatForm(request.POST or None)
+    form = UsuarioForm(request.POST or None)
     if form.is_valid():
         form.save()
         return redirect('funcionarios')

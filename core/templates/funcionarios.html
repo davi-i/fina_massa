@@ -23,7 +23,7 @@
                 <tr>
                   <td>{{funcionario.name}}</td>
                   <td>
-                    <!-- <a href="{% url 'funcionario' funcionario.id %}" class="btn btn-success rounded-circle"><i class="far fa-search"></i></a> -->
+                    <!-- <a href="{ % url 'funcionario' funcionario.id %}" class="btn btn-success rounded-circle"><i class="far fa-search"></i></a> -->
                     <a href="{% url 'funcionario_edicao' funcionario.id %}" class="btn btn-success rounded-circle"><i class="far fa-edit"></i></a>
                     <a href="{% url 'funcionario_remocao' funcionario.id %}" class="btn btn-danger rounded-circle"><i class="fas fa-times"></i></a>
                   </td>
