@@ -25,7 +25,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('login/', auth_views.LoginView.as_view(extra_context={'restrito': 'active'}), name='login'),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
-    path("registro/", views.registro, name="registro"),
     # path('perfil/', perfil, name='perfil'),
     path('sobre/', views.sobre, name='sobre'),
     path('cardapio/cadastrar/', views.cardapio_cadastro, name='cardapio_cadastro'),
@@ -41,5 +40,8 @@ urlpatterns = [
     path('promocao/cadastrar', views.promocao_cadastro, name='promocao_cadastro'),
     path('promocao/<int:id>/editar', views.promocao_edicao, name='promocao_edicao'),
     path('promocao/<int:id>/remover', views.promocao_remocao, name='promocao_remocao'),
+    path('funcionario/cadastrar', views.funcionario_cadastro, name='funcionario_cadastro'),
+    path('funcionario/<int:id>/editar', views.funcionario_edicao, name='funcionario_edicao'),
+    path('funcionario/<int:id>/remover', views.funcionario_remocao, name='funcionario_remocao'),
     path('funcionarios/', views.funcionarios, name='funcionarios'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

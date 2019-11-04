@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .filters import ItemCardapioFilter, PizzaFilter
 from .models import Ingrediente, ItemCardapio, Tamanho, Tipo, Filial, Promocao, Pizza
@@ -17,21 +18,6 @@ def index(request):
         date.today().strftime('%A').lower(): 'today'
     }
     return render(request, 'index.html', contexto)
-
-
-
-@login_required
-def registro(request):
-    form = UserCreationForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        return redirect('login')
-    contexto = {
-        'restrito': 'active',
-        'registro': 'active',
-        'form': form,
-    }
-    return render(request, 'registration/registro.html', contexto)
 
 
 def sobre(request):
@@ -207,7 +193,46 @@ def promocao_remocao(request, id):
 
 @login_required
 def funcionarios(request):
+    funcionarios = User.objects.all()
     contexto = {
-        'funcionarios': 'active',
+        'restrito': 'active',
+        'funcionario_gerenciar': 'active',
+        'funcionarios': funcionarios,
     }
-    return render (request, 'funcionarios.html', contexto)
+    return render(request, 'funcionarios.html', contexto)
+
+
+@login_required
+def funcionario_cadastro(request):
+    form = UserCreatForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('funcionarios')
+    contexto = {
+        'restrito': 'active',
+        'registro': 'active',
+        'form': form,
+    }
+    return render(request, 'registration/registro.html', contexto)
+
+
+@login_required
+def funcionario_edicao(request, id):
+    funcionario = get_object_or_404(User, pk=id)
+    form = UserChangeForm(request.POST or None, instance=funcionario)
+    if form.is_valid():
+        form.save()
+        return redirect('funcionarios')
+    contexto = {
+        'restrito': 'active',
+        'funcionario_gerenciar': 'active',
+        'form': form,
+    }
+    return render(request, 'registration/registro.html', contexto)
+
+
+@login_required
+def funcionario_remocao(request, id):
+    funcionario = get_object_or_404(funcionario, pk=id)
+    funcionario.delete()
+    return redirect('funcionarios')
