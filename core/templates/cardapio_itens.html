@@ -7,8 +7,8 @@
         <div class="col-xl-9 mx-auto">
           <div class="cta-inner text-center rounded">
             <h2 class="section-heading">
-              <span class="section-heading-lower">Gerenciar filiais</span>
-              <a href="{% url 'filial_cadastro'%}" class="btn btn-primary">Cadastrar nova</a>
+              <span class="section-heading-lower">Gerenciar intens do cardápio</span>
+              <a href="{% url 'cardapio_cadastro'%}" class="btn btn-primary">Cadastrar novo</a>
             </h2>
             <table class="table table-bordered bg-main">
               <thead class="">
@@ -18,12 +18,12 @@
                 </tr>
               </thead>
               <tbody>
-                {% for filial in filiais %}
+                {% for item in itens %}
                 <tr>
-                  <td>{{filial.nome}}</td>
+                  <td>{{item}}</td>
                   <td>
-                    <a href="{% url 'filial_edicao' filial.id %}" class="btn btn-success rounded-circle"><i class="far fa-edit"></i></a>
-                    <a href="{% url 'filial_remocao' filial.id %}" class="btn btn-danger rounded-circle"><i class="fas fa-times"></i></a>
+                    <a href="{% url 'cardapio_edicao' item.id %}" class="btn btn-success rounded-circle"><i class="far fa-edit"></i></a>
+                    <a href="{% url 'cardapio_remocao' item.id %}" class="btn btn-danger rounded-circle"><i class="fas fa-times"></i></a>
                   </td>
                 </tr>
                 {% endfor %}

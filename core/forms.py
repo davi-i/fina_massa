@@ -135,6 +135,9 @@ class FilialForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         # kwargs['use_required_attribute'] = False
         kwargs['prefix'] = 'filial'
+        if 'instance' in kwargs and kwargs['instance'].pk:
+            kwargs['instance'].abertura = fix_date(kwargs['instance'].abertura)
+            kwargs['instance'].fechamento = fix_date(kwargs['instance'].fechamento)
         super().__init__(*args, **kwargs)
         self.fields['endereco'].empty_label = None
 

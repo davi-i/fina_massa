@@ -28,6 +28,15 @@ def sobre(request):
     }
     return render(request, 'sobre.html', contexto)
 
+@login_required
+def cardapio_itens(request):
+    cardapio_itens = ItemCardapio.objects.all()
+    contexto = {
+        'restrito': 'active',
+        'cardapio_gerenciar': 'active',
+        'itens': cardapio_itens,
+    }
+    return render(request, 'cardapio_itens.html', contexto)
 
 @login_required
 def cardapio_cadastro(request):
@@ -82,7 +91,7 @@ def cardapio_edicao(request, id):
 def cardapio_remocao(request, id):
     item = get_object_or_404(ItemCardapio, pk=id)
     item.delete()
-    return redirect('cardapio')
+    return redirect('cardapio_itens')
 
 
 def cardapio(request):
@@ -137,18 +146,31 @@ def filial_cadastro(request):
 
 
 @login_required
-def filial_edicao(request):
-    pass
+def filial_edicao(request, id):
+    filial = get_object_or_404(Filial, pk=id)
+    data = request.POST.copy() or None
+    form = FilialForm(data, request.FILES or None, instance=filial)
+    endereco_form = EnderecoForm(data)
+    if endereco_form.is_valid():
+        endereco = endereco_form.save()
+        data['filial-endereco'] = endereco.pk
+    if form.is_valid():
+        form.save()
+        return redirect('filiais')
+    contexto = {
+        'restrito': 'active',
+        'filial_gerenciar': 'active',
+        'form': form,
+        'endereco_form': endereco_form
+    }
+    return render(request, 'filial_cadastro.html', contexto)
 
 
 @login_required
 def filial_remocao(request):
-    pass
-
-
-@login_required
-def filial(request):
-    pass
+    filial = get_object_or_404(Filial, pk=id)
+    filial.delete()
+    return redirect('filiais')
 
 
 @login_required
@@ -217,7 +239,7 @@ def funcionario_cadastro(request):
         return redirect('funcionarios')
     contexto = {
         'restrito': 'active',
-        'registro': 'active',
+        'funcionario_gerenciar': 'active',
         'form': form,
     }
     return render(request, 'registration/registro.html', contexto)
