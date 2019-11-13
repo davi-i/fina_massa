@@ -23,8 +23,9 @@ from core import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('login/', auth_views.LoginView.as_view(extra_context={'restrito': 'active'}), name='login'),
+    path('login/', views.login, name='login'),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path('senha/<int:id>/', views.senha, name='senha'),
     # path('perfil/', perfil, name='perfil'),
     path('sobre/', views.sobre, name='sobre'),
     path('cardapio/cadastrar/', views.cardapio_cadastro, name='cardapio_cadastro'),

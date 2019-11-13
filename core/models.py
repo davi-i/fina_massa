@@ -1,3 +1,4 @@
+
 from django.db import models
 from django.utils import timezone
 from datetime import date, timedelta
@@ -5,9 +6,10 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-# class Usuario(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     cpf = models.IntegerField("CPF")
+
+class Usuario(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    cpf = models.CharField("CPF", max_length=11)
 
 
 class Tipo(models.Model):

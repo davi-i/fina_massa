@@ -8,7 +8,7 @@
 {% endfor %}
 {% for field in form.visible_fields %}
   <div class="control-group form-group">
-    <div class="controls{% if field.errors %} erro{% elif form.is_bound %} sem-erro{% endif %}">
+    <div class="controls{% if field.errors %} erro{% endif %}">
       {{field.label_tag}}<br/>
       {% with type=field.field.widget.input_type %}
         {% if type == 'checkbox' or type == 'radio' %}

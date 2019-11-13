@@ -1,7 +1,6 @@
 from django import forms
 from django.db.models import F
-from .models import (Ingrediente, ItemCardapio, Filial,
-                     Endereco, Pizza, Tipo, Promocao, Tamanho)
+from . import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -35,26 +34,43 @@ class TimeField(forms.TimeField):
 
 
 class UsuarioForm(forms.ModelForm):
+    class UserForm(forms.ModelForm):
+        class Meta:
+            model = User
+            fields = ('first_name', 'last_name', 'username')
+
     class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'username')
+        model = models.Usuario
+        fields = ('cpf',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.user_form = UsuarioForm.UserForm(self.data)
+        self.fields.update(self.user_form.fields)
         self.fields['first_name'].label = "Nome"
         self.fields['last_name'].label = "Sobrenome"
 
+    def is_valid(self):
+        return super().is_valid() and self.user_form.is_valid()
+
     def save(self, commit=True):
-        user = super().save(commit=False)
-        user.set_password('finamassa.123')
+        usuario = super().save(commit=False)
+        user = self.user_form.save(commit=False)
+        user.set_password('finamassa.'+usuario.cpf)
         if commit:
             user.save()
-        return user
+            usuario.user = user
+            usuario.save()
+        return usuario
+
+
+# class LoginForm(forms.Form):
+#     usuario = forms.
 
 
 class IngredienteForm(forms.ModelForm):
     class Meta:
-        model = Ingrediente
+        model = models.Ingrediente
         fields = ('nome',)
 
     def __init__(self, *args, **kwargs):
@@ -63,7 +79,7 @@ class IngredienteForm(forms.ModelForm):
 
 class ItemCardapioForm(forms.ModelForm):
     class Meta:
-        model = ItemCardapio
+        model = models.ItemCardapio
         fields = ('descricao',
                   'tipo',
                   'preco',
@@ -101,7 +117,7 @@ class ItemCardapioEdicaoForm(ItemCardapioForm):
 
 class EnderecoForm(forms.ModelForm):
     class Meta:
-        model = Endereco
+        model = models.Endereco
         fields = ('rua',
                   'bairro',
                   'cidade',
@@ -121,7 +137,7 @@ class FilialForm(forms.ModelForm):
     fechamento = TimeField()
 
     class Meta:
-        model = Filial
+        model = models.Filial
         fields = ('nome',
                   'foto',
                   'contato',
@@ -144,13 +160,13 @@ class FilialForm(forms.ModelForm):
 
 class PizzaForm(forms.ModelForm):
     class Meta:
-        model = Pizza
+        model = models.Pizza
         fields = ('preco',)
 
     def __init__(self, *args, **kwargs):
         if 'tamanho' in kwargs:
             tamanho = self.tamanho = kwargs.pop('tamanho')
-            kwargs['instance'] = Pizza(tamanho=self.tamanho)
+            kwargs['instance'] = models.Pizza(tamanho=self.tamanho)
         else:
             tamanho = kwargs['instance'].tamanho
         super().__init__(*args, **kwargs)
@@ -169,8 +185,8 @@ class PizzaForm(forms.ModelForm):
 class BasePizzaFormSet(forms.BaseModelFormSet):
     def __init__(self, *args, **kwargs):
         if 'queryset' not in kwargs:
-            self.tamanhos = Tamanho.objects.all()
-            kwargs['queryset'] = Pizza.objects.none()
+            self.tamanhos = models.Tamanho.objects.all()
+            kwargs['queryset'] = models.Pizza.objects.none()
         super().__init__(*args, **kwargs)
 
     def get_form_kwargs(self, index):
@@ -187,8 +203,8 @@ class BasePizzaFormSet(forms.BaseModelFormSet):
         return pizzas
 
 
-tamanho_count = Tamanho.objects.count()
-PizzaFormSet = forms.modelformset_factory(model=Pizza,
+tamanho_count = models.Tamanho.objects.count()
+PizzaFormSet = forms.modelformset_factory(model=models.Pizza,
                                           form=PizzaForm,
                                           formset=BasePizzaFormSet,
                                           max_num=tamanho_count,
@@ -199,7 +215,7 @@ class PromocaoForm(forms.ModelForm):
     data = DateField()
 
     class Meta:
-        model = Promocao
+        model = models.Promocao
         fields = ('imagem', 'filial', 'data', 'itens')
 
         widgets = {

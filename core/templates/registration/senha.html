@@ -7,12 +7,13 @@
         <div class="col-xl-9 mx-auto">
           <div class="cta-inner text-center rounded">
             <h2 class="section-heading">
-              <span class="section-heading-lower">Login</span>
+              <span class="section-heading-lower">Alterar senha</span>
             </h2>
+            <h3 class='text-uppercase'><strong>{{user.first_name}}</strong></h3>
             <form class="w-75 mx-auto" method="POST">
               {% csrf_token %}
               {% include 'form.html' with form=form only %}
-              <button type="submit" class="btn btn-primary">Login</button>
+              <button type="submit" class="btn btn-primary">Salvar</button>
             </form>
           </div>
         </div>

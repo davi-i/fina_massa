@@ -1,14 +1,56 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.utils.http import urlencode
+from django.contrib.auth import login as auth_login
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
+from django.conf import settings
 from .filters import ItemCardapioFilter, PizzaFilter
 from .models import Ingrediente, ItemCardapio, Tamanho, Tipo, Filial, Promocao, Pizza
 from .forms import (IngredienteForm, ItemCardapioForm, ItemCardapioEdicaoForm, FilialForm,
                     EnderecoForm, PizzaFormSet, PromocaoForm, UsuarioForm)
 from datetime import date
+
+
+def redirect_with_get(request, page, *args, **kwargs):
+    data = request.META['QUERY_STRING']
+    response = redirect(page, *args, **kwargs)
+    if data:
+        response['Location'] += '?' + data
+    return response
+
+def redirect_to_next(request, other_page=None):
+    return redirect(request.GET.get('next') or other_page)
+
+def login(request):
+    form = AuthenticationForm(request, data=request.POST or None)
+    if form.is_valid():
+        user = form.get_user()
+        if user.last_login is not None:
+            auth_login(request, user)
+            return redirect_to_next(request, settings.LOGIN_REDIRECT_URL)
+        else:
+            return redirect_with_get(request, 'senha', user.id)
+    contexto = {
+        'restrito': 'active',
+        'form': form,
+    }
+    return render(request, 'registration/login.html', contexto)
+
+
+def senha(request, id):
+    user = User.objects.get(pk=id)
+    form = PasswordChangeForm(user, data=request.POST or None)
+    if form.is_valid():
+        form.save()
+        auth_login(request, user)
+        return redirect_to_next(request, settings.LOGIN_REDIRECT_URL)
+    contexto = {
+        'form': form,
+        'user': user,
+    }
+    return render(request, 'registration/senha.html', contexto)
 
 
 def index(request):
