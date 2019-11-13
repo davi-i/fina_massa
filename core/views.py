@@ -47,8 +47,9 @@ def senha(request, id):
         auth_login(request, user)
         return redirect_to_next(request, settings.LOGIN_REDIRECT_URL)
     contexto = {
+        'restrito': 'active',
         'form': form,
-        'user': user,
+        'name': user.first_name,
     }
     return render(request, 'registration/senha.html', contexto)
 
@@ -101,7 +102,8 @@ def cardapio_cadastro(request):
 
     contexto = {
         'restrito': 'active',
-        'cardapio_cadastro': 'active',
+        'cardapio_gerenciar': 'active',
+        'titulo': 'Cadastrar item do cardápio',
         'form': form,
         'pizzas_forms': pizzas_forms,
         'ingrediente_form': ingrediente_form
@@ -122,7 +124,8 @@ def cardapio_edicao(request, id):
         return redirect('cardapio')
     contexto = {
         'restrito': 'active',
-        'cardapio_cadastro': 'active',
+        'cardapio_gerenciar': 'active',
+        'titulo': 'Editar item do cardápio',
         'form': form,
         'pizzas_forms': pizzas_forms,
     }
@@ -181,6 +184,7 @@ def filial_cadastro(request):
     contexto = {
         'restrito': 'active',
         'filial_cadastro': 'active',
+        'titulo': 'Cadastrar filial',
         'form': form,
         'endereco_form': endereco_form
     }
@@ -202,6 +206,7 @@ def filial_edicao(request, id):
     contexto = {
         'restrito': 'active',
         'filial_gerenciar': 'active',
+        'titulo': 'Editar filial',
         'form': form,
         'endereco_form': endereco_form
     }
@@ -235,6 +240,7 @@ def promocao_cadastro(request):
     contexto = {
         'restrito': 'active',
         'promocao_gerenciar': 'active',
+        'titulo': 'Cadastrar promoção',
         'form': form,
     }
     return render(request, 'promocao_cadastro.html', contexto)
@@ -250,6 +256,7 @@ def promocao_edicao(request, id):
     contexto = {
         'restrito': 'active',
         'promocao_gerenciar': 'active',
+        'titulo': 'Editar promoção',
         'form': form,
     }
     return render(request, 'promocao_cadastro.html', contexto)
@@ -263,6 +270,7 @@ def promocao_remocao(request, id):
 
 
 @login_required
+@staff_member_required(login_url='/login/')
 def funcionarios(request):
     funcionarios = User.objects.all()
     contexto = {
@@ -274,6 +282,7 @@ def funcionarios(request):
 
 
 @login_required
+@staff_member_required(login_url='/login/')
 def funcionario_cadastro(request):
     form = UsuarioForm(request.POST or None)
     if form.is_valid():
@@ -288,9 +297,10 @@ def funcionario_cadastro(request):
 
 
 @login_required
+@staff_member_required(login_url='/login/')
 def funcionario_edicao(request, id):
-    funcionario = get_object_or_404(User, pk=id)
-    form = UserChangeForm(request.POST or None, instance=funcionario)
+    funcionario = get_object_or_404(User, pk=id).usuario
+    form = UsuarioForm(request.POST or None, instance=funcionario)
     if form.is_valid():
         form.save()
         return redirect('funcionarios')
@@ -303,7 +313,8 @@ def funcionario_edicao(request, id):
 
 
 @login_required
+@staff_member_required(login_url='/login/')
 def funcionario_remocao(request, id):
-    funcionario = get_object_or_404(funcionario, pk=id)
+    funcionario = get_object_or_404(User, pk=id)
     funcionario.delete()
     return redirect('funcionarios')

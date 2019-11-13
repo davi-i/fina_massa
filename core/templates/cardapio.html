@@ -62,7 +62,7 @@
                       {% if item.ingredientes.all %}
                         <span class="sp">
                           {% for ingrediente in item.ingredientes.all %}
-                            {% if forloop.first %}({% endif %}{{ingrediente}}{% if forloop.last %}){% else %},{% endif %}
+                            {% if forloop.first %}({% endif %}{{ingrediente|lower}}{% if forloop.last %}){% else %},{% endif %}
                           {% endfor %}
                         </span>
                       {% endif %}
@@ -73,14 +73,6 @@
                       {% endfor %}
                     {% else %}
                       <td class="text-right">R${{item.preco}}</td>
-                    {% endif %}
-                    {% if user.is_authenticated %}
-                      <td class="px-3 text-center">
-                        <a href="{% url 'cardapio_edicao' item.id %}" class="btn-link text-primary"><i class="fas fa-edit"></i></a>
-                      </td>
-                      <td class="px-3 text-center">
-                        <a href="{% url 'cardapio_remocao' item.id %}" class="btn-link text-danger"><i class="fas fa-trash"></i></a>
-                      </td>
                     {% endif %}
                   </tr>
                 {% endfor %}

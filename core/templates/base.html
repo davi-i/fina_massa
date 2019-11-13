@@ -61,7 +61,9 @@
               <div class="dropdown-menu bg-main-faded text-center p-0" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item {{cardapio_gerenciar}}" href="{% url 'cardapio_itens' %}">Gerenciar itens do cardápio</a>
                 <a class="dropdown-item {{filial_gerenciar}}" href="{% url 'filiais' %}">Gerenciar filiais</a>
-                <a class="dropdown-item {{funcionario_gerenciar}}" href="{% url 'funcionarios' %}">Gerenciar funcionários</a>
+                {% if user.is_staff %}
+                  <a class="dropdown-item {{funcionario_gerenciar}}" href="{% url 'funcionarios' %}">Gerenciar funcionários</a>
+                {% endif %}
                 <a class="dropdown-item {{promocao_gerenciar}}" href="{% url 'promocoes' %}">Gerenciar promoções</a>
                 <div class="dropdown-divider m-0"></div>
                 <a class="dropdown-item bg-danger" href="{% url 'logout' %}">Sair</a>

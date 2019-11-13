@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 
 class Usuario(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    cpf = models.CharField("CPF", max_length=11)
+    cpf = models.CharField("CPF", max_length=11, unique=True)
 
 
 class Tipo(models.Model):

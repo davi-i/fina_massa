@@ -9,7 +9,7 @@
             <h2 class="section-heading">
               <span class="section-heading-lower">Alterar senha</span>
             </h2>
-            <h3 class='text-uppercase'><strong>{{user.first_name}}</strong></h3>
+            <h3 class='text-uppercase'><strong>{{name}}</strong></h3>
             <form class="w-75 mx-auto" method="POST">
               {% csrf_token %}
               {% include 'form.html' with form=form only %}

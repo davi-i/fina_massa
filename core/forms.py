@@ -45,8 +45,20 @@ class UsuarioForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.user_form = UsuarioForm.UserForm(self.data)
+        has_instance = bool(self.instance.pk)
+        user = self.instance.user if has_instance else None
+        self.user_form = UsuarioForm.UserForm(self.data, instance=user)
+        self.fields['permissao'] = forms.ChoiceField(
+            choices=[
+                (0, 'Apenas um funcionário'),
+                (1, 'Um propietário')
+            ],
+            label="O funcionário é"
+        )
+        if has_instance:
+            self.initial['permissao'] = int(self.instance.user.is_staff)
         self.fields.update(self.user_form.fields)
+        self.initial.update(self.user_form.initial)
         self.fields['first_name'].label = "Nome"
         self.fields['last_name'].label = "Sobrenome"
 
@@ -56,6 +68,8 @@ class UsuarioForm(forms.ModelForm):
     def save(self, commit=True):
         usuario = super().save(commit=False)
         user = self.user_form.save(commit=False)
+        if self.cleaned_data['permissao'] == '1':
+            user.is_staff = True
         user.set_password('finamassa.'+usuario.cpf)
         if commit:
             user.save()
