@@ -70,7 +70,7 @@ class UsuarioForm(forms.ModelForm):
         user = self.user_form.save(commit=False)
         if self.cleaned_data['permissao'] == '1':
             user.is_staff = True
-        user.set_password('finamassa.'+usuario.cpf)
+        user.set_password('finamassa.' + usuario.cpf)
         if commit:
             user.save()
             usuario.user = user
@@ -106,6 +106,7 @@ class ItemCardapioForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(use_required_attribute=False, *args, **kwargs)
+        self.pizzas = PizzaFormSet(self.data or None)
 
     def clean(self):
         cleaned_data = super().clean()
@@ -114,19 +115,90 @@ class ItemCardapioForm(forms.ModelForm):
 
         if tipo and tipo.descricao.startswith('pizza'):
             cleaned_data['preco'] = None
+            self.is_pizza = True
             return
+        self.is_pizza = False
 
         if not preco:
             self.add_error('preco', "Este campo é obrigatório")
 
+    def is_valid(self):
+        valido = super().is_valid()
+        if self.is_pizza:
+            valido = valido and self.pizzas.is_valid()
+        return valido
+
+    def save(self, commit=True):
+        item = super().save(commit)
+        if self.is_pizza:
+            self.pizzas.save(item, commit)
+
 
 class ItemCardapioEdicaoForm(ItemCardapioForm):
-    def __init__(self, instance, *args, **kwargs):
-        super().__init__(instance=instance, *args, **kwargs)
+    def __init__(self, item, *args, **kwargs):
+        super().__init__(instance=item, *args, **kwargs)
+        self.is_pizza = item.tipo.descricao.startswith('pizza')
+        if self.is_pizza:
+            self.pizzas = PizzaFormSet(
+                request.POST or None,
+                queryset=item.pizza_set.all()
+            )
         self.fields['tipo'].widget.attrs = {'readonly': True}
 
     def clean(self):
         return super(forms.ModelForm, self).clean()
+
+
+class PizzaForm(forms.ModelForm):
+    class Meta:
+        model = models.Pizza
+        fields = ('preco',)
+
+    def __init__(self, *args, **kwargs):
+        if 'tamanho' in kwargs:
+            kwargs['instance'] = models.Pizza(tamanho=kwargs.pop('tamanho'))
+        super().__init__(*args, **kwargs)
+        self.tamanho = self.instance.tamanho
+        self.fields['preco'].label = ('Preço (%s)' %
+                                      self.tamanho.descricao)
+
+    def save(self, commit=False):
+        pizza = super().save(commit=False)
+        if hasattr(self, 'tamanho'):
+            pizza.tamanho = self.tamanho
+        if commit:
+            pizza.save()
+        return pizza
+
+
+class BasePizzaFormSet(forms.BaseModelFormSet):
+    def __init__(self, *args, **kwargs):
+        if 'queryset' not in kwargs:
+            self.tamanhos = models.Tamanho.objects.all()
+            kwargs['queryset'] = models.Pizza.objects.none()
+        super().__init__(*args, **kwargs)
+
+    def get_form_kwargs(self, index):
+        form_kwargs = super().get_form_kwargs(index)
+        if hasattr(self, 'tamanhos') and index < len(self.tamanhos):
+            form_kwargs['tamanho'] = self.tamanhos[index]
+        return form_kwargs
+
+    def save(self, item, commit=True):
+        pizzas = super().save(commit=False)
+        if commit:
+            for pizza in pizzas:
+                pizza.item = item
+                pizza.save()
+        return pizzas
+
+
+tamanho_count = models.Tamanho.objects.count()
+PizzaFormSet = forms.modelformset_factory(model=models.Pizza,
+                                          form=PizzaForm,
+                                          formset=BasePizzaFormSet,
+                                          max_num=tamanho_count,
+                                          extra=tamanho_count)
 
 
 class EnderecoForm(forms.ModelForm):
@@ -170,59 +242,6 @@ class FilialForm(forms.ModelForm):
             kwargs['instance'].fechamento = fix_date(kwargs['instance'].fechamento)
         super().__init__(*args, **kwargs)
         self.fields['endereco'].empty_label = None
-
-
-class PizzaForm(forms.ModelForm):
-    class Meta:
-        model = models.Pizza
-        fields = ('preco',)
-
-    def __init__(self, *args, **kwargs):
-        if 'tamanho' in kwargs:
-            tamanho = self.tamanho = kwargs.pop('tamanho')
-            kwargs['instance'] = models.Pizza(tamanho=self.tamanho)
-        else:
-            tamanho = kwargs['instance'].tamanho
-        super().__init__(*args, **kwargs)
-        self.fields['preco'].label = ('Preço (%s)' %
-                                      tamanho.descricao)
-
-    def save(self, commit=False):
-        pizza = super().save(commit=False)
-        if hasattr(self, 'tamanho'):
-            pizza.tamanho = self.tamanho
-        if commit:
-            pizza.save()
-        return pizza
-
-
-class BasePizzaFormSet(forms.BaseModelFormSet):
-    def __init__(self, *args, **kwargs):
-        if 'queryset' not in kwargs:
-            self.tamanhos = models.Tamanho.objects.all()
-            kwargs['queryset'] = models.Pizza.objects.none()
-        super().__init__(*args, **kwargs)
-
-    def get_form_kwargs(self, index):
-        form_kwargs = super().get_form_kwargs(index)
-        if hasattr(self, 'tamanhos') and index < len(self.tamanhos):
-            form_kwargs['tamanho'] = self.tamanhos[index]
-        return form_kwargs
-
-    def save(self, item):
-        pizzas = super().save(commit=False)
-        for pizza in pizzas:
-            pizza.item = item
-            pizza.save()
-        return pizzas
-
-
-tamanho_count = models.Tamanho.objects.count()
-PizzaFormSet = forms.modelformset_factory(model=models.Pizza,
-                                          form=PizzaForm,
-                                          formset=BasePizzaFormSet,
-                                          max_num=tamanho_count,
-                                          extra=tamanho_count)
 
 
 class PromocaoForm(forms.ModelForm):

@@ -20,8 +20,10 @@ def redirect_with_get(request, page, *args, **kwargs):
         response['Location'] += '?' + data
     return response
 
+
 def redirect_to_next(request, other_page=None):
     return redirect(request.GET.get('next') or other_page)
+
 
 def login(request):
     form = AuthenticationForm(request, data=request.POST or None)
@@ -71,6 +73,7 @@ def sobre(request):
     }
     return render(request, 'sobre.html', contexto)
 
+
 @login_required
 def cardapio_itens(request):
     cardapio_itens = ItemCardapio.objects.all()
@@ -80,6 +83,7 @@ def cardapio_itens(request):
         'itens': cardapio_itens,
     }
     return render(request, 'cardapio_itens.html', contexto)
+
 
 @login_required
 def cardapio_cadastro(request):
@@ -93,11 +97,8 @@ def cardapio_cadastro(request):
         ingrediente_form = IngredienteForm()
 
     elif ('salvar-item' in request.POST and
-          form.is_valid() and
-          pizzas_forms.is_valid()):
-        item = form.save()
-        if form.cleaned_data['tipo'].descricao.startswith('pizza'):
-            pizzas_forms.save(item)
+          form.is_valid()):
+        form.save()
         return redirect('cardapio')
 
     contexto = {
@@ -114,12 +115,16 @@ def cardapio_cadastro(request):
 @login_required
 def cardapio_edicao(request, id):
     item = get_object_or_404(ItemCardapio, pk=id)
-    pizzas_forms = PizzaFormSet(request.POST or None,
-                                queryset=item.pizza_set.all())
+    is_pizza = item.tipo.descricao.startswith('pizza')
+    if is_pizza:
+        pizzas_forms = PizzaFormSet(
+            request.POST or None,
+            queryset=item.pizza_set.all()
+        )
     form = ItemCardapioEdicaoForm(item, request.POST or None)
     if form.is_valid():
         item = form.save()
-        if pizzas_forms.is_valid():
+        if is_pizza and pizzas_forms.is_valid():
             pizzas_forms.save(item)
         return redirect('cardapio')
     contexto = {
@@ -127,8 +132,9 @@ def cardapio_edicao(request, id):
         'cardapio_gerenciar': 'active',
         'titulo': 'Editar item do cardápio',
         'form': form,
-        'pizzas_forms': pizzas_forms,
     }
+    if is_pizza:
+        contexto['pizzas_forms'] = pizzas_forms
     return render(request, 'cardapio_cadastro.html', contexto)
 
 
