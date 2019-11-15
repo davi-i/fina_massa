@@ -88,7 +88,7 @@ def cardapio_itens(request):
 @login_required
 def cardapio_cadastro(request):
     form = ItemCardapioForm(request.POST or None)
-    pizzas_forms = PizzaFormSet(request.POST or None)
+    # pizzas_forms = PizzaFormSet(request.POST or None)
     ingrediente_form = IngredienteForm(request.POST or None)
 
     if ('salvar-ingrediente' in request.POST and
@@ -106,7 +106,6 @@ def cardapio_cadastro(request):
         'cardapio_gerenciar': 'active',
         'titulo': 'Cadastrar item do cardápio',
         'form': form,
-        'pizzas_forms': pizzas_forms,
         'ingrediente_form': ingrediente_form
     }
     return render(request, 'cardapio_cadastro.html', contexto)
@@ -115,26 +114,17 @@ def cardapio_cadastro(request):
 @login_required
 def cardapio_edicao(request, id):
     item = get_object_or_404(ItemCardapio, pk=id)
-    is_pizza = item.tipo.descricao.startswith('pizza')
-    if is_pizza:
-        pizzas_forms = PizzaFormSet(
-            request.POST or None,
-            queryset=item.pizza_set.all()
-        )
     form = ItemCardapioEdicaoForm(item, request.POST or None)
     if form.is_valid():
-        item = form.save()
-        if is_pizza and pizzas_forms.is_valid():
-            pizzas_forms.save(item)
+        form.save()
         return redirect('cardapio')
+    # breakpoint()
     contexto = {
         'restrito': 'active',
         'cardapio_gerenciar': 'active',
         'titulo': 'Editar item do cardápio',
         'form': form,
     }
-    if is_pizza:
-        contexto['pizzas_forms'] = pizzas_forms
     return render(request, 'cardapio_cadastro.html', contexto)
 
 
@@ -164,6 +154,7 @@ def cardapio(request):
         'tamanhos': tamanhos,
     }
     return render(request, 'cardapio.html', contexto)
+
 
 @login_required
 def filiais(request):
@@ -310,6 +301,7 @@ def funcionario_edicao(request, id):
     if form.is_valid():
         form.save()
         return redirect('funcionarios')
+    breakpoint()
     contexto = {
         'restrito': 'active',
         'funcionario_gerenciar': 'active',

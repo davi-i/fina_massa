@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% load widget_tweaks %}
 
 {% block conteudo %}
@@ -14,10 +14,10 @@
               {% csrf_token %}
               {% include 'form.html' with form=form only %}
               <div id="div-precos">
-                {% for pizza_form in pizzas_forms %}
+                {% for pizza_form in form.pizzas %}
                   {% include 'form.html' with form=pizza_form only %}
                 {% endfor %}
-                {{pizzas_forms.management_form}}
+                {{form.pizzas.management_form}}
               </div>
               <button name="salvar-item" type="submit" class="btn btn-primary">Salvar</button>
             </form>

@@ -106,7 +106,8 @@ class ItemCardapioForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(use_required_attribute=False, *args, **kwargs)
-        self.pizzas = PizzaFormSet(self.data or None)
+        if not hasattr(self, 'pizzas'):
+            self.pizzas = PizzaFormSet(self.data or None)
 
     def clean(self):
         cleaned_data = super().clean()
@@ -135,18 +136,20 @@ class ItemCardapioForm(forms.ModelForm):
 
 
 class ItemCardapioEdicaoForm(ItemCardapioForm):
-    def __init__(self, item, *args, **kwargs):
-        super().__init__(instance=item, *args, **kwargs)
+    def __init__(self, item, data, *args, **kwargs):
         self.is_pizza = item.tipo.descricao.startswith('pizza')
         if self.is_pizza:
             self.pizzas = PizzaFormSet(
-                request.POST or None,
+                data or None,
                 queryset=item.pizza_set.all()
             )
+        super().__init__(data, instance=item, *args, **kwargs)
         self.fields['tipo'].widget.attrs = {'readonly': True}
 
     def clean(self):
-        return super(forms.ModelForm, self).clean()
+        super(forms.ModelForm, self).clean()
+        if self.is_pizza:
+            self.pizzas.clean()
 
 
 class PizzaForm(forms.ModelForm):
