@@ -54,7 +54,7 @@
                   <tr class="list-hours-item">
                     <td class="promocao">
                       {% if item.promocao_atual %}
-                        <button data-toggle="modal" data-target="#promocao" class="not-visible"><i class="fas fa-certificate mx-2"></i></button>
+                        <button data-toggle="modal" data-target="#promocao" data-imagem="{{item.promocao_atual.imagem}}" class="not-visible"><i class="fas fa-certificate mx-2"></i></button>
                       {% endif %}
                     </td>
                     <td class="pt-2 pr-5">
