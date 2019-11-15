@@ -1,14 +1,13 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 
 {% block conteudo %}
-  <section class="page-section cta">
+  <section class="main-container">
     <div class="container">
       <div class="row">
         <div class="col-xl-9 mx-auto">
-          <div class="cta-inner text-center rounded">
-            <h2 class="section-heading">
-              <span class="section-heading-lower">Login</span>
-            </h2>
+          <div class="inner text-center rounded">
+            <h2>Login</h2>
+            <hr/>
             <form class="w-75 mx-auto" method="POST">
               {% csrf_token %}
               {% include 'form.html' with form=form only %}

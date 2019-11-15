@@ -2,17 +2,16 @@
 {% load static %}
 
 {% block conteudo %}
-  <section class="page-section cta">
+  <section class="main-container">
     <div class="container">
       <div class="row">
         <div class="col-xl-9 mx-auto">
-          <div class="cta-inner text-center rounded">
-            <h2 class="section-heading">
-              <span class="section-heading-lower">Gerenciar funcionários</span>
-              <a href="{% url 'funcionario_cadastro'%}" class="btn btn-primary">Cadastrar novo</a>
-            </h2>
-            <table class="table table-bordered bg-main">
-              <thead class="">
+          <div class="inner text-center rounded">
+            <h2>Gerenciar funcionários</h2>
+            <hr/>
+            <a href="{% url 'funcionario_cadastro'%}" class="btn btn-primary my-4">Cadastrar novo</a>
+            <table class="table table-hover">
+              <thead>
                 <tr>
                   <th>Nome</th>
                   <th>Ações</th>

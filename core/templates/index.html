@@ -2,14 +2,12 @@
 {% load static %}
 
 {% block conteudo %}
-  <section class="page-section cta">
+  <section class="main-container">
     <div class="container">
       <div class="row">
         <div class="col-xl-9 mx-auto">
-          <div class="cta-inner text-center rounded">
-            <h2 class="section-heading">
-              <span class="section-heading-lower">Promoções da semana</span>
-            </h2>
+          <div class="inner text-center rounded">
+            <h2>Promoções da semana</h2>
             <div id="calendario" class="row d-flex justify-content-center">
               {% for dia, promocao in promocoes %}
                 <div class="col-lg col-md-3 col-sm-6 col-12 dia mb-1 p-0 {{dia.1}}">
@@ -36,12 +34,12 @@
     </div>
   </section>
   {% for filial in filiais %}
-    <section class="page-section clearfix">
+    <section class="clearfix">
       <div class="container">
-        <div class="intro">
-          <img class="intro-img img-fluid mb-3 mb-lg-0" src="/media/{{filial.foto}}" alt="">
-          <div class="intro-text left-0 text-center bg-faded p-5">
-            <h2 class="section-heading mb-4">{{filial.nome}}</h2>
+        <div class="filial">
+          <img class="img-fluid mb-3 mb-lg-0" src="/media/{{filial.foto}}" alt="">
+          <div class="left-0 text-center p-5">
+            <h2 class="mb-4">{{filial.nome}}</h2>
             <address class="mb-4">
               <p class="mb-3 lead"><i class="fas fa-phone-alt"></i> {{filial.contato_str}}</p>
               <p class="mb-3 lead"><i class="fas fa-map-marked"></i> {{filial.endereco}}</p>

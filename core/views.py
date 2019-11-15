@@ -1,24 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.utils.http import urlencode
 from django.contrib.auth import login as auth_login
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.conf import settings
-from .filters import ItemCardapioFilter, PizzaFilter
-from .models import Ingrediente, ItemCardapio, Tamanho, Tipo, Filial, Promocao, Pizza
-from .forms import (IngredienteForm, ItemCardapioForm, ItemCardapioEdicaoForm, FilialForm,
-                    EnderecoForm, PizzaFormSet, PromocaoForm, UsuarioForm)
+from . import filters, models, forms
 from datetime import date
-
-
-def redirect_with_get(request, page, *args, **kwargs):
-    data = request.META['QUERY_STRING']
-    response = redirect(page, *args, **kwargs)
-    if data:
-        response['Location'] += '?' + data
-    return response
 
 
 def redirect_to_next(request, other_page=None):
@@ -33,7 +21,7 @@ def login(request):
             auth_login(request, user)
             return redirect_to_next(request, settings.LOGIN_REDIRECT_URL)
         else:
-            return redirect_with_get(request, 'senha', user.id)
+            return senha(request, user.id)
     contexto = {
         'restrito': 'active',
         'form': form,
@@ -42,27 +30,36 @@ def login(request):
 
 
 def senha(request, id):
-    user = User.objects.get(pk=id)
-    form = PasswordChangeForm(user, data=request.POST or None)
-    if form.is_valid():
-        form.save()
-        auth_login(request, user)
-        return redirect_to_next(request, settings.LOGIN_REDIRECT_URL)
-    contexto = {
-        'restrito': 'active',
-        'form': form,
-        'name': user.first_name,
-    }
-    return render(request, 'registration/senha.html', contexto)
+    if request.method == 'POST':
+        if request.path == '/login/':
+            data = None
+        elif request.path == '/senha/%d/' % id:
+            data = request.POST
+        else:
+            return redirect('login')
+
+        user = User.objects.get(pk=id)
+        form = SetPasswordForm(user, data=data)
+        if form.is_valid():
+            form.save()
+            auth_login(request, user)
+            return redirect_to_next(request, settings.LOGIN_REDIRECT_URL)
+        contexto = {
+            'restrito': 'active',
+            'form': form,
+            'name': user.first_name,
+            'id': user.id,
+        }
+        return render(request, 'registration/senha.html', contexto)
+    return redirect('login')
 
 
 def index(request):
-    filiais = Filial.objects.all()
+    filiais = models.Filial.objects.all()
     contexto = {
         'index': 'active',
         'filiais': filiais,
-        'promocoes': Promocao.na_semana(),
-        date.today().strftime('%A').lower(): 'today'
+        'promocoes': models.Promocao.na_semana(),
     }
     return render(request, 'index.html', contexto)
 
@@ -76,7 +73,7 @@ def sobre(request):
 
 @login_required
 def cardapio_itens(request):
-    cardapio_itens = ItemCardapio.objects.all()
+    cardapio_itens = models.ItemCardapio.objects.all()
     contexto = {
         'restrito': 'active',
         'cardapio_gerenciar': 'active',
@@ -87,14 +84,13 @@ def cardapio_itens(request):
 
 @login_required
 def cardapio_cadastro(request):
-    form = ItemCardapioForm(request.POST or None)
-    # pizzas_forms = PizzaFormSet(request.POST or None)
-    ingrediente_form = IngredienteForm(request.POST or None)
+    form = forms.ItemCardapioForm(request.POST or None)
+    ingrediente_form = forms.IngredienteForm(request.POST or None)
 
     if ('salvar-ingrediente' in request.POST and
             ingrediente_form.is_valid()):
         ingrediente_form.save()
-        ingrediente_form = IngredienteForm()
+        ingrediente_form = forms.IngredienteForm()
 
     elif ('salvar-item' in request.POST and
           form.is_valid()):
@@ -104,7 +100,7 @@ def cardapio_cadastro(request):
     contexto = {
         'restrito': 'active',
         'cardapio_gerenciar': 'active',
-        'titulo': 'Cadastrar item do cardápio',
+        'titulo': 'Cadastrar item no cardápio',
         'form': form,
         'ingrediente_form': ingrediente_form
     }
@@ -113,40 +109,51 @@ def cardapio_cadastro(request):
 
 @login_required
 def cardapio_edicao(request, id):
-    item = get_object_or_404(ItemCardapio, pk=id)
-    form = ItemCardapioEdicaoForm(item, request.POST or None)
-    if form.is_valid():
+    item = get_object_or_404(models.ItemCardapio, pk=id)
+    form = forms.ItemCardapioEdicaoForm(item, request.POST or None)
+    ingrediente_form = forms.IngredienteForm(request.POST or None)
+
+    if ('salvar-ingrediente' in request.POST and
+            ingrediente_form.is_valid()):
+        ingrediente_form.save()
+        ingrediente_form = forms.IngredienteForm()
+    elif ('salvar-item' in request.POST and
+          form.is_valid()):
         form.save()
         return redirect('cardapio')
-    # breakpoint()
     contexto = {
         'restrito': 'active',
         'cardapio_gerenciar': 'active',
         'titulo': 'Editar item do cardápio',
         'form': form,
+        'ingrediente_form': ingrediente_form
     }
     return render(request, 'cardapio_cadastro.html', contexto)
 
 
 @login_required
 def cardapio_remocao(request, id):
-    item = get_object_or_404(ItemCardapio, pk=id)
+    item = get_object_or_404(models.ItemCardapio, pk=id)
     item.delete()
     return redirect('cardapio_itens')
 
 
 def cardapio(request):
-    item_filter = ItemCardapioFilter(request.GET,
-                                     queryset=ItemCardapio.objects.all())
-    pizza_filter = PizzaFilter(request.GET,
-                               queryset=Pizza.objects.all())
+    item_filter = filters.ItemCardapioFilter(
+        request.GET,
+        queryset=models.ItemCardapio.objects.all()
+    )
+    pizza_filter = filters.PizzaFilter(
+        request.GET,
+        queryset=models.Pizza.objects.all()
+    )
     tipos = []
-    for tipo in Tipo.objects.all():
+    for tipo in models.Tipo.objects.all():
         itens = tipo.itens.filter(id__in=item_filter.qs)
         if tipo.descricao.startswith('pizza'):
             itens = itens.filter(pizza__in=pizza_filter.qs).distinct()
         tipos.append(itens)
-    tamanhos = Tamanho.objects.all()
+    tamanhos = models.Tamanho.objects.all()
     contexto = {
         'cardapio': 'active',
         'filter': item_filter,
@@ -158,7 +165,7 @@ def cardapio(request):
 
 @login_required
 def filiais(request):
-    filiais = Filial.objects.all()
+    filiais = models.Filial.objects.all()
     contexto = {
         'restrito': 'active',
         'filial_gerenciar': 'active',
@@ -170,8 +177,8 @@ def filiais(request):
 @login_required
 def filial_cadastro(request):
     data = request.POST.copy() or None
-    form = FilialForm(data, request.FILES or None)
-    endereco_form = EnderecoForm(data)
+    form = forms.FilialForm(data, request.FILES or None)
+    endereco_form = forms.EnderecoForm(data)
     if endereco_form.is_valid():
         endereco = endereco_form.save()
         data['filial-endereco'] = endereco.pk
@@ -190,10 +197,10 @@ def filial_cadastro(request):
 
 @login_required
 def filial_edicao(request, id):
-    filial = get_object_or_404(Filial, pk=id)
+    filial = get_object_or_404(models.Filial, pk=id)
     data = request.POST.copy() or None
-    form = FilialForm(data, request.FILES or None, instance=filial)
-    endereco_form = EnderecoForm(data)
+    form = forms.FilialForm(data, request.FILES or None, instance=filial)
+    endereco_form = forms.EnderecoForm(data)
     if endereco_form.is_valid():
         endereco = endereco_form.save()
         data['filial-endereco'] = endereco.pk
@@ -212,14 +219,14 @@ def filial_edicao(request, id):
 
 @login_required
 def filial_remocao(request):
-    filial = get_object_or_404(Filial, pk=id)
+    filial = get_object_or_404(models.Filial, pk=id)
     filial.delete()
     return redirect('filiais')
 
 
 @login_required
 def promocoes(request):
-    promocoes = Promocao.objects.all()
+    promocoes = models.Promocao.objects.all()
     contexto = {
         'restrito': 'active',
         'promocao_gerenciar': 'active',
@@ -230,7 +237,7 @@ def promocoes(request):
 
 @login_required
 def promocao_cadastro(request):
-    form = PromocaoForm(request.POST or None, request.FILES or None)
+    form = forms.PromocaoForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         form.save()
         return redirect('promocoes')
@@ -245,8 +252,8 @@ def promocao_cadastro(request):
 
 @login_required
 def promocao_edicao(request, id):
-    promocao = get_object_or_404(Promocao, pk=id)
-    form = PromocaoForm(request.POST or None, instance=promocao)
+    promocao = get_object_or_404(models.Promocao, pk=id)
+    form = forms.PromocaoForm(request.POST or None, instance=promocao)
     if form.is_valid():
         form.save()
         return redirect('index')
@@ -261,7 +268,7 @@ def promocao_edicao(request, id):
 
 @login_required
 def promocao_remocao(request, id):
-    promocao = get_object_or_404(Promocao, pk=id)
+    promocao = get_object_or_404(models.Promocao, pk=id)
     promocao.delete()
     return redirect('promocoes')
 
@@ -281,13 +288,14 @@ def funcionarios(request):
 @login_required
 @staff_member_required(login_url='/login/')
 def funcionario_cadastro(request):
-    form = UsuarioForm(request.POST or None)
+    form = forms.UsuarioForm(request.POST or None)
     if form.is_valid():
         form.save()
         return redirect('funcionarios')
     contexto = {
         'restrito': 'active',
         'funcionario_gerenciar': 'active',
+        'titulo': 'Cadastrar funcionário',
         'form': form,
     }
     return render(request, 'registration/registro.html', contexto)
@@ -297,14 +305,14 @@ def funcionario_cadastro(request):
 @staff_member_required(login_url='/login/')
 def funcionario_edicao(request, id):
     funcionario = get_object_or_404(User, pk=id).usuario
-    form = UsuarioForm(request.POST or None, instance=funcionario)
+    form = forms.UsuarioForm(request.POST or None, instance=funcionario)
     if form.is_valid():
         form.save()
         return redirect('funcionarios')
-    breakpoint()
     contexto = {
         'restrito': 'active',
         'funcionario_gerenciar': 'active',
+        'titulo': 'Editar funcionário',
         'form': form,
     }
     return render(request, 'registration/registro.html', contexto)

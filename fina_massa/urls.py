@@ -1,4 +1,4 @@
-"""fina_massa URL Configuration
+﻿"""fina_massa URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.1/topics/http/urls/
@@ -26,23 +26,58 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     path('senha/<int:id>/', views.senha, name='senha'),
-    # path('perfil/', perfil, name='perfil'),
     path('sobre/', views.sobre, name='sobre'),
-    path('cardapio/cadastrar/', views.cardapio_cadastro, name='cardapio_cadastro'),
-    path('cardapio/<int:id>/editar/', views.cardapio_edicao, name='cardapio_edicao'),
-    path('cardapio/<int:id>/remover/', views.cardapio_remocao, name='cardapio_remocao'),
+    path(
+        'cardapio/cadastrar/',
+        views.cardapio_cadastro,
+        name='cardapio_cadastro'
+    ),
+    path(
+        'cardapio/<int:id>/editar/',
+        views.cardapio_edicao,
+        name='cardapio_edicao'
+    ),
+    path(
+        'cardapio/<int:id>/remover/',
+        views.cardapio_remocao,
+        name='cardapio_remocao'
+    ),
     path('cardapio/', views.cardapio, name='cardapio'),
     path('cardapio/itens', views.cardapio_itens, name='cardapio_itens'),
     path('filial/', views.filiais, name='filiais'),
     path('filial/cadastrar', views.filial_cadastro, name='filial_cadastro'),
     path('filial//<int:id>/editar', views.filial_edicao, name='filial_edicao'),
-    path('filial/<int:id>/remover', views.filial_remocao, name='filial_remocao'),
+    path(
+        'filial/<int:id>/remover', views.filial_remocao, name='filial_remocao'
+    ),
     path('promocao/', views.promocoes, name='promocoes'),
-    path('promocao/cadastrar', views.promocao_cadastro, name='promocao_cadastro'),
-    path('promocao/<int:id>/editar', views.promocao_edicao, name='promocao_edicao'),
-    path('promocao/<int:id>/remover', views.promocao_remocao, name='promocao_remocao'),
-    path('funcionario/cadastrar', views.funcionario_cadastro, name='funcionario_cadastro'),
-    path('funcionario/<int:id>/editar', views.funcionario_edicao, name='funcionario_edicao'),
-    path('funcionario/<int:id>/remover', views.funcionario_remocao, name='funcionario_remocao'),
+    path(
+        'promocao/cadastrar', views.promocao_cadastro, name='promocao_cadastro'
+    ),
+    path(
+        'promocao/<int:id>/editar',
+        views.promocao_edicao,
+        name='promocao_edicao'
+    ),
+    path(
+        'promocao/<int:id>/remover',
+        views.promocao_remocao,
+        name='promocao_remocao'
+    ),
+    path(
+        'funcionario/cadastrar',
+        views.funcionario_cadastro,
+        name='funcionario_cadastro'
+    ),
+    path(
+        'funcionario/<int:id>/editar',
+        views.funcionario_edicao,
+        name='funcionario_edicao'
+    ),
+    path(
+        'funcionario/<int:id>/remover',
+        views.funcionario_remocao,
+        name='funcionario_remocao'
+    ),
     path('funcionarios/', views.funcionarios, name='funcionarios'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

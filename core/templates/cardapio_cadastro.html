@@ -2,14 +2,13 @@
 {% load widget_tweaks %}
 
 {% block conteudo %}
-  <section class="page-section cta">
+  <section class="main-container">
     <div class="container">
       <div class="row">
         <div class="col-xl-9 mx-auto">
-          <div class="cta-inner text-center rounded">
-            <h2 class="section-heading">
-              <span class="section-heading-lower">{{titulo}}</span>
-            </h2>
+          <div class="inner text-center rounded">
+            <h2>{{titulo}}</h2>
+            <hr/>
             <form method="post" class="mx-auto mt-3">
               {% csrf_token %}
               {% include 'form.html' with form=form only %}
@@ -50,9 +49,9 @@
         }
       })
       const $nome_div = $(
-              "<div class='inline-input {% if ingrediente_form.nome.errors %}erro{% endif %}'>" +
-                  '{% render_field ingrediente_form.nome class="form-control inline" placeholder="Cadastrar novo ingrediente" %}' +
-                  "<button type=submit name=salvar-ingrediente class=\"btn btn-primary py-0 inline\">Salvar</button>" +
+              "<div class='inline-button {% if ingrediente_form.nome.errors %}erro{% endif %}'>" +
+                  '{% render_field ingrediente_form.nome class="form-control" placeholder="Cadastrar novo ingrediente" %}' +
+                  "<button type=submit name=salvar-ingrediente class=\"btn btn-primary py-0\">Salvar</button>" +
                 "</div>" +
                 {% for erro in ingrediente_form.nome.errors %}
                   '<small class="text-danger">{{erro}}</small>' +

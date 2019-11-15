@@ -1,0 +1,314 @@
+﻿/*!
+ * Start Bootstrap - Business Casual v5.0.8 (https://startbootstrap.com/template-overviews/business-casual)
+ * Copyright 2013-2019 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-business-casual/blob/master/LICENSE)
+ */
+
+body {
+  font-family: 'Lora';
+  text-align: center;
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(228, 102, 34, 0.65))), url("../img/pizza.png");
+  background: linear-gradient(rgba(228, 102, 34, 0.65)), url("../img/pizza.png");
+  background-attachment: fixed;
+  background-position: center;
+  background-size: repeat;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Raleway';
+}
+
+p {
+  line-height: 1.75;
+}
+
+header {
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+  text-transform: uppercase;
+  line-height: 1;
+  font-family: 'Raleway';
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+nav {
+  background-color: rgba(228, 102, 34, 0.9);
+  font-family: 'Raleway';
+}
+
+nav .nav-link, nav .dropdown-item {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 800;
+}
+
+nav .dropdown-item.active {
+  background-color: transparent;
+}
+
+nav .dropdown-item:hover, nav .dropdown-item:focus {
+  color: rgba(255, 255, 255, 0.4);
+  background-color: transparent;
+}
+
+@media (min-width: 992px) {
+  nav .nav-link {
+    font-size: 0.9rem;
+  }
+  nav .nav-link:hover, nav .dropdown-item:hover {
+    color: rgba(255, 255, 255, 0.4);
+    background-color: transparent;
+  }
+}
+
+section {
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+}
+
+section h2:first-of-type {
+  text-transform: uppercase;
+  font-size: 2.5rem;
+}
+
+footer {
+  color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(228, 102, 34, 0.9);
+}
+
+.bg-main {
+  background-color: rgba(228, 102, 34, 0.9);
+}
+
+.bg-main-faded {
+  background-color: rgba(228, 102, 34, 0.6);
+}
+
+.promocao {
+  color:  #D4AF37;
+}
+
+.not-visible {
+  background: unset;
+  border: none;
+  outline: none;
+  color: unset;
+}
+
+.not-visible:focus {
+    outline: none;
+}
+
+.modal-content {
+  background-color: #D4AF37;
+}
+
+.model-content * {
+  font-family: "Lora";
+}
+
+.modal-body {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.filial {
+  position: relative;
+}
+
+.filial > div {
+  border-radius: 1rem;
+  background-color: rgba(255, 255, 255, 0.85);
+}
+
+.filial img {
+  border-radius: 1rem;
+}
+
+.filial address {
+  background-color: rgba(228, 102, 34, 0.2);
+  border-radius: 1rem;
+}
+
+@media (min-width: 992px) {
+  .filial img {
+    width: 75%;
+    float: right;
+  }
+  .filial > div {
+    left: 0;
+    width: 60%;
+    margin-top: 3rem;
+    position: absolute;
+  }
+}
+
+@media (min-width: 1200px) {
+  .filial > div {
+    width: 45%;
+  }
+}
+
+.main-container {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  background-color: rgba(230, 167, 86, 0.9);
+}
+
+.main-container .inner {
+  position: relative;
+  padding: 3rem;
+  margin: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.85);
+}
+
+.main-container .inner:before {
+  border-radius: 0.5rem;
+  content: '';
+  position: absolute;
+  top: -0.5rem;
+  bottom: -0.5rem;
+  left: -0.5rem;
+  right: -0.5rem;
+  border: 0.25rem solid rgba(255, 255, 255, 0.85);
+  z-index: -1;
+}
+
+.main-container .table {
+  background: transparent;
+  border-radius: .5rem;
+}
+
+.main-container .table thead th {
+  background-color: rgba(228, 102, 34, 0.6);
+  border-color: rgba(228, 102, 34, 0.1);
+}
+
+.main-container .table tbody tr td {
+  background-color: rgba(228, 102, 34, 0.4);
+  border-color: rgba(228, 102, 34, 0.2);
+}
+
+.main-container .table th:first-child, .main-container .table td:first-child{
+  border-radius: .5rem 0 0 .5rem;
+}
+
+.main-container .table th:last-child, .main-container .table td:last-child{
+  border-radius: 0 .5rem .5rem 0;
+}
+
+.main-container .cardapio {
+  font-size: 0.9rem;
+}
+
+.main-container .cardapio tr {
+  border-bottom: 1px solid rgba(230, 167, 86, 0.5);
+  padding-bottom: .25rem;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.main-container .cardapio .fatias {
+  font-size: 0.8rem;
+}
+
+@media (min-width: 992px) {
+  .main-container .cardapio {
+    font-size: 1.1rem;
+  }
+}
+
+.btn {
+  -webkit-box-shadow: 0px 3px 3px 0px rgba(33, 37, 41, 0.1);
+  box-shadow: 0px 3px 3px 0px rgba(33, 37, 41, 0.1);
+}
+
+.btn-primary {
+  background-color: #1f7a1f;
+  border-color: #1f7a1f;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+  background-color: #086708;
+  border-color: #086708;
+}
+
+.erro > input, .erro > select {
+  border-color: #dc3545;
+}
+
+.erro > div.form-control:first-of-type{
+  border-top-color: #dc3545;
+}
+
+.erro > div.form-control {
+  border-left-color: #dc3545;
+  border-right-color: #dc3545;
+}
+
+.erro > div.form-control:last-of-type{
+  border-bottom-color: #dc3545;
+}
+
+select[readonly] {
+  pointer-events: none;
+  touch-action: none;
+}
+
+.inline-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.inline-button button {
+  position: absolute;
+  top: calc(50% - 10.5px );
+  left: calc(100% - 1.5rem - 50px);
+  font-size: .8rem;
+}
+
+#calendario {
+  color: white;
+}
+#calendario .semana {
+  letter-spacing: 1px;
+  border-bottom: 1px solid #c6c6c6;
+  background: rgba(0, 0, 0, 0.1);
+}
+#calendario .semana + div {
+  position: relative;
+  line-height: normal;
+}
+#calendario .dia {
+  border: 1px solid #c6c6c6;
+  background-color: rgba(228, 102, 34, 0.9);
+}
+#calendario .dia {
+  float: left;
+  max-width: 8rem;
+}
+#calendario .dia .info {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  height: 4rem;
+}
+
+#calendario .dia .info.tem:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+#calendario .dia.hoje {
+  color: white;
+  background: #df902a;
+}
+
+.right-top {
+  position: absolute;
+  top: 0;
+  right: 0;
+}

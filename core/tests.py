@@ -5,6 +5,7 @@ from django.test import TestCase
 Código para criar tamanhos, tipos, filiais e alguns itens
 '''
 from core.models import *
+from django.contrib.auth.models import User
 
 p = Tamanho.objects.create(descricao="P", fatias=4)
 m = Tamanho.objects.create(descricao="M", fatias=6)
@@ -51,3 +52,14 @@ for tipo, ds, ps, igss in zip(tipos, descricoes, precos, ingredientes):
         else:
             i.preco = p
         i.save()
+u = User.objects.create(
+    first_name="Bruna",
+    last_name="Francelino",
+    username="bruna",
+    is_staff=True
+)
+u.set_password('finamassa.123')
+Usuario.objects.create(
+    cpf="00000000000",
+    user=u
+)

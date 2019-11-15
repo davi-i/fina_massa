@@ -2,15 +2,12 @@
 {% load static widget_tweaks %}
 
 {% block conteudo %}
-  <section class="page-section cta">
+  <section class="main-container">
     <div class="container">
       <div class="row">
         <div class="col-xl-9 mx-auto">
-          <div class="cta-inner text-center rounded">
-            <h2 class="section-heading">
-              <span class="section-heading-lower">Cardápio</span>
-            </h2>
-
+          <div class="inner text-center rounded">
+            <h2>Cardápio</h2>
             <hr/>
             <form id="filtros" method="get" class="form-inline justify-content-center">
               {% for field in filter.form %}
@@ -37,21 +34,21 @@
                 {% for item in tipo.all %}
                   {% if forloop.first %}
                     <h3 class='text-uppercase'><strong>{{item.tipo}}</strong></h3>
-                    <table class="list-hours mb-5 text-left mx-auto">
+                    <table class="cardapio mb-5 text-left mx-auto">
                       {% if item.pizza_set.all %}
-                        <tr class="list-hours-item">
+                        <tr>
                           <td></td>
                           <th></th>
                           {% for tamanho in tamanhos %}
                             <td class="text-center">
                               {{tamanho.descricao}}<br/>
-                              <span class="sp">{{tamanho.fatias}} fatias</span>
+                              <span class="fatias">{{tamanho.fatias}} fatias</span>
                             </td>
                           {% endfor %}
                         </tr>
                     {% endif %}
                   {% endif %}
-                  <tr class="list-hours-item">
+                  <tr>
                     <td class="promocao">
                       {% if item.promocao_atual %}
                         <button data-toggle="modal" data-target="#promocao" data-imagem="{{item.promocao_atual.imagem}}" class="not-visible"><i class="fas fa-certificate mx-2"></i></button>
@@ -60,7 +57,7 @@
                     <td class="pt-2 pr-5">
                       {{item.descricao}}<br/>
                       {% if item.ingredientes.all %}
-                        <span class="sp">
+                        <span class="fatias">
                           {% for ingrediente in item.ingredientes.all %}
                             {% if forloop.first %}({% endif %}{{ingrediente|lower}}{% if forloop.last %}){% else %},{% endif %}
                           {% endfor %}
@@ -85,26 +82,4 @@
       </div>
     </div>
   </section>
-
-  <!--section class="page-section about-heading">
-    <div class="container">
-      <img class="img-fluid rounded about-heading-img mb-3 mb-lg-0" src="{% static 'img/about.jpg' %}" alt="">
-      <!--<div class="about-heading-content">
-        <div class="row">
-          <div class="col-xl-9 col-lg-10 mx-auto">
-            <div class="bg-faded rounded p-5">
-              <h2 class="section-heading mb-4">
-                <span class="section-heading-upper">Strong Coffee, Strong Roots</span>
-                <span class="section-heading-lower">About Our Cafe</span>
-              </h2>
-              <p>Founded in 1987 by tde Hernandez brotders, our establishment has been serving up rich coffee sourced from artisan farmers in various regions of Soutd and Central America. We are dedicated to travelling tde world, finding tde best coffee, and bringing back to you here in our cafe.</p>
-              <p class="mb-0">We guarantee tdat you will fall in
-                <em>lust</em>
-                witd our decadent blends tde moment you walk inside until you finish your last sip. Join us for your daily routine, an outing witd friends, or simply just to enjoy some alone time.</p>
-            </div>
-          </div>
-        </div>
-      </div>->
-    </div>
-  </section-->
 {% endblock %}

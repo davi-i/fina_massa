@@ -1,10 +1,7 @@
-
 from django.db import models
 from django.utils import timezone
-from datetime import date, timedelta
+from datetime import timedelta
 from django.contrib.auth.models import User
-
-# Create your models here.
 
 
 class Usuario(models.Model):
@@ -122,12 +119,19 @@ class Promocao(models.Model):
             if weekday == 6:
                 return 0
             return weekday + 1
+        # Começa do domingo dessa semana
         for i in range(7):
             dia = hoje - timedelta(days=proper_week_day(hoje.weekday()) - i)
+        # Hoje fica no meio
+        # for i in range(-3, 4):
+        #     dia = hoje - timedelta(days=i)
+        # Começa de hoje
+        # for i in range(7):
+        #     dia = hoje + timedelta(days=i)
             try:
                 promocao = Promocao.objects.get(data=dia)
             except Promocao.DoesNotExist:
                 promocao = None
-            today = 'today' if timezone.localtime(agora).date() == dia else ''
-            promocoes.append(((dia, today), promocao))
+            is_hoje = 'hoje' if timezone.localtime(agora).date() == dia else ''
+            promocoes.append(((dia, is_hoje), promocao))
         return promocoes

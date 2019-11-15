@@ -1,9 +1,6 @@
 from django import forms
-from django.db.models import F
-from . import models
-from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from . import models
 import datetime
 
 
@@ -76,10 +73,6 @@ class UsuarioForm(forms.ModelForm):
             usuario.user = user
             usuario.save()
         return usuario
-
-
-# class LoginForm(forms.Form):
-#     usuario = forms.
 
 
 class IngredienteForm(forms.ModelForm):

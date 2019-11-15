@@ -1,16 +1,15 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 
 {% block conteudo %}
-  <section class="page-section cta">
+  <section class="main-container">
     <div class="container">
       <div class="row">
         <div class="col-xl-9 mx-auto">
-          <div class="cta-inner text-center rounded">
-            <h2 class="section-heading">
-              <span class="section-heading-lower">Alterar senha</span>
-            </h2>
+          <div class="inner text-center rounded">
+            <h2>Definir senha</h2>
+            <hr/>
             <h3 class='text-uppercase'><strong>{{name}}</strong></h3>
-            <form class="w-75 mx-auto" method="POST">
+            <form action="/senha/{{id}}/" class="w-75 mx-auto" method="POST">
               {% csrf_token %}
               {% include 'form.html' with form=form only %}
               <button type="submit" class="btn btn-primary">Salvar</button>
