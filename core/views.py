@@ -56,10 +56,12 @@ def senha(request, id):
 
 def index(request):
     filiais = models.Filial.objects.all()
+    imagens = models.CarrosselImagem.objects.all()
     contexto = {
         'index': 'active',
         'filiais': filiais,
         'promocoes': models.Promocao.na_semana(),
+        'imagens': imagens,
     }
     return render(request, 'index.html', contexto)
 
@@ -324,3 +326,34 @@ def funcionario_remocao(request, id):
     funcionario = get_object_or_404(User, pk=id)
     funcionario.delete()
     return redirect('funcionarios')
+
+@login_required
+def carrossel_cadastro(request):
+    form = forms.CarrosselForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        form.save()
+        return redirect('carrossel_gerenciamento')
+    contexto = {
+        'restrito': 'active',
+        'carrossel_gerenciamento': 'active',
+        'titulo': 'Cadastrar imagem',
+        'form': form,
+    }
+    return render(request, 'carrossel_cadastro.html', contexto)
+
+
+def carrossel_gerenciamento(request):
+    imagens = models.CarrosselImagem.objects.all()
+    contexto = {
+        'restrito': 'active',
+        'carrossel_gerenciar': 'active',
+        'imagens': imagens,
+    }
+    return render(request, 'carrossel_gerenciamento.html', contexto)
+
+
+def carrossel_remocao(request, id):
+    imagem = models.CarrosselImagem.get(pk=id)
+    imagem.delete()
+    return redirect('carrossel_gerenciamento')
+

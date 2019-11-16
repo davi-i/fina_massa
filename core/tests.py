@@ -52,6 +52,9 @@ for tipo, ds, ps, igss in zip(tipos, descricoes, precos, ingredientes):
         else:
             i.preco = p
         i.save()
+
+
+
 u = User.objects.create(
     first_name="Bruna",
     last_name="Francelino",
@@ -59,7 +62,10 @@ u = User.objects.create(
     is_staff=True
 )
 u.set_password('finamassa.123')
+u.save()
 Usuario.objects.create(
     cpf="00000000000",
     user=u
 )
+
+Carrossel.objects.create()

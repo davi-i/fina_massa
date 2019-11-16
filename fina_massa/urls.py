@@ -80,4 +80,8 @@ urlpatterns = [
         name='funcionario_remocao'
     ),
     path('funcionarios/', views.funcionarios, name='funcionarios'),
+    path('carrossel/cadastrar/', views.carrossel_cadastro, name='carrossel_cadastro'),
+    path('carrossel/gerenciar/', views.carrossel_gerenciamento, name='carrossel_gerenciamento'),
+    path('carrossel/<int:id>/remover/', views.carrossel_remocao, name='carrossel_remocao'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

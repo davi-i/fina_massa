@@ -6,23 +6,22 @@
       <div class="row">
         <div class="col-xl-9 mx-auto">
           <div class="inner text-center rounded">
-            <h2>Gerenciar itens do cardápio</h2>
+            <h2>Gerenciar filiais</h2>
             <hr/>
-            <a href="{% url 'cardapio_cadastro'%}" class="btn btn-warning mb-4">Cadastrar novo</a>
+            <a href="{% url 'filial_cadastro'%}" class="btn btn-primary my-4">Cadastrar nova</a>
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th>Nome</th>
+                  <th>Imagem</th>
                   <th>Ações</th>
                 </tr>
               </thead>
               <tbody>
-                {% for item in itens %}
+                {% for imagem in imagens %}
                 <tr>
-                  <td>{{item}}</td>
+                  <td><img src="/media/{{imagem.arquivo}}" width="100%" height="auto"></td>
                   <td>
-                    <a href="{% url 'cardapio_edicao' item.id %}" class="btn btn-success rounded-circle"><i class="far fa-edit"></i></a>
-                    <a href="{% url 'cardapio_remocao' item.id %}" class="btn btn-danger rounded-circle"><i class="fas fa-times"></i></a>
+                    <a href="{% url 'carrossel_remocao' imagem.id %}" class="btn btn-danger rounded-circle"><i class="fas fa-times"></i></a>
                   </td>
                 </tr>
                 {% endfor %}

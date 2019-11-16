@@ -231,7 +231,6 @@ class FilialForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        # kwargs['use_required_attribute'] = False
         kwargs['prefix'] = 'filial'
         if 'instance' in kwargs and kwargs['instance'].pk:
             kwargs['instance'].abertura = fix_date(kwargs['instance'].abertura)
@@ -255,3 +254,19 @@ class PromocaoForm(forms.ModelForm):
         if 'instance' in kwargs and kwargs['instance'].pk:
             kwargs['instance'].data = fix_date(kwargs['instance'].data)
         super().__init__(*args, **kwargs)
+
+
+class CarrosselForm(forms.ModelForm):
+
+    class Meta:
+        model = models.CarrosselImagem
+        fields = ('arquivo',)
+
+
+    def save(self, commit=True):
+        imagem = super().save(commit=False)
+        imagem.carrossel = models.Carrossel.objects.get(id=1)
+        if commit:
+            imagem.save()
+        return imagem
+        

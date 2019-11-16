@@ -135,3 +135,12 @@ class Promocao(models.Model):
             is_hoje = 'hoje' if timezone.localtime(agora).date() == dia else ''
             promocoes.append(((dia, is_hoje), promocao))
         return promocoes
+
+
+class Carrossel(models.Model):
+    pass
+
+
+class CarrosselImagem(models.Model):
+    arquivo = models.ImageField('Imagem', upload_to="carrossel")
+    carrossel = models.ForeignKey(Carrossel, on_delete=models.CASCADE)
