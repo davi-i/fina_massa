@@ -7,24 +7,24 @@
       <div class="row">
         <div class="col-xl-9 mx-auto">
           <div class="inner text-center rounded p-0">
-            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <div id="carousel" class="carousel slide" data-ride="carousel">
               <ol class="carousel-indicators">
                 {% for imagem in imagens %}
-                  <li data-target="#carouselExampleIndicators" data-slide-to="0" class="{% if forloop.first %}active{% endif %}"></li>
+                  <li data-target="#carousel" data-slide-to="{{forloop.counter0}}" class="{% if forloop.first %}active{% endif %}"></li>
                 {% endfor %}
               </ol> 
               <div class="carousel-inner">
                 {% for imagem in imagens %}
                   <div class="carousel-item{% if forloop.first %} active{% endif %}">
-                    <img src="/media/{{imagem.arquivo}}" class="d-block w-100" alt="...">
+                    <img src="/media/{{imagem}}" class="d-block w-100" alt="...">
                   </div>
                 {% endfor %}
               </div>
-              <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+              <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="sr-only">Anterior</span>
               </a>
-              <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+              <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="sr-only">Próximo</span>
               </a>

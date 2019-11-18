@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+  <section class="main-container">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-9 mx-auto">
+          <div class="inner text-center rounded">
+            <h2>Gerenciar ingredientes</h2>
+            <hr/>
+            <a href="{% url 'ingrediente_cadastro'%}" class="btn btn-primary my-4">Cadastrar novo</a>
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for ingrediente in ingredientes %}
+                <tr>
+                  <td>{{ingrediente}}</td>
+                  <td>
+                    <a href="{% url 'ingrediente_edicao' ingrediente.id %}" class="btn btn-success rounded-circle"><i class="far fa-edit"></i></a>
+                    <a href="{% url 'ingrediente_remocao' ingrediente.id %}" class="btn btn-danger rounded-circle"><i class="fas fa-times"></i></a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

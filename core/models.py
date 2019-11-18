@@ -9,7 +9,7 @@ class Usuario(models.Model):
     cpf = models.CharField("CPF", max_length=11, unique=True)
 
 
-class Tipo(models.Model):
+class ItemTipo(models.Model):
     descricao = models.CharField('Descrição', max_length=100)
 
     def __str__(self):
@@ -57,7 +57,7 @@ class Filial(models.Model):
 
 class ItemCardapio(models.Model):
     descricao = models.CharField('Descrição', max_length=100)
-    tipo = models.ForeignKey(Tipo,
+    tipo = models.ForeignKey(ItemTipo,
                              on_delete=models.CASCADE,
                              related_query_name='item')
     ingredientes = models.ManyToManyField(Ingrediente)
@@ -138,9 +138,7 @@ class Promocao(models.Model):
 
 
 class Carrossel(models.Model):
-    pass
+    imagem = models.ImageField('Imagem', upload_to="carrossel")
 
-
-class CarrosselImagem(models.Model):
-    arquivo = models.ImageField('Imagem', upload_to="carrossel")
-    carrossel = models.ForeignKey(Carrossel, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.imagem.path

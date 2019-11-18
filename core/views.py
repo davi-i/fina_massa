@@ -56,7 +56,7 @@ def senha(request, id):
 
 def index(request):
     filiais = models.Filial.objects.all()
-    imagens = models.CarrosselImagem.objects.all()
+    imagens = models.Carrossel.objects.all()
     contexto = {
         'index': 'active',
         'filiais': filiais,
@@ -163,6 +163,153 @@ def cardapio(request):
         'tamanhos': tamanhos,
     }
     return render(request, 'cardapio.html', contexto)
+
+
+@login_required
+def tipos(request):
+    tipos = models.ItemTipo.objects.all()
+    contexto = {
+        'restrito': 'active',
+        'tipo_gerenciar': 'active',
+        'tipos': tipos,
+    }
+    return render(request, 'tipos.html', contexto)
+
+
+@login_required
+def tipo_cadastro(request):
+    form = forms.TipoForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('tipos')
+    contexto = {
+        'restrito': 'active',
+        'tipo_gerenciar': 'active',
+        'titulo': 'Cadastrar tipo de item do cardápio',
+        'form': form,
+    }
+    return render(request, 'tipo_cadastro.html', contexto)
+
+
+@login_required
+def tipo_edicao(request, id):
+    tipo = get_object_or_404(models.ItemTipo, pk=id)
+    form = forms.TipoForm(request.POST or None, instance=tipo)
+    if form.is_valid():
+        form.save()
+        return redirect('tipos')
+    contexto = {
+        'restrito': 'active',
+        'tipo_gerenciar': 'active',
+        'titulo': 'Editar tipo de item do cardápio',
+        'form': form,
+    }
+    return render(request, 'tipo_cadastro.html', contexto)
+
+
+@login_required
+def tipo_remocao(request, id):
+    tipo = get_object_or_404(models.ItemTipo, pk=id)
+    tipo.delete()
+    return redirect('tipos')
+
+
+@login_required
+def tamanhos(request):
+    tamanhos = models.Tamanho.objects.all()
+    contexto = {
+        'restrito': 'active',
+        'tamanho_gerenciar': 'active',
+        'tamanhos': tamanhos,
+    }
+    return render(request, 'tamanhos.html', contexto)
+
+
+@login_required
+def tamanho_cadastro(request):
+    form = forms.TamanhoForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('tamanhos')
+    contexto = {
+        'restrito': 'active',
+        'tamanho_gerenciar': 'active',
+        'titulo': 'Cadastrar tamanho de pizza',
+        'form': form,
+    }
+    return render(request, 'tamanho_cadastro.html', contexto)
+
+
+@login_required
+def tamanho_edicao(request, id):
+    tamanho = get_object_or_404(models.Tamanho, pk=id)
+    form = forms.TamanhoForm(request.POST or None, instance=tamanho)
+    if form.is_valid():
+        form.save()
+        return redirect('tamanhos')
+    contexto = {
+        'restrito': 'active',
+        'tamanho_gerenciar': 'active',
+        'titulo': 'Editar tamanho de pizza',
+        'form': form,
+    }
+    return render(request, 'tamanho_cadastro.html', contexto)
+
+
+@login_required
+def tamanho_remocao(request, id):
+    tamanho = get_object_or_404(models.Tamanho, pk=id)
+    tamanho.delete()
+    return redirect('tamanhos')
+
+
+@login_required
+def ingredientes(request):
+    ingredientes = models.Ingrediente.objects.all()
+    contexto = {
+        'restrito': 'active',
+        'ingrediente_gerenciar': 'active',
+        'ingredientes': ingredientes,
+    }
+    return render(request, 'ingredientes.html', contexto)
+
+
+@login_required
+def ingrediente_cadastro(request):
+    form = forms.IngredienteForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('ingredientes')
+    contexto = {
+        'restrito': 'active',
+        'ingrediente_gerenciar': 'active',
+        'titulo': 'Cadastrar ingrediente',
+        'form': form,
+    }
+    return render(request, 'ingrediente_cadastro.html', contexto)
+
+
+@login_required
+def ingrediente_edicao(request, id):
+    ingrediente = get_object_or_404(models.Ingrediente, pk=id)
+    form = forms.IngredienteForm(request.POST or None, instance=ingrediente)
+    if form.is_valid():
+        form.save()
+        return redirect('ingredientes')
+    contexto = {
+        'restrito': 'active',
+        'ingrediente_gerenciar': 'active',
+        'titulo': 'Editar ingrediente',
+        'form': form,
+    }
+    return render(request, 'ingrediente_cadastro.html', contexto)
+
+
+@login_required
+def ingrediente_remocao(request, id):
+    ingrediente = get_object_or_404(models.Ingrediente, pk=id)
+    ingrediente.delete()
+    return redirect('ingredientes')
 
 
 @login_required
@@ -327,6 +474,7 @@ def funcionario_remocao(request, id):
     funcionario.delete()
     return redirect('funcionarios')
 
+
 @login_required
 def carrossel_cadastro(request):
     form = forms.CarrosselForm(request.POST or None, request.FILES or None)
@@ -342,8 +490,9 @@ def carrossel_cadastro(request):
     return render(request, 'carrossel_cadastro.html', contexto)
 
 
+@login_required
 def carrossel_gerenciamento(request):
-    imagens = models.CarrosselImagem.objects.all()
+    imagens = models.Carrossel.objects.all()
     contexto = {
         'restrito': 'active',
         'carrossel_gerenciar': 'active',
@@ -352,8 +501,8 @@ def carrossel_gerenciamento(request):
     return render(request, 'carrossel_gerenciamento.html', contexto)
 
 
+@login_required
 def carrossel_remocao(request, id):
-    imagem = models.CarrosselImagem.get(pk=id)
+    imagem = models.Carrossel.objects.get(pk=id)
     imagem.delete()
     return redirect('carrossel_gerenciamento')
-

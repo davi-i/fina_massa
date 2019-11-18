@@ -1,6 +1,6 @@
 import django_filters as filters
 from django import forms
-from .models import ItemCardapio, Filial, Tipo, Pizza
+from .models import ItemCardapio, Filial, ItemTipo, Pizza
 
 
 class ItemCardapioFilter(filters.FilterSet):
@@ -11,7 +11,7 @@ class ItemCardapioFilter(filters.FilterSet):
                                         field_name='preco',
                                         lookup_expr='lte')
     tipo = filters.ModelMultipleChoiceFilter(
-        queryset=Tipo.objects.all(),
+        queryset=ItemTipo.objects.all(),
         widget=forms.CheckboxSelectMultiple)
     filiais = filters.ModelMultipleChoiceFilter(
         queryset=Filial.objects.all(),

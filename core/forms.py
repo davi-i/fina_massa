@@ -75,6 +75,18 @@ class UsuarioForm(forms.ModelForm):
         return usuario
 
 
+class TipoForm(forms.ModelForm):
+    class Meta:
+        model = models.ItemTipo
+        fields = ('descricao', )
+
+
+class TamanhoForm(forms.ModelForm):
+    class Meta:
+        model = models.Tamanho
+        fields = ('descricao', 'fatias')
+
+
 class IngredienteForm(forms.ModelForm):
     class Meta:
         model = models.Ingrediente
@@ -257,16 +269,6 @@ class PromocaoForm(forms.ModelForm):
 
 
 class CarrosselForm(forms.ModelForm):
-
     class Meta:
-        model = models.CarrosselImagem
-        fields = ('arquivo',)
-
-
-    def save(self, commit=True):
-        imagem = super().save(commit=False)
-        imagem.carrossel = models.Carrossel.objects.get(id=1)
-        if commit:
-            imagem.save()
-        return imagem
-        
+        model = models.Carrossel
+        fields = ('imagem',)

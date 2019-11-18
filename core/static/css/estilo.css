@@ -312,3 +312,18 @@ select[readonly] {
   top: 0;
   right: 0;
 }
+
+.p-relative {
+  position: relative;
+}
+
+.right-top2 {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+}
+
+.w-100 {
+  font-size: 100%
+}
