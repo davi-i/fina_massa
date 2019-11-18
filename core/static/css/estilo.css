@@ -179,6 +179,13 @@ footer {
   z-index: -1;
 }
 
+@media (max-width: 500px){
+  .main-container .inner {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
 .main-container .table {
   background: transparent;
   border-radius: .5rem;
@@ -312,6 +319,12 @@ select[readonly] {
 .right-top {
   position: absolute;
   top: 0;
+  right: 0;
+}
+
+.right-bottom {
+  position: absolute;
+  bottom: 0;
   right: 0;
 }
 

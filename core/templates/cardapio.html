@@ -37,7 +37,6 @@
                     <table class="cardapio mb-5 text-left mx-auto">
                       {% if item.pizza_set.all %}
                         <tr>
-                          <td></td>
                           <th></th>
                           {% for tamanho in tamanhos %}
                             <td class="text-center">
@@ -49,13 +48,14 @@
                     {% endif %}
                   {% endif %}
                   <tr>
-                    <td class="promocao">
-                      {% if item.promocao_atual %}
-                        <button data-toggle="modal" data-target="#promocao" data-imagem="{{item.promocao_atual.imagem}}" class="not-visible"><i class="fas fa-certificate mx-2"></i></button>
-                      {% endif %}
-                    </td>
                     <td class="pt-2 pr-5">
-                      {{item.descricao}}<br/>
+                      {% if item.promocao_atual %}
+                        <button data-toggle="modal" data-target="#promocao" data-imagem="{{item.promocao_atual.imagem}}" class="not-visible p-0 btn-linl">
+                          <span class="promocao"><i class="fas fa-certificate"></i> {{item.descricao}}</span>
+                        </button>
+                      {% else %}
+                          {{item.descricao}}
+                      {% endif %}<br/>
                       {% if item.ingredientes.all %}
                         <span class="fatias">
                           {% for ingrediente in item.ingredientes.all %}

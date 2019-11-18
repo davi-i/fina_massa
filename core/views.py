@@ -403,7 +403,9 @@ def promocao_cadastro(request):
 @login_required
 def promocao_edicao(request, id):
     promocao = get_object_or_404(models.Promocao, pk=id)
-    form = forms.PromocaoForm(request.POST or None, instance=promocao)
+    form = forms.PromocaoForm(
+        request.POST or None, request.FILES or None, instance=promocao
+    )
     if form.is_valid():
         form.save()
         return redirect('index')

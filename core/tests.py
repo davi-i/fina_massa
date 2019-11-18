@@ -67,5 +67,3 @@ Usuario.objects.create(
     cpf="00000000000",
     user=u
 )
-
-Carrossel.objects.create()
