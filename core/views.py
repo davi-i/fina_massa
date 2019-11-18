@@ -9,6 +9,7 @@ from . import filters, models, forms
 from datetime import date
 
 
+
 def redirect_to_next(request, other_page=None):
     return redirect(request.GET.get('next') or other_page)
 
@@ -150,7 +151,7 @@ def cardapio(request):
         queryset=models.Pizza.objects.all()
     )
     tipos = []
-    for tipo in models.Tipo.objects.all():
+    for tipo in models.ItemTipo.objects.all():
         itens = tipo.itens.filter(id__in=item_filter.qs)
         if tipo.descricao.startswith('pizza'):
             itens = itens.filter(pizza__in=pizza_filter.qs).distinct()
