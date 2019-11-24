@@ -35,7 +35,7 @@
                   {% if forloop.first %}
                     <h3 class='text-uppercase'><strong>{{item.tipo}}</strong></h3>
                     <table class="cardapio mb-5 text-left mx-auto">
-                      {% if item.pizza_set.all %}
+                      {% if item.tipo.possui_tamanhos %}
                         <tr>
                           <th></th>
                           {% for tamanho in tamanhos %}
@@ -56,7 +56,7 @@
                       {% else %}
                           {{item.descricao}}
                       {% endif %}<br/>
-                      {% if item.ingredientes.all %}
+                      {% if item.tipo.possui_ingredientes %}
                         <span class="fatias">
                           {% for ingrediente in item.ingredientes.all %}
                             {% if forloop.first %}({% endif %}{{ingrediente|lower}}{% if forloop.last %}){% else %},{% endif %}
@@ -64,8 +64,8 @@
                         </span>
                       {% endif %}
                     </td>
-                    {% if item.pizza_set.all %}
-                      {% for tamanho in item.pizza_set.all %}
+                    {% if item.tipo.possui_tamanhos %}
+                      {% for tamanho in item.tamanhos.all %}
                         <td class="text-center pr-2">R${{tamanho.preco}}</td>
                       {% endfor %}
                     {% else %}

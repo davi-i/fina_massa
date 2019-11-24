@@ -1,6 +1,6 @@
 import django_filters as filters
 from django import forms
-from .models import ItemCardapio, Filial, ItemTipo, Pizza
+from .models import ItemCardapio, Filial, ItemTipo, ItemTamanho
 
 
 class ItemCardapioFilter(filters.FilterSet):
@@ -22,7 +22,7 @@ class ItemCardapioFilter(filters.FilterSet):
         fields = []
 
 
-class PizzaFilter(filters.FilterSet):
+class ItemTamanhoFilter(filters.FilterSet):
     preco_minimo = filters.NumberFilter(label="Preço mínimo",
                                         field_name='preco',
                                         lookup_expr='gte')
@@ -31,5 +31,5 @@ class PizzaFilter(filters.FilterSet):
                                         lookup_expr='lte')
 
     class Meta:
-        model = Pizza
+        model = ItemTamanho
         fields = []

@@ -1,5 +1,5 @@
 ﻿{% extends 'base.html' %}
-{% load widget_tweaks %}
+{% load widget_tweaks static %}
 
 {% block conteudo %}
   <section class="main-container">
@@ -13,10 +13,10 @@
               {% csrf_token %}
               {% include 'form.html' with form=form only %}
               <div id="div-precos">
-                {% for pizza_form in form.pizzas %}
-                  {% include 'form.html' with form=pizza_form only %}
+                {% for tamanho_form in form.tamanhos %}
+                  {% include 'form.html' with form=tamanho_form only %}
                 {% endfor %}
-                {{form.pizzas.management_form}}
+                {{form.tamanhos.management_form}}
               </div>
               <button name="salvar-item" type="submit" class="btn btn-primary">Salvar</button>
             </form>
@@ -30,12 +30,27 @@
 {% block scripts %}
   {{super}}
   <script type="text/javascript">
-    $precos = $('#div-precos').hide()
-    $preco = $('input[name=preco]').parents('.form-group')
+    tipos = {
+      '': {
+          possui_ingredientes: false,
+          possui_tamanhos: false
+      },
+      {% for tipo in tipos %}
+        '{{tipo.id}}': {
+          possui_ingredientes: {{tipo.possui_ingredientes|yesno:'true,false'}},
+          possui_tamanhos: {{tipo.possui_tamanhos|yesno:'true,false'}}
+        },
+      {% endfor %}
+    }
+    $precos = $('#div-precos').hide();
+    $preco = $('input[name=preco]').parents('.form-group');
+    $ingredientes = $('input[name=ingredientes]').parents('.form-group');
      chechar_tipo = ($select) => {
-        is_pizza = $('option[value="'+$select.val()+'"]').html().toLowerCase().startsWith('pizza')
-        $precos.toggle(is_pizza)
-        $preco.toggle(!is_pizza)
+        possui_tamanhos = tipos[$select.val()].possui_tamanhos;
+        $precos.toggle(possui_tamanhos);
+        $preco.toggle(!possui_tamanhos);
+        possui_ingredientes = tipos[$select.val()].possui_ingredientes;
+        $ingredientes.toggle(possui_ingredientes)
      }
      $(() => {
       chechar_tipo($('select[name=tipo]').change(e => {
@@ -59,6 +74,6 @@
             );
       $('input[name=ingredientes]:last').parents('.form-group').append($nome_div);
     });
-
   </script>
+  <script src="{% static 'js/readonly_select.js' %}"></script>
 {% endblock %}

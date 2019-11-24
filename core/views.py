@@ -9,7 +9,6 @@ from . import filters, models, forms
 from datetime import date
 
 
-
 def redirect_to_next(request, other_page=None):
     return redirect(request.GET.get('next') or other_page)
 
@@ -89,6 +88,7 @@ def cardapio_itens(request):
 def cardapio_cadastro(request):
     form = forms.ItemCardapioForm(request.POST or None)
     ingrediente_form = forms.IngredienteForm(request.POST or None)
+    tipos = form.fields['tipo'].queryset.all()
 
     if ('salvar-ingrediente' in request.POST and
             ingrediente_form.is_valid()):
@@ -105,7 +105,8 @@ def cardapio_cadastro(request):
         'cardapio_gerenciar': 'active',
         'titulo': 'Cadastrar item no cardápio',
         'form': form,
-        'ingrediente_form': ingrediente_form
+        'ingrediente_form': ingrediente_form,
+        'tipos': tipos
     }
     return render(request, 'cardapio_cadastro.html', contexto)
 
@@ -115,6 +116,7 @@ def cardapio_edicao(request, id):
     item = get_object_or_404(models.ItemCardapio, pk=id)
     form = forms.ItemCardapioEdicaoForm(item, request.POST or None)
     ingrediente_form = forms.IngredienteForm(request.POST or None)
+    tipos = form.fields['tipo'].queryset.all()
 
     if ('salvar-ingrediente' in request.POST and
             ingrediente_form.is_valid()):
@@ -129,7 +131,8 @@ def cardapio_edicao(request, id):
         'cardapio_gerenciar': 'active',
         'titulo': 'Editar item do cardápio',
         'form': form,
-        'ingrediente_form': ingrediente_form
+        'ingrediente_form': ingrediente_form,
+        'tipos': tipos
     }
     return render(request, 'cardapio_cadastro.html', contexto)
 
@@ -146,15 +149,15 @@ def cardapio(request):
         request.GET,
         queryset=models.ItemCardapio.objects.all()
     )
-    pizza_filter = filters.PizzaFilter(
+    item_tamanho_filter = filters.ItemTamanhoFilter(
         request.GET,
-        queryset=models.Pizza.objects.all()
+        queryset=models.ItemTamanho.objects.all()
     )
     tipos = []
     for tipo in models.ItemTipo.objects.all():
         itens = tipo.itens.filter(id__in=item_filter.qs)
-        if tipo.descricao.startswith('pizza'):
-            itens = itens.filter(pizza__in=pizza_filter.qs).distinct()
+        if tipo.possui_tamanhos:
+            itens = itens.filter(tamanhos__in=item_tamanho_filter.qs).distinct()
         tipos.append(itens)
     tamanhos = models.Tamanho.objects.all()
     contexto = {
@@ -235,7 +238,7 @@ def tamanho_cadastro(request):
     contexto = {
         'restrito': 'active',
         'tamanho_gerenciar': 'active',
-        'titulo': 'Cadastrar tamanho de pizza',
+        'titulo': 'Cadastrar tamanhos',
         'form': form,
     }
     return render(request, 'tamanho_cadastro.html', contexto)
@@ -251,7 +254,7 @@ def tamanho_edicao(request, id):
     contexto = {
         'restrito': 'active',
         'tamanho_gerenciar': 'active',
-        'titulo': 'Editar tamanho de pizza',
+        'titulo': 'Editar tamanho',
         'form': form,
     }
     return render(request, 'tamanho_cadastro.html', contexto)

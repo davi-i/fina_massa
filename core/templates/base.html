@@ -59,7 +59,7 @@
               <div class="dropdown-menu bg-main-faded text-center p-0" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item {{cardapio_gerenciar}}" href="{% url 'cardapio_itens' %}">Gerenciar itens do cardápio</a>
                 <a class="dropdown-item {{tipo_gerenciar}}" href="{% url 'tipos' %}">Gerenciar tipos de itens do cardápio</a>
-                <a class="dropdown-item {{tamanho_gerenciar}}" href="{% url 'tamanhos' %}">Gerenciar tamanhos de pizza</a>
+                <a class="dropdown-item {{tamanho_gerenciar}}" href="{% url 'tamanhos' %}">Gerenciar tamanhos</a>
                 <a class="dropdown-item {{ingrediente_gerenciar}}" href="{% url 'ingredientes' %}">Gerenciar ingredientes</a>
                 <a class="dropdown-item {{filial_gerenciar}}" href="{% url 'filiais' %}">Gerenciar filiais</a>
                 {% if user.is_staff %}

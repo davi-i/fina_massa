@@ -3,8 +3,10 @@ const determineSticky = () => {
     const $nav = $(el),
       stickPoint = parseInt($nav.css('top')),
       currTop = el.getBoundingClientRect().top-parseInt($('html').css('font-size'))*1.5,
-      isStuck = currTop <= stickPoint;
+      isStuck = currTop <= stickPoint,
+      scroll = $(window).scrollTop();
     $nav.toggleClass('py-lg-4', !isStuck);
+    $(window).scrollTop(scroll);
   });
 }
 $(() => {

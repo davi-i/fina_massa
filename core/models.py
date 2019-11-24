@@ -11,6 +11,16 @@ class Usuario(models.Model):
 
 class ItemTipo(models.Model):
     descricao = models.CharField('Descrição', max_length=100)
+    possui_ingredientes = models.BooleanField(
+        'Esse tipo possui ingredientes?',
+        choices=((True, 'Sim'), (False, 'Não')),
+        default=False
+    )
+    possui_tamanhos = models.BooleanField(
+        'Esse tipo possui tamanhos?',
+        choices=((True, 'Sim'), (False, 'Não')),
+        default=False
+    )
 
     def __str__(self):
         return self.descricao.replace('_', ' ').capitalize()
@@ -60,16 +70,22 @@ class ItemCardapio(models.Model):
     tipo = models.ForeignKey(ItemTipo,
                              on_delete=models.CASCADE,
                              related_query_name='item')
-    ingredientes = models.ManyToManyField(Ingrediente)
+    ingredientes = models.ManyToManyField(
+        Ingrediente,
+        related_query_name='item'
+    )
     filiais = models.ManyToManyField(Filial, related_query_name='item')
-    preco = models.DecimalField('Preço',
-                                max_digits=10,
-                                decimal_places=2,
-                                blank=True,
-                                null=True)
+    preco = models.DecimalField(
+        'Preço',
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True
+    )
 
     class Meta:
         default_related_name = 'itens'
+        ordering = ['tipo']
 
     def __str__(self):
         return "%s de %s" % (self.tipo, self.descricao.lower())
@@ -87,12 +103,13 @@ class Tamanho(models.Model):
     fatias = models.IntegerField('Fatias')
 
 
-class Pizza(models.Model):
+class ItemTamanho(models.Model):
     item = models.ForeignKey(ItemCardapio,
                              on_delete=models.CASCADE,
                              limit_choices_to={
-                                 'tipo__descricao___startswith': 'pizza'
-                             })
+                                 'tipo__possui_tamanhos': True
+                             },
+                             related_name='tamanhos')
     tamanho = models.ForeignKey(Tamanho, on_delete=models.CASCADE)
     preco = models.DecimalField('Preço', max_digits=10, decimal_places=2)
 
